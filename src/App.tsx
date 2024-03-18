@@ -1,9 +1,9 @@
-import { Helmet } from 'react-helmet-async'
+import { Dashboard } from './pages/dashboard'
 export function App() {
   return (
     <>
-      <Helmet titleTemplate="%s | pizza.shop" />
-      <h1>Hello World</h1>
+      <Dashboard />
+      {/* <Helmet titleTemplate="%s | pizza.shop" /> */}
     </>
   )
 }
