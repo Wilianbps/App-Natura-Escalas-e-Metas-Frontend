@@ -1,12 +1,13 @@
 import { ThemeProvider } from '@emotion/react'
+import { RouterProvider } from 'react-router-dom'
 
-import { Dashboard } from './pages/dashboard'
+import { router } from './routes/routes'
 import { defaultTheme } from './styles/themes/default'
 
 export function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Dashboard />
+      <RouterProvider router={router} />
     </ThemeProvider>
   )
 }
