@@ -9,7 +9,6 @@ export function AppLayout() {
   return (
     <ContainerLayout>
       <Sidebar />
-
       <div>
         <Header />
         <Outlet />
