@@ -1,9 +1,11 @@
+import { SelectBasic } from '../Select'
 import { ContainerHeader } from './styles'
 
 export function Header() {
   return (
     <ContainerHeader>
-      <div></div>
+      <SelectBasic minWidth={120} heightSelect="30px" fontSize="13px" />
+      <input type="date" />
     </ContainerHeader>
   )
 }

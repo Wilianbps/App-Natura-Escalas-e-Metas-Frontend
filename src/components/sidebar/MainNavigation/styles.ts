@@ -22,7 +22,7 @@ export const StyledLink = styled(NavLink)`
   }
 
   &:hover {
-    color: ${(props) => props.theme['orange-dark']};
+    color: ${(props) => props.theme.orangeDark};
   }
 
   display: flex;
@@ -36,7 +36,7 @@ export const StyledLink = styled(NavLink)`
     font-weight: 500;
   }
   .background-icon {
-    background-color: ${(props) => props.theme['yellow-light']};
+    background-color: ${(props) => props.theme.yellowLight};
     border-radius: 50%;
     margin-left: -10px;
 

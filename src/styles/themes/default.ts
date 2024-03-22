@@ -1,9 +1,39 @@
-export const defaultTheme = {
+/* eslint-disable @typescript-eslint/naming-convention */
+
+import { createTheme } from '@mui/material/styles'
+
+declare module '@mui/material/styles' {
+  interface Theme {
+    white: React.CSSProperties['color']
+    red: React.CSSProperties['color']
+    black: React.CSSProperties['color']
+    yellowLight: React.CSSProperties['color']
+    orangeDark: React.CSSProperties['color']
+  }
+  interface ThemeOptions {
+    white: React.CSSProperties['color']
+    red: React.CSSProperties['color']
+    black: React.CSSProperties['color']
+    yellowLight: React.CSSProperties['color']
+    orangeDark: React.CSSProperties['color']
+  }
+}
+
+export const defaultTheme = createTheme({
   white: '#fff',
   red: 'red',
   black: 'black',
 
-  'yellow-light': '#F6EBCF',
+  yellowLight: '#F6EBCF',
 
-  'orange-dark': ' #FF9E00',
-}
+  orangeDark: '#FF9E00',
+
+  typography: {
+    fontFamily: 'Montserrat',
+  },
+  palette: {
+    primary: {
+      main: '#FF9E00', // Definir a cor primária para vermelho
+    },
+  },
+})
