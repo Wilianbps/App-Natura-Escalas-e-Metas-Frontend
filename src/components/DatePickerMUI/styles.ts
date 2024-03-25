@@ -2,10 +2,10 @@ import styled from '@emotion/styled'
 import { DatePicker } from '@mui/x-date-pickers/'
 
 export const StyledDatePicker = styled(DatePicker)`
-  background-color: #ff9e00;
+  background-color: ${(props) => props.theme.yellowMedium};
   width: 9.375rem;
+  border-radius: 0.3rem;
 
-  border-radius: 0px;
   input {
     font-size: 13px;
     height: 7px;

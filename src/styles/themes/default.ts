@@ -8,14 +8,18 @@ declare module '@mui/material/styles' {
     red: React.CSSProperties['color']
     black: React.CSSProperties['color']
     yellowLight: React.CSSProperties['color']
+    yellowMedium: React.CSSProperties['color']
     orangeDark: React.CSSProperties['color']
+    grayLight: React.CSSProperties['color']
   }
   interface ThemeOptions {
     white: React.CSSProperties['color']
     red: React.CSSProperties['color']
     black: React.CSSProperties['color']
     yellowLight: React.CSSProperties['color']
+    yellowMedium: React.CSSProperties['color']
     orangeDark: React.CSSProperties['color']
+    grayLight: React.CSSProperties['color']
   }
 }
 
@@ -25,8 +29,11 @@ export const defaultTheme = createTheme({
   black: 'black',
 
   yellowLight: '#F6EBCF',
+  yellowMedium: '#ffe2b3',
 
   orangeDark: '#FF9E00',
+
+  grayLight: '#F4F4F4',
 
   typography: {
     fontFamily: 'Montserrat',

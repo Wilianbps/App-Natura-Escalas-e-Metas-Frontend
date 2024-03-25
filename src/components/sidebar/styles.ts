@@ -10,7 +10,7 @@ export const ContainerSidebar = styled.aside`
 
 export const Header = styled.header`
   height: 6.25rem;
-  border-bottom: solid 1px #cfd1d4;
+  /*   border-bottom: solid 1px #cfd1d4; */
   padding: 1.7rem;
   display: flex;
   justify-content: space-between;
@@ -29,6 +29,6 @@ export const Header = styled.header`
 `
 
 export const ContentSidebarNavigation = styled.section`
-  padding: 1.7rem;
+  padding: 1rem 1.7rem 1.7rem;
   height: calc(100% - 100px);
 `
