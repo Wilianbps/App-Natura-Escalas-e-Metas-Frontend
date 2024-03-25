@@ -1,11 +1,7 @@
-import {
-  Box,
-  FormControl,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from '@mui/material'
+import { Box, FormControl, MenuItem, SelectChangeEvent } from '@mui/material'
 import { useState } from 'react'
+
+import { SelectStyled } from './styles'
 
 interface SelectBasicProps {
   minWidth: number
@@ -18,15 +14,15 @@ export function SelectBasic(props: SelectBasicProps) {
 
   const [store, setStore] = useState<string>('Loja Iguatemi')
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = (event: SelectChangeEvent<string>) => {
     setStore(event.target.value as string)
   }
   return (
     <Box sx={{ minWidth }}>
       <FormControl fullWidth>
-        <Select
+        <SelectStyled
           value={store}
-          onChange={handleChange}
+          onChange={(event) => handleChange(event as SelectChangeEvent<string>)}
           sx={{
             height: heightSelect,
             fontSize,
@@ -41,7 +37,7 @@ export function SelectBasic(props: SelectBasicProps) {
           <MenuItem sx={{ fontSize }} value="Loja 3">
             Loja3
           </MenuItem>
-        </Select>
+        </SelectStyled>
       </FormControl>
     </Box>
   )

@@ -33,7 +33,8 @@ export const defaultTheme = createTheme({
   },
   palette: {
     primary: {
-      main: '#FF9E00', // Definir a cor primária para vermelho
+      main: '#FF9E00',
+      dark: '#FF9E00',
     },
   },
 })
