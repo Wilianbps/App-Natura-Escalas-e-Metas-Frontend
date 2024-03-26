@@ -21,6 +21,6 @@ export const globalStyles = css`
   button {
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 0.938rem;
   }
 `

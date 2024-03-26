@@ -41,8 +41,31 @@ export const Container = styled.section`
           border-top-right-radius: 6px;
           border-bottom-right-radius: 6px;
           text-align: end;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          height: 3.4rem;
+        }
+
+        .circle {
+          cursor: pointer;
+          background-color: #f9f9f9;
+          display: flex;
+          padding: 8px;
+          border-radius: 50%;
+          margin-right: 10px;
+
+          > svg {
+            font-size: 1.3rem;
+            color: ${(props) => props.theme.orangeDark};
+          }
         }
       }
     }
+  }
+  footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4.375rem;
   }
 `

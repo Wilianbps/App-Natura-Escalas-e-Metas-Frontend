@@ -1,5 +1,9 @@
 import { Switch } from '@mui/material'
+import { CgPen } from 'react-icons/cg'
 
+import { Button } from '@/components/Button'
+
+import { employess } from './employees'
 import { Container } from './styles'
 
 export function Employees() {
@@ -20,24 +24,27 @@ export function Employees() {
         </thead>
 
         <tbody>
-          <tr>
-            <td>
-              <Switch />
-            </td>
-            <td>Ana Luíza Ribeiro</td>
-            <td>00040</td>
-            <td>editar</td>
-          </tr>
-          <tr>
-            <td>
-              <Switch />
-            </td>
-            <td>Ana Luíza Ribeiro</td>
-            <td>00057</td>
-            <td>editar</td>
-          </tr>
+          {employess.map((employee) => (
+            <>
+              <tr key={employee.id}>
+                <td>
+                  <Switch />
+                </td>
+                <td>{employee.name}</td>
+                <td>{employee.employeeCode}</td>
+                <td>
+                  <div className="circle">
+                    <CgPen />
+                  </div>
+                </td>
+              </tr>
+            </>
+          ))}
         </tbody>
       </table>
+      <footer>
+        <Button text="Salvar colaboladores" color="#000" bgColor="#ffe2b3" />
+      </footer>
     </Container>
   )
 }
