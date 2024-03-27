@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { DatePickerMUI } from '../DatePickerMUI'
-import { SelectBasic } from '../Select'
+import { SelectStores } from '../Select'
 import { ContainerHeader } from './styles'
 
 export function Header() {
@@ -12,7 +12,7 @@ export function Header() {
   }
   return (
     <ContainerHeader>
-      <SelectBasic minWidth={120} heightSelect="40px" fontSize="13px" />
+      <SelectStores minWidth={120} heightSelect="40px" fontSize="13px" />
       <DatePickerMUI
         selectDate={selectedDate}
         onSelectDate={handleSelectDate}

@@ -5,7 +5,7 @@ interface ContainerButtonProps {
 }
 
 export const ContainerButton = styled.button<ContainerButtonProps>`
-  padding: 12px 30px 12px 30px;
+  padding: 9px 26px 9px 26px;
   color: ${(props) => props.variants.color};
   background-color: ${(props) => props.variants.bgColor};
   font-weight: 500;

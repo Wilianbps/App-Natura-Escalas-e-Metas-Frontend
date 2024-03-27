@@ -1,12 +1,24 @@
 import { Switch } from '@mui/material'
+import { useState } from 'react'
 import { CgPen } from 'react-icons/cg'
 
 import { Button } from '@/components/Button'
 
+import ModalEditEmployee from './componentes/ModalEditEmployee'
 import { employess } from './employees'
 import { Container } from './styles'
 
 export function Employees() {
+  const [openModalEditEmpoyee, setOpenModalEditEmpoyee] = useState(false)
+
+  const handleOpenModalEditEmployee = () => {
+    setOpenModalEditEmpoyee(true)
+  }
+
+  function handleCloseModalEditEmpoyee() {
+    setOpenModalEditEmpoyee(false)
+  }
+
   return (
     <Container>
       <header>
@@ -33,7 +45,7 @@ export function Employees() {
                 <td>{employee.name}</td>
                 <td>{employee.employeeCode}</td>
                 <td>
-                  <div className="circle">
+                  <div className="circle" onClick={handleOpenModalEditEmployee}>
                     <CgPen />
                   </div>
                 </td>
@@ -45,6 +57,10 @@ export function Employees() {
       <footer>
         <Button text="Salvar colaboladores" color="#000" bgColor="#ffe2b3" />
       </footer>
+      <ModalEditEmployee
+        open={openModalEditEmpoyee}
+        onHandleClose={handleCloseModalEditEmpoyee}
+      />
     </Container>
   )
 }

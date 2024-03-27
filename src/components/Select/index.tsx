@@ -1,15 +1,10 @@
 import { Box, FormControl, MenuItem, SelectChangeEvent } from '@mui/material'
 import { useState } from 'react'
 
+import { SelectStoresProps } from './interfaces'
 import { SelectStyled } from './styles'
 
-interface SelectBasicProps {
-  minWidth: number
-  heightSelect: string
-  fontSize: string
-}
-
-export function SelectBasic(props: SelectBasicProps) {
+export function SelectStores(props: SelectStoresProps) {
   const { minWidth, heightSelect, fontSize } = props
 
   const [store, setStore] = useState<string>('Loja Iguatemi')
