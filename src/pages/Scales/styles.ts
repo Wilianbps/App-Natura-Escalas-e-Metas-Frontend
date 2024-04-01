@@ -14,73 +14,52 @@ export const Container = styled.section`
 export const ContainerTable = styled.main`
   table {
     width: 100%;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    color: #414141;
+    font-size: 0.813rem;
+    border-collapse: collapse;
+
     thead {
-      th {
+      tr {
+        text-align: center;
+        th.shifts {
+          background-color: #f3f3f3;
+          border: 1px solid #d5d5d5;
+          padding: 8px;
+          text-align: center;
+        }
       }
     }
 
     tbody {
       tr {
         td {
-          border: 1px solid gray;
-        }
-      }
-    }
-  }
+          border: 1px solid #d5d5d5;
+          width: 100%;
+          height: 32px;
+          text-align: center;
 
-  /* table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 1rem;
-    margin-top: 1.5rem;
+          :first-child {
+            border: 0;
+            min-width: 200px;
+            text-align: center;
+            font-weight: 500;
+          }
 
-    thead {
-      td {
-        padding: 0 2rem;
-        text-align: center;
-        font-weight: 600;
-        color: orange;
-
-        &:last-child {
-          text-align: end;
-        }
-      }
-    }
-
-    tbody {
-      td {
-        padding: 0.5rem 2rem;
-        background-color: ${(props) => props.theme.grayLight};
-        text-align: center;
-        &:first-child {
-          border-top-left-radius: 6px;
-          border-bottom-left-radius: 6px;
-        }
-
-        &:last-child {
-          border-top-right-radius: 6px;
-          border-bottom-right-radius: 6px;
-          text-align: end;
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          height: 3.4rem;
-        }
-
-        .circle {
-          cursor: pointer;
-          background-color: #f9f9f9;
-          display: flex;
-          padding: 8px;
-          border-radius: 50%;
-          margin-right: 10px;
-
-          > svg {
-            font-size: 1.3rem;
-            color: ${(props) => props.theme.orangeDark};
+          select {
+            width: 100%;
+            height: 32px;
+            border: none;
+            appearance: none;
+            text-align: center;
+            cursor: pointer;
+            :focus {
+              border: 1px solid ${(props) => props.theme.orangeDark};
+            }
           }
         }
       }
     }
-  } */
+  }
 `
