@@ -46,20 +46,64 @@ export const ContainerTable = styled.main`
             text-align: center;
             font-weight: 500;
           }
-
-          select {
-            width: 100%;
-            height: 32px;
-            border: none;
-            appearance: none;
-            text-align: center;
-            cursor: pointer;
-            :focus {
-              border: 1px solid ${(props) => props.theme.orangeDark};
-            }
-          }
         }
       }
     }
   }
+`
+
+interface SelectStyledProps {
+  variant: string
+}
+
+export const SelectStyled = styled.div<SelectStyledProps>`
+  position: relative;
+  display: flex;
+  width: 100%;
+
+  select {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    border: none;
+    position: absolute;
+    opacity: 0;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  .styled-select {
+    width: 100%;
+    border: none;
+    height: 32px;
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${(props) =>
+      props.variant === 'T'
+        ? props.theme.yellow
+        : props.variant === 'R'
+          ? props.theme.blueLight
+          : props.variant === 'F'
+            ? props.theme.gray
+            : props.variant === '' && 'transparent'};
+  }
+
+  /* width: 100%;
+  height: 32px;
+  border: none;
+  appearance: none;
+  text-align: center;
+  cursor: pointer;
+  :focus {
+    border: 1px solid ${(props) => props.theme.orangeDark};
+  }
+
+  background-color: ${(props) =>
+    props.variant === 'T'
+      ? props.theme.yellow
+      : props.variant === 'R'
+        ? props.theme.blueLight
+        : props.variant === 'F' && props.theme.gray}; */
 `

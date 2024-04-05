@@ -1,9 +1,46 @@
-import { scales } from './scales'
-import { Container, ContainerTable } from './styles'
+import { useEffect, useState } from 'react'
+
+import { IScale } from './interfaces'
+import { dataScales } from './scales'
+import { Container, ContainerTable, SelectStyled } from './styles'
 import { times } from './times'
 
 export function Scales() {
-  function handleChangeToDoTime() {}
+  const [scales, setScales] = useState({} as IScale)
+
+  function handleChangeToDoTime(
+    event: React.ChangeEvent<HTMLSelectElement>,
+    rowIndex: number,
+    optionId: number,
+  ) {
+    const { value } = event.target
+
+    console.log('event', value)
+    console.log('index', rowIndex)
+    console.log('id', optionId)
+
+    // Copiar o estado atual das escalas
+    const updatedScales = { ...scales }
+
+    // Encontrar a opção correta para atualizar
+    const selectedOption = updatedScales.turns[rowIndex].options.find(
+      (option) => option.id === optionId,
+    )
+
+    // Atualizar o tipo da opção selecionada
+    if (selectedOption) {
+      selectedOption.type = value
+    }
+
+    // Atualizar o estado com as novas escalas
+    setScales(updatedScales)
+  }
+
+  console.log('scales', scales)
+
+  useEffect(() => {
+    setScales(dataScales)
+  }, [])
 
   return (
     <Container>
@@ -45,26 +82,38 @@ export function Scales() {
             </tr>
           </thead>
           <tbody>
-            {scales[0]!.map((scale: any, index) => (
+            {scales?.turns?.map((scale, index) => (
+              /*     <tr key={`${index}${scale.id}`}> */
               <tr key={index}>
-                <td>{scale[0].name}</td>
-                {scale[1].options!.map((option: any) => (
-                  <td key={index}>
-                    <select value={option} onChange={handleChangeToDoTime}>
-                      <option value="T">T</option>
-                      <option value="R">R</option>
-                      <option value="F">F</option>
-                    </select>
+                <td>{scale.name}</td>
+                {scale.options.map((option) => (
+                  <td key={option.id}>
+                    <SelectStyled variant={option.type}>
+                      <select
+                        value={option.type}
+                        onChange={(event) =>
+                          handleChangeToDoTime(event, index, option.id)
+                        }
+                      >
+                        <option value=""></option>
+                        <option value="T">T</option>
+                        <option value="R">R</option>
+                      </select>
+
+                      <div className="styled-select">
+                        {option.type === 'T' ? 'T' : option.type === 'R' && 'R'}
+                      </div>
+                    </SelectStyled>
                   </td>
                 ))}
               </tr>
             ))}
 
-            {scales[1]!.map((value: any, index) => (
-              <tr key={index}>
-                <td>{value[0].type}</td>
-                {value[1].values!.map((item: any) => (
-                  <td key={index}>
+            {scales?.values?.map((value, index) => (
+              <tr key={`scaleValue_${index}`}>
+                <td>{value.type}</td>
+                {value.value!.map((item, index) => (
+                  <td key={`value_${index}`}>
                     <span>{item}</span>
                   </td>
                 ))}

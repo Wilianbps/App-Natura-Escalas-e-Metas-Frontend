@@ -7,19 +7,27 @@ declare module '@mui/material/styles' {
     white: React.CSSProperties['color']
     red: React.CSSProperties['color']
     black: React.CSSProperties['color']
+    yellow: React.CSSProperties['color']
     yellowLight: React.CSSProperties['color']
     yellowMedium: React.CSSProperties['color']
+    orangeMedium: React.CSSProperties['color']
     orangeDark: React.CSSProperties['color']
     grayLight: React.CSSProperties['color']
+    gray: React.CSSProperties['color']
+    blueLight: React.CSSProperties['color']
   }
   interface ThemeOptions {
     white: React.CSSProperties['color']
     red: React.CSSProperties['color']
     black: React.CSSProperties['color']
+    yellow: React.CSSProperties['color']
     yellowLight: React.CSSProperties['color']
     yellowMedium: React.CSSProperties['color']
+    orangeMedium: React.CSSProperties['color']
     orangeDark: React.CSSProperties['color']
     grayLight: React.CSSProperties['color']
+    gray: React.CSSProperties['color']
+    blueLight: React.CSSProperties['color']
   }
 }
 
@@ -28,11 +36,16 @@ export const defaultTheme = createTheme({
   red: 'red',
   black: 'black',
 
+  yellow: '#F8E32B',
   yellowLight: '#F6EBCF',
   yellowMedium: '#ffe2b3',
 
+  orangeMedium: '#FFB84D',
   orangeDark: '#FF9E00',
 
+  blueLight: '#B0D3F3',
+
+  gray: '#C8C8C8',
   grayLight: '#F4F4F4',
 
   typography: {
