@@ -34,17 +34,33 @@ export const ContainerTable = styled.main`
 
     tbody {
       tr {
+        &:nth-last-of-type(2) {
+          font-weight: bold;
+        }
+        &:nth-last-of-type(3) {
+          font-weight: bold;
+        }
+        &:nth-last-of-type(4) {
+          color: ${(props) => props.theme.greenMedium};
+          font-weight: bold;
+        }
         td {
           border: 1px solid #d5d5d5;
           width: 100%;
           height: 32px;
           text-align: center;
 
-          :first-child {
+          &:first-of-type {
+            padding: 0 30px;
+            text-align: left;
             border: 0;
-            min-width: 200px;
-            text-align: center;
-            font-weight: 500;
+            min-width: 190px;
+            font-weight: 600;
+
+            &.title-info-scale {
+              font-size: 12px;
+              color: ${(props) => props.theme.greenMedium};
+            }
           }
         }
       }
@@ -53,7 +69,8 @@ export const ContainerTable = styled.main`
 `
 
 interface SelectStyledProps {
-  variant: string
+  option: string | null
+  turn: string
 }
 
 export const SelectStyled = styled.div<SelectStyledProps>`
@@ -80,30 +97,39 @@ export const SelectStyled = styled.div<SelectStyledProps>`
     display: inline-flex;
     justify-content: center;
     align-items: center;
+
     background-color: ${(props) =>
-      props.variant === 'T'
+      props.option === 'T' && props.turn === 'T1'
         ? props.theme.yellow
-        : props.variant === 'R'
-          ? props.theme.blueLight
-          : props.variant === 'F'
-            ? props.theme.gray
-            : props.variant === '' && 'transparent'};
+        : props.option === 'T' && props.turn === 'T2'
+          ? props.theme.orangeMedium
+          : props.option === 'T' && props.turn === 'T3'
+            ? props.theme.beigeDark
+            : props.option === 'R'
+              ? props.theme.blueLight
+              : 'transparent'};
   }
+`
 
-  /* width: 100%;
-  height: 32px;
-  border: none;
-  appearance: none;
-  text-align: center;
-  cursor: pointer;
-  :focus {
-    border: 1px solid ${(props) => props.theme.orangeDark};
-  }
+interface TableDataInfo {
+  type: string
+  value: number | string
+}
 
+export const TableDataInfo = styled.td<TableDataInfo>`
   background-color: ${(props) =>
-    props.variant === 'T'
-      ? props.theme.yellow
-      : props.variant === 'R'
-        ? props.theme.blueLight
-        : props.variant === 'F' && props.theme.gray}; */
+    props.type === 'Atendimento Médio' &&
+    (Number(props.value) > 0 && Number(props.value) <= 3
+      ? '#FFEFEF'
+      : Number(props.value) > 3 && Number(props.value) <= 6
+        ? '#FFCDCD'
+        : Number(props.value) > 6 && Number(props.value) <= 9
+          ? '#FF9494'
+          : Number(props.value) > 9 && Number(props.value) <= 15
+            ? '#FB4949'
+            : Number(props.value) > 15 && Number(props.value) <= 20
+              ? '#FF1A1A'
+              : Number(props.value) > 20 && Number(props.value) <= 25
+                ? '#C60000'
+                : 'transparent')};
 `

@@ -74,25 +74,62 @@ export const dataScales = {
         { id: 29, type: '' },
       ],
     },
-  ],
-  values: [
     {
-      type: 'Qnt colab. ativos',
-      value: [
+      id: 3,
+      name: 'MariaSoares',
+      turn: 'T3',
+      options: [
+        { id: 0, type: '' },
+        { id: 1, type: '' },
+        { id: 2, type: '' },
+        { id: 3, type: '' },
+        { id: 4, type: '' },
+        { id: 5, type: '' },
+        { id: 6, type: '' },
+        { id: 7, type: '' },
+        { id: 8, type: '' },
+        { id: 9, type: '' },
+        { id: 10, type: '' },
+        { id: 11, type: '' },
+        { id: 12, type: '' },
+        { id: 13, type: '' },
+        { id: 14, type: '' },
+        { id: 15, type: 'T' },
+        { id: 16, type: 'T' },
+        { id: 17, type: 'T' },
+        { id: 18, type: 'T' },
+        { id: 19, type: 'T' },
+        { id: 20, type: 'T' },
+        { id: 21, type: 'T' },
+        { id: 22, type: 'T' },
+        { id: 23, type: 'T' },
+        { id: 24, type: 'T' },
+        { id: 25, type: 'T' },
+        { id: 26, type: 'T' },
+        { id: 27, type: 'T' },
+        { id: 28, type: 'T' },
+        { id: 29, type: 'T' },
+      ],
+    },
+  ],
+  infos: [
+    {
+      type: 'Qnt Colab. Ativos',
+      values: [
         0, 1, 2, 2, 2, 2, 2, 2, 4, 3, 4, 4, 3, 2, 3, 3, 3, 3, 3, 2, 2, 2, 4, 3,
         3, 2, 2, 3, 4, 2,
       ],
     },
     {
-      type: 'Qnt colab. ativos',
-      value: [
-        0, 1, 1, 1, 1, 1, 2, 2, 4, 3, 4, 9, 10, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3,
-        3, 2, 2, 3, 1, 2,
+      type: 'Atendimento Médio',
+      values: [
+        0, 1, 1, 1, 1, 1, 2, 2, 4, 3, 4, 9, 10, 2, 1, 1, 1, 25, 1, 2, 2, 2, 2,
+        3, 3, 2, 2, 3, 1, 2,
       ],
     },
     {
-      type: '% Cons. Ativos',
-      value: [
+      type: 'Média de Fluxos',
+      values: [
         '0%',
         '98%',
         '98%',

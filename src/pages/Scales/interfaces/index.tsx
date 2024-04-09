@@ -5,9 +5,9 @@ export interface IScale {
     turn: string
     options: { id: number; type: string }[]
   }[]
-  values: {
+  infos: {
     type: string
-    value: number[] | string[]
+    values: number[] | string[]
   }[]
 }
 

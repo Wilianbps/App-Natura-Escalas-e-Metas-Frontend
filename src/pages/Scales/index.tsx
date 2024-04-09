@@ -2,11 +2,35 @@ import { useEffect, useState } from 'react'
 
 import { IScale } from './interfaces'
 import { dataScales } from './scales'
-import { Container, ContainerTable, SelectStyled } from './styles'
+import {
+  Container,
+  ContainerTable,
+  SelectStyled,
+  TableDataInfo,
+} from './styles'
 import { times } from './times'
 
 export function Scales() {
   const [scales, setScales] = useState({} as IScale)
+
+  async function updateTurn(updatedScales: IScale, rowIndex: number) {
+    const index = updatedScales.turns[rowIndex].options.findIndex(
+      (option) => option.type === 'T' || option.type === 'R',
+    )
+
+    if (index !== -1) {
+      if (index >= 0 && index <= 7) {
+        updatedScales.turns[rowIndex].turn = 'T1'
+        setScales(updatedScales)
+      } else if (index >= 8 && index <= 14) {
+        updatedScales.turns[rowIndex].turn = 'T2'
+        setScales(updatedScales)
+      } else if (index >= 15 && index <= 30) {
+        updatedScales.turns[rowIndex].turn = 'T3'
+        setScales(updatedScales)
+      }
+    }
+  }
 
   function handleChangeToDoTime(
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -14,11 +38,6 @@ export function Scales() {
     optionId: number,
   ) {
     const { value } = event.target
-
-    console.log('event', value)
-    console.log('index', rowIndex)
-    console.log('id', optionId)
-
     // Copiar o estado atual das escalas
     const updatedScales = { ...scales }
 
@@ -32,11 +51,11 @@ export function Scales() {
       selectedOption.type = value
     }
 
+    updateTurn(updatedScales, rowIndex)
+
     // Atualizar o estado com as novas escalas
     setScales(updatedScales)
   }
-
-  console.log('scales', scales)
 
   useEffect(() => {
     setScales(dataScales)
@@ -83,12 +102,11 @@ export function Scales() {
           </thead>
           <tbody>
             {scales?.turns?.map((scale, index) => (
-              /*     <tr key={`${index}${scale.id}`}> */
               <tr key={index}>
                 <td>{scale.name}</td>
                 {scale.options.map((option) => (
                   <td key={option.id}>
-                    <SelectStyled variant={option.type}>
+                    <SelectStyled option={option.type} turn={scale.turn}>
                       <select
                         value={option.type}
                         onChange={(event) =>
@@ -108,17 +126,31 @@ export function Scales() {
                 ))}
               </tr>
             ))}
+            <tr>
+              {Array(31)
+                .fill(null)
+                .map((_item, index) => (
+                  <td key={index}></td>
+                ))}
+            </tr>
 
-            {scales?.values?.map((value, index) => (
-              <tr key={`scaleValue_${index}`}>
-                <td>{value.type}</td>
-                {value.value!.map((item, index) => (
-                  <td key={`value_${index}`}>
-                    <span>{item}</span>
-                  </td>
+            {scales?.infos?.map((info, indexTr) => (
+              <tr key={`scaleInfos_${indexTr}`}>
+                <td className="title-info-scale">{info.type}</td>
+                {info?.values?.map((value, indexTd) => (
+                  <TableDataInfo
+                    key={`value_${indexTd}`}
+                    type={info.type}
+                    value={value}
+                  >
+                    <span>{value}</span>
+                  </TableDataInfo>
                 ))}
               </tr>
             ))}
+            <tr>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </ContainerTable>
