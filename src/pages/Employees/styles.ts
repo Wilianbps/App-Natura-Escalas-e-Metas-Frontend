@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 
 export const Container = styled.section`
   padding: 1.25rem 3.125rem;
+  margin-top: 6.25rem;
 
   h1 {
     font-size: 1.875rem;

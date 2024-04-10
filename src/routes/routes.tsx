@@ -4,7 +4,7 @@ import { AppLayout } from '@/pages/_Layouts'
 import { Dashboard } from '@/pages/Dashboard'
 import { Employees } from '@/pages/Employees'
 import { Goals } from '@/pages/Goals'
-import { Scales } from '@/pages/Scales'
+import { ScalePage } from '@/pages/Scales'
 import { Simulator } from '@/pages/Simulator'
 
 function ErrorBoundary() {
@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { path: '/', element: <Dashboard /> },
-      { path: '/escalas', element: <Scales /> },
+      { path: '/escalas', element: <ScalePage /> },
       { path: '/metas', element: <Goals /> },
       { path: '/colaboradores', element: <Employees /> },
       { path: '/simulador', element: <Simulator /> },
