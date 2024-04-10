@@ -4,6 +4,7 @@ export const defaultScales = [
       { id: 1 },
       { name: 'José Maria' },
       { turn: 'Matutino' },
+      { status: true },
       {
         options: [
           { id: 0, type: 'T' },
@@ -43,6 +44,7 @@ export const defaultScales = [
       { id: 2 },
       { name: 'José Maria' },
       { turn: 'Matutino' },
+      { status: true },
       {
         options: [
           { id: 0, type: 'R' },

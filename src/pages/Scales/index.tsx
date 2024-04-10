@@ -1,3 +1,4 @@
+import { Switch } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 import { IScale } from './interfaces'
@@ -57,6 +58,19 @@ export function Scales() {
     setScales(updatedScales)
   }
 
+  function handleChangeStatus(
+    event: React.ChangeEvent<HTMLInputElement>,
+    rowIndex: number,
+  ) {
+    const { checked } = event.target
+
+    const updatedStatus = { ...scales }
+
+    updatedStatus.turns[rowIndex].status = checked
+
+    setScales(updatedStatus)
+  }
+
   useEffect(() => {
     setScales(dataScales)
   }, [])
@@ -72,6 +86,7 @@ export function Scales() {
           <thead>
             <tr>
               <th rowSpan={3}></th>
+              <th rowSpan={3}></th>
             </tr>
             <tr>
               <th colSpan={15} style={{ backgroundColor: '#F8E32B' }}>
@@ -85,13 +100,14 @@ export function Scales() {
               </th>
             </tr>
             <tr>
-              <th colSpan={16}></th>
+              <th colSpan={17}></th>
               <th colSpan={15} style={{ backgroundColor: '#D58400' }}>
                 Noturno
               </th>
             </tr>
             <tr>
-              <th></th>
+              <th>Nome</th>
+              <th>Status</th>
               {times.map((time) => (
                 <th key={time[0]} className="shifts">
                   <p>{time[0]}</p>
@@ -104,10 +120,22 @@ export function Scales() {
             {scales?.turns?.map((scale, index) => (
               <tr key={index}>
                 <td>{scale.name}</td>
+                <td>
+                  <Switch
+                    size="small"
+                    checked={scale.status}
+                    onChange={(event) => handleChangeStatus(event, index)}
+                  />
+                </td>
                 {scale.options.map((option) => (
                   <td key={option.id}>
-                    <SelectStyled option={option.type} turn={scale.turn}>
+                    <SelectStyled
+                      option={option.type}
+                      turn={scale.turn}
+                      status={scale.status}
+                    >
                       <select
+                        disabled={!scale.status}
                         value={option.type}
                         onChange={(event) =>
                           handleChangeToDoTime(event, index, option.id)
@@ -127,7 +155,7 @@ export function Scales() {
               </tr>
             ))}
             <tr>
-              {Array(31)
+              {Array(32)
                 .fill(null)
                 .map((_item, index) => (
                   <td key={index}></td>
@@ -137,6 +165,7 @@ export function Scales() {
             {scales?.infos?.map((info, indexTr) => (
               <tr key={`scaleInfos_${indexTr}`}>
                 <td className="title-info-scale">{info.type}</td>
+                <td></td>
                 {info?.values?.map((value, indexTd) => (
                   <TableDataInfo
                     key={`value_${indexTd}`}

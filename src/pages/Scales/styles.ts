@@ -23,6 +23,20 @@ export const ContainerTable = styled.main`
     thead {
       tr {
         text-align: center;
+
+        &:nth-of-type(5) {
+          th:nth-of-type(1) {
+            color: ${(props) => props.theme.orangeDark};
+            text-align: left;
+            padding-left: 30px;
+          }
+
+          th:nth-of-type(2) {
+            color: ${(props) => props.theme.orangeDark};
+            text-align: left;
+          }
+        }
+
         th.shifts {
           background-color: #f3f3f3;
           border: 1px solid #d5d5d5;
@@ -54,13 +68,19 @@ export const ContainerTable = styled.main`
             padding: 0 30px;
             text-align: left;
             border: 0;
-            min-width: 190px;
+            min-width: 200px;
             font-weight: 600;
-
             &.title-info-scale {
               font-size: 12px;
               color: ${(props) => props.theme.greenMedium};
             }
+          }
+
+          &:nth-of-type(2) {
+            text-align: left;
+            border: 0;
+            min-width: 60px;
+            font-weight: 600;
           }
         }
       }
@@ -71,6 +91,7 @@ export const ContainerTable = styled.main`
 interface SelectStyledProps {
   option: string | null
   turn: string
+  status: boolean
 }
 
 export const SelectStyled = styled.div<SelectStyledProps>`
@@ -109,6 +130,10 @@ export const SelectStyled = styled.div<SelectStyledProps>`
               ? props.theme.blueLight
               : 'transparent'};
   }
+
+  opacity: ${(props) => props.status === false && 0};
+
+  transition: opacity ease-in 0.4s;
 `
 
 interface TableDataInfo {
@@ -117,6 +142,12 @@ interface TableDataInfo {
 }
 
 export const TableDataInfo = styled.td<TableDataInfo>`
+  color: ${(props) =>
+    props.type === 'Atendimento Médio' &&
+    Number(props.value) > 9 &&
+    Number(props.value) <= 25 &&
+    '#fff'};
+
   background-color: ${(props) =>
     props.type === 'Atendimento Médio' &&
     (Number(props.value) > 0 && Number(props.value) <= 3

@@ -4,6 +4,7 @@ export const dataScales = {
       id: 1,
       name: 'José Maria',
       turn: 'T1',
+      status: true,
       options: [
         { id: 0, type: 'T' },
         { id: 1, type: 'T' },
@@ -41,6 +42,7 @@ export const dataScales = {
       id: 2,
       name: 'Mario Andrade',
       turn: 'T2',
+      status: true,
       options: [
         { id: 0, type: '' },
         { id: 1, type: '' },
@@ -76,8 +78,9 @@ export const dataScales = {
     },
     {
       id: 3,
-      name: 'MariaSoares',
+      name: 'Maria Soares da Silva Santos',
       turn: 'T3',
+      status: true,
       options: [
         { id: 0, type: '' },
         { id: 1, type: '' },
@@ -123,7 +126,7 @@ export const dataScales = {
     {
       type: 'Atendimento Médio',
       values: [
-        0, 1, 1, 1, 1, 1, 2, 2, 4, 3, 4, 9, 10, 2, 1, 1, 1, 25, 1, 2, 2, 2, 2,
+        0, 1, 1, 1, 1, 1, 2, 2, 4, 3, 4, 9, 10, 2, 1, 11, 1, 25, 1, 2, 16, 2, 2,
         3, 3, 2, 2, 3, 1, 2,
       ],
     },

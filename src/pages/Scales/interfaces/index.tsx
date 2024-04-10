@@ -3,6 +3,7 @@ export interface IScale {
     id: number
     name: string
     turn: string
+    status: boolean
     options: { id: number; type: string }[]
   }[]
   infos: {
