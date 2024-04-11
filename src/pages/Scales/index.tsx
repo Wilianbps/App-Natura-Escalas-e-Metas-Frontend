@@ -21,36 +21,41 @@ export function ScalePage() {
         <h1>Escalas</h1>
       </header>
 
-      <Box sx={{ width: '100%', padding: 0 }}>
+      <Box sx={{ width: '100%', marginTop: '10px' }}>
         <TabContext value={value}>
           <Box
             sx={{
               borderBottom: 1,
               borderColor: 'divider',
-              /*               display: 'flex',
-              justifyContent: 'flex-end', */
               padding: 0,
             }}
           >
-            <TabList onChange={handleChange} aria-labelledby="0">
+            <TabList onChange={handleChange}>
               <Tab
                 label="Configurar"
                 icon={<CgPen />}
                 iconPosition="end"
                 value="1"
+                sx={{
+                  textTransform: 'capitalize',
+                  fontWeight: 'bold',
+                }}
               />
               <Tab
                 label="Resumo"
                 icon={<CgEye />}
                 iconPosition="end"
                 value="2"
+                sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
               />
             </TabList>
           </Box>
-          <TabPanel value="1">
+          <TabPanel value="1" sx={{ padding: 0 }}>
             <Scale />
           </TabPanel>
-          <TabPanel value="2">Resumo</TabPanel>
+          <TabPanel value="2" sx={{ padding: 0 }}>
+            Resumo
+          </TabPanel>
         </TabContext>
       </Box>
     </Container>

@@ -7,7 +7,7 @@ export const Container = styled.section`
   header {
     h1 {
       font-size: 1.875rem;
-      font-weight: 300;
+      font-weight: 400;
     }
   }
 `

@@ -1,6 +1,7 @@
 import { Switch } from '@mui/material'
 import { useEffect, useState } from 'react'
 
+import { PaginationPerDay } from './components/PaginationPerDay'
 import { IScale } from './interfaces'
 import { dataScales } from './scales'
 import {
@@ -77,6 +78,8 @@ export function Scale() {
 
   return (
     <Container>
+      <PaginationPerDay />
+
       <ContainerTable>
         <table>
           <thead>
