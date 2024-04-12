@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { CgEye, CgPen } from 'react-icons/cg'
 
 import { Scale } from './components/ScalePage'
+import { Summary } from './components/Summary'
 import { Container } from './styles'
 
 export function ScalePage() {
@@ -54,7 +55,7 @@ export function ScalePage() {
             <Scale />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
-            Resumo
+            <Summary />
           </TabPanel>
         </TabContext>
       </Box>
