@@ -2,7 +2,6 @@ import {
   CgCornerDownLeft,
   CgHomeAlt,
   CgMenuGridO,
-  CgOptions,
   CgPoll,
   CgProfile,
 } from 'react-icons/cg'
@@ -40,20 +39,20 @@ export function MainNavigation(props: MainNavigationProps) {
           {!isSidebarOpen && <span>Metas</span>}
         </StyledLink>
         <StyledLink
-          to="/colaboradores"
-          data-current={pathname === '/colaboradores'}
+          to="/configuracoes"
+          data-current={pathname === '/configuracoes'}
         >
           <div className="background-icon">
             <CgProfile />
           </div>
-          {!isSidebarOpen && <span>Colaboradores</span>}
+          {!isSidebarOpen && <span>Configurações</span>}
         </StyledLink>
-        <StyledLink to="/simulador" data-current={pathname === '/simulador'}>
+        {/*  <StyledLink to="/simulador" data-current={pathname === '/simulador'}>
           <div className="background-icon">
             <CgOptions />
           </div>
           {!isSidebarOpen && <span>Simulador</span>}
-        </StyledLink>
+        </StyledLink> */}
       </section>
 
       <footer>

@@ -46,6 +46,7 @@ export const defaultTheme = createTheme({
 
   yellow: '#F8E32B',
   yellowLight: '#F6EBCF',
+
   yellowMedium: '#ffe2b3',
 
   orangeMedium: '#FFB84D',

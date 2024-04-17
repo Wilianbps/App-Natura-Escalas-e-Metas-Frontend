@@ -1,7 +1,58 @@
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { Box, Tab } from '@mui/material'
+import { useState } from 'react'
+
+import { GoalCards } from './components/Goal-Cards'
+import { GoalPerDay } from './components/GoalPearDay'
+import { GoalPearWeek } from './components/GoalPearWeek'
+import { Container } from './styles'
+
 export function Goals() {
+  const [value, setValue] = useState('1')
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue)
+  }
   return (
-    <div>
-      <h1>Metas</h1>
-    </div>
+    <Container>
+      <header>
+        <h1>Metas</h1>
+        <GoalCards />
+      </header>
+
+      <Box sx={{ width: '100%', marginTop: '10px' }}>
+        <TabContext value={value}>
+          <Box
+            sx={{
+              borderBottom: 1,
+              borderColor: 'divider',
+              padding: 0,
+            }}
+          >
+            <TabList onChange={handleChange}>
+              <Tab
+                label="Dias"
+                value="1"
+                sx={{
+                  textTransform: 'capitalize',
+                  fontWeight: 'bold',
+                }}
+              />
+              <Tab
+                label="Semanas"
+                value="2"
+                sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
+              />
+            </TabList>
+          </Box>
+          <TabPanel value="1" sx={{ padding: 0 }}>
+            <GoalPerDay />
+          </TabPanel>
+          <TabPanel value="2" sx={{ padding: 0 }}>
+            <GoalPearWeek />
+          </TabPanel>
+        </TabContext>
+      </Box>
+    </Container>
   )
 }

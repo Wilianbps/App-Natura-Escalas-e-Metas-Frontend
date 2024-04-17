@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
       { path: '/', element: <Dashboard /> },
       { path: '/escalas', element: <ScalePage /> },
       { path: '/metas', element: <Goals /> },
-      { path: '/colaboradores', element: <Employees /> },
+      { path: '/configuracoes', element: <Employees /> },
       { path: '/simulador', element: <Simulator /> },
     ],
   },

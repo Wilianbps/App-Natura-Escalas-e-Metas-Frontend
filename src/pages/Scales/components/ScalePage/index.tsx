@@ -1,5 +1,7 @@
 import { Switch } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { GiForkKnifeSpoon } from 'react-icons/gi'
+import { IoPersonCircleOutline } from 'react-icons/io5'
 
 import { PaginationPerDay } from './components/PaginationPerDay'
 import { IScale } from './interfaces'
@@ -146,7 +148,11 @@ export function Scale() {
                       </select>
 
                       <div className="styled-select">
-                        {option.type === 'T' ? 'T' : option.type === 'R' && 'R'}
+                        {option.type === 'T' ? (
+                          <IoPersonCircleOutline size={20} />
+                        ) : (
+                          option.type === 'R' && <GiForkKnifeSpoon size={20} />
+                        )}
                       </div>
                     </SelectStyled>
                   </td>
