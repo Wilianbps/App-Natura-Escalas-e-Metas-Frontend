@@ -37,9 +37,35 @@ export const InfoEmployeeContainer = styled.section`
   gap: 1rem;
 `
 
+export const SelectDayoffContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 30rem;
+  display: flex;
+  gap: 1rem;
+
+  .container-selectDayOff-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    > button {
+      height: 100%;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 8px;
+      border: none;
+      color: white;
+    }
+  }
+`
+
 export const SelectVacationContainer = styled.section`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   min-width: 30rem;
   display: flex;
   gap: 1rem;
@@ -47,7 +73,7 @@ export const SelectVacationContainer = styled.section`
 
 export const DividerVertical = styled.div`
   border-left: 1px solid black;
-  height: 300px;
+  min-height: 300px;
   margin: 0 20px;
 `
 
@@ -56,4 +82,18 @@ export const ContainerWorkShift = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
+`
+
+export const ContainerDaysOff = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+
+  > p {
+    font-weight: 500;
+    background-color: ${(props) => props.theme.yellowLight};
+    padding: 5px;
+    border-radius: 8px;
+  }
 `

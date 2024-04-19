@@ -9,7 +9,7 @@ export const Container = styled.section`
 export const ContainerGoals = styled.section`
   display: grid;
   grid-template-columns: 1.5fr 1fr;
-  gap: 4rem;
+  gap: 2rem;
 `
 
 export const Card = styled.section`
@@ -18,7 +18,7 @@ export const Card = styled.section`
     linear-gradient(to right, #ff9e00, #fff173) border-box;
   border-radius: 30px;
   border: 1px solid transparent;
-  padding: 1.875rem;
+  padding: 1.2rem;
 
   footer,
   header {
@@ -51,7 +51,38 @@ export const MonthlyGoalChart = styled(Card)`
   z-index: -11;
 `
 
-export const GoalEmployeesChartContent = styled(Card)`
+export const ContainerChartGoalEmployees = styled(Card)`
+  section {
+    margin-top: 2rem;
+  }
+`
+
+export const ContainerChartsAverageSales = styled.section`
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+`
+
+export const ContainerChartAverageSalesHour = styled(Card)`
+  width: 100%;
+  section {
+    margin-top: 2rem;
+  }
+`
+
+export const ContainerChartAverageSalesDay = styled(Card)`
+  width: 100%;
+
+  section {
+    margin-top: 2rem;
+  }
+`
+
+export const ContainerChartAverageSalesMonth = styled(Card)`
+  width: 100%;
+  margin-top: 1rem;
   section {
     margin-top: 2rem;
   }

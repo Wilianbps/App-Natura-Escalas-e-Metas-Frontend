@@ -10,11 +10,13 @@ import { DatePickerEmployeeModal } from './components/DatePicker'
 import { SelectOptions } from './components/Select'
 import { WorkShift } from './components/WorkShift'
 import {
+  ContainerDaysOff,
   ContainerModal,
   ContainerWorkShift,
   ContentModal,
   DividerVertical,
   InfoEmployeeContainer,
+  SelectDayoffContainer,
   SelectVacationContainer,
 } from './styles'
 
@@ -33,6 +35,7 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     useState<Date | null>(null)
 
   const [dayOff, setDayOff] = useState<Date | null>(null)
+  const [arrayDaysOff, setArrayDaysOff] = useState<Date[] | null>([])
 
   const [selectTypeRest, setSelectTypeRest] = useState('')
 
@@ -50,6 +53,24 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
 
   function handleSelectDayOff(date: Date | null) {
     setDayOff(date)
+  }
+
+  function handleAddDayOffInArray() {
+    if (!dayOff) {
+      alert('Informe uma data')
+      return
+    }
+    if (dayOff) {
+      setArrayDaysOff((prevArrayDaysOff) =>
+        prevArrayDaysOff ? [...prevArrayDaysOff, dayOff] : [dayOff],
+      )
+    }
+    setDayOff(null)
+  }
+
+  function handleClearSelectedDaysOff() {
+    setArrayDaysOff([])
+    setDayOff(null)
   }
 
   return (
@@ -115,13 +136,32 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
             )}
 
             {selectTypeRest === 'folga' && (
-              <SelectVacationContainer>
-                <DatePickerEmployeeModal
-                  selectDate={dayOff}
-                  onSelectDate={handleSelectDayOff}
-                  label="Folga"
-                />
-              </SelectVacationContainer>
+              <SelectDayoffContainer>
+                <section className="container-selectDayOff-button">
+                  <DatePickerEmployeeModal
+                    selectDate={dayOff}
+                    onSelectDate={handleSelectDayOff}
+                    label="Folga"
+                  />
+                  <Button
+                    text="Adicionar"
+                    color="#FFFFFF"
+                    bgColor="#449428"
+                    onClick={handleAddDayOffInArray}
+                  />
+                  <Button
+                    text="Limpar"
+                    color="#FFFFFF"
+                    bgColor="#FF9E00"
+                    onClick={handleClearSelectedDaysOff}
+                  />
+                </section>
+                <ContainerDaysOff>
+                  {arrayDaysOff?.map((item) => (
+                    <p key={item.toString()}>{item.toLocaleDateString()}</p>
+                  ))}
+                </ContainerDaysOff>
+              </SelectDayoffContainer>
             )}
 
             {selectTypeRest === '' && (

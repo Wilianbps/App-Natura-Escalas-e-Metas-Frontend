@@ -56,12 +56,13 @@ export function GoalEmployeesChart() {
           bottom: 5,
         }}
         barSize={20}
+        style={{ fontSize: 12, fontWeight: 500 }}
       >
         <XAxis
           dataKey="name"
           scale="point"
           padding={{ left: 10, right: 10 }}
-          fontSize={13}
+          fontSize={12}
           fontWeight={500}
         />
         <YAxis />

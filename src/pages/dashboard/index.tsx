@@ -1,10 +1,17 @@
+import { AverageSalesDayChart } from './components/AverageSalesDayChart'
+import { AverageSalesHourChart } from './components/AverageSalesHourChart'
+import { AverageSalesMonthChart } from './components/AverageSalesMonthChart'
 import { GoalEmployeesChart } from './components/GoalEmployeesChart'
 import SliderSizes from './components/Slider'
 import {
   Container,
+  ContainerChartAverageSalesDay,
+  ContainerChartAverageSalesHour,
+  ContainerChartAverageSalesMonth,
+  ContainerChartGoalEmployees,
+  ContainerChartsAverageSales,
   ContainerGoals,
   ContentInfoTextAndMonthlyGoal,
-  GoalEmployeesChartContent,
   InfoText,
   MonthlyGoalChart,
 } from './styles'
@@ -27,14 +34,38 @@ export function Dashboard() {
           </MonthlyGoalChart>
         </ContentInfoTextAndMonthlyGoal>
 
-        <GoalEmployeesChartContent>
+        <ContainerChartGoalEmployees>
           <header>Meta de Colaboladores</header>
-
           <section>
             <GoalEmployeesChart />
           </section>
-        </GoalEmployeesChartContent>
+        </ContainerChartGoalEmployees>
       </ContainerGoals>
+
+      <ContainerChartsAverageSales>
+        <ContainerChartAverageSalesHour>
+          <header>Média de Vendas por Hora</header>
+
+          <section>
+            <AverageSalesHourChart />
+          </section>
+        </ContainerChartAverageSalesHour>
+        <ContainerChartAverageSalesDay>
+          <header>Média de Vendas por Dia</header>
+
+          <section>
+            <AverageSalesDayChart />
+          </section>
+        </ContainerChartAverageSalesDay>
+      </ContainerChartsAverageSales>
+
+      <ContainerChartAverageSalesMonth>
+        <header>Ranking de Vendas Mês</header>
+
+        <section>
+          <AverageSalesMonthChart />
+        </section>
+      </ContainerChartAverageSalesMonth>
     </Container>
   )
 }
