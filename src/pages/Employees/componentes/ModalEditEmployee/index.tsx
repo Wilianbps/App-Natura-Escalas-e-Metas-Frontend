@@ -159,12 +159,14 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
                     label="Folga"
                   />
                   <Button
+                    type="button"
                     text="Adicionar"
                     color="#FFFFFF"
                     bgColor="#449428"
                     onClick={handleAddDayOffInArray}
                   />
                   <Button
+                    type="button"
                     text="Limpar"
                     color="#FFFFFF"
                     bgColor="#FF9E00"

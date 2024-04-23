@@ -80,7 +80,12 @@ export function Employees() {
         </section>
       </ScaleFlowContainer>
       <footer>
-        <Button text="Salvar colaboladores" color="#000" bgColor="#ffe2b3" />
+        <Button
+          type="submit"
+          text="Salvar colaboladores"
+          color="#000"
+          bgColor="#ffe2b3"
+        />
       </footer>
       <ModalEditEmployee
         open={openModalEditEmpoyee}
