@@ -14,6 +14,7 @@ export const Container = styled.section`
     border-collapse: separate;
     border-spacing: 0 1rem;
     margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
 
     thead {
       td {
@@ -68,5 +69,47 @@ export const Container = styled.section`
     display: flex;
     justify-content: flex-end;
     margin-top: 4.375rem;
+  }
+`
+
+export const ScaleFlowContainer = styled.section`
+  margin-top: 1rem;
+  > header {
+    h2 {
+      font-weight: 400;
+    }
+  }
+  section {
+    margin-top: 1.5rem;
+    &.buttons-flow {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+
+      > section {
+        input[type='radio'] {
+          display: none;
+        }
+        > label {
+          width: 120px; /* Você pode ajustar este valor conforme necessário */
+          text-align: center;
+          display: block;
+        }
+
+        > input[type='radio'] + label {
+          border-radius: 50px;
+          background-color: transparent;
+          font-weight: 500;
+          border: 1px solid ${(props) => props.theme.orangeDark};
+          padding: 10px 15px;
+          cursor: pointer;
+        }
+
+        input[type='radio']:checked + label {
+          background-color: ${(props) => props.theme.orangeMedium};
+          color: #fff;
+        }
+      }
+    }
   }
 `
