@@ -1,32 +1,35 @@
-import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
 import IconButton from '@mui/material/IconButton'
 import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { CgCloseO } from 'react-icons/cg'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/Button'
 
 import { DatePickerEmployeeModal } from './components/DatePicker'
 import { SelectOptions } from './components/Select'
 import { WorkShift } from './components/WorkShift'
+import { ModalEditEmployeeProps } from './interfaces'
 import {
   ContainerDaysOff,
   ContainerModal,
   ContainerWorkShift,
-  ContentModal,
   DividerVertical,
+  FormModal,
   InfoEmployeeContainer,
   SelectDayoffContainer,
   SelectVacationContainer,
 } from './styles'
 
-interface ModalEditEmployeeProps {
-  open: boolean
-  onHandleClose: () => void
+interface infoEmployeeProps {
+  selectedShift: string | null
 }
 
 export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
   const { open, onHandleClose } = props
+
+  const { register, handleSubmit, reset } = useForm<infoEmployeeProps>()
 
   const [selectedStartVacation, setSelectedStartVacation] =
     useState<Date | null>(null)
@@ -73,6 +76,18 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     setDayOff(null)
   }
 
+  function handleSaveForm(data: infoEmployeeProps) {
+    console.log('data', data)
+
+    if (data.selectedShift === null) {
+      return toast.error('Selecione um turno.', {
+        style: { height: '50px', padding: '15px' },
+      })
+    }
+    reset()
+    onHandleClose()
+  }
+
   return (
     <React.Fragment>
       <ContainerModal
@@ -114,7 +129,7 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
           </div>
         </header>
 
-        <ContentModal>
+        <FormModal onSubmit={handleSubmit(handleSaveForm)}>
           <SelectOptions
             selectTypeRest={selectTypeRest}
             onHandleSelectTypeRest={handleSelectTypeRest}
@@ -167,22 +182,18 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
             {selectTypeRest === '' && (
               <SelectVacationContainer></SelectVacationContainer>
             )}
-
             <DividerVertical />
-
             <ContainerWorkShift>
-              <WorkShift />
+              <WorkShift register={register} />
             </ContainerWorkShift>
           </InfoEmployeeContainer>
-        </ContentModal>
-        <DialogActions>
           <Button
+            type="submit"
             text="Salvar"
             color="#FFFFFF"
             bgColor="#FF9E00"
-            onClick={onHandleClose}
           />
-        </DialogActions>
+        </FormModal>
       </ContainerModal>
     </React.Fragment>
   )

@@ -22,7 +22,7 @@ export const ContainerModal = styled(Dialog)`
   }
 `
 
-export const ContentModal = styled.section`
+export const FormModal = styled.form`
   margin-top: 3.125rem;
   margin-bottom: 2rem;
   display: flex;
@@ -30,6 +30,10 @@ export const ContentModal = styled.section`
   justify-content: center;
   align-items: center;
   gap: 2rem;
+
+  > button {
+    align-self: flex-end;
+  }
 `
 
 export const InfoEmployeeContainer = styled.section`
