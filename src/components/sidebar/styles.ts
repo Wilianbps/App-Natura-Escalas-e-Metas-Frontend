@@ -6,6 +6,7 @@ export const ContainerSidebar = styled.aside`
     rgba(255, 192, 0, 0.1) 74%,
     rgba(217, 217, 217, 0) 100%
   );
+  z-index: 10;
 `
 
 export const Header = styled.header`

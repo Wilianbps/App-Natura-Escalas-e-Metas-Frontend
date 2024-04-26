@@ -6,11 +6,15 @@ import { CgCloseO } from 'react-icons/cg'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/Button'
+import { useSettings } from '@/contexts/setting/SettingContext'
+import { formatArrayDate } from '@/libs/formatArrayDate'
+import { formatDate } from '@/libs/formatDate'
 
 import { DatePickerEmployeeModal } from './components/DatePicker'
 import { SelectOptions } from './components/Select'
 import { WorkShift } from './components/WorkShift'
-import { ModalEditEmployeeProps } from './interfaces'
+import { IEmployee, ModalEditEmployeeProps } from './interfaces'
+import { modalValidations } from './modalValidations'
 import {
   ContainerDaysOff,
   ContainerModal,
@@ -27,6 +31,7 @@ interface infoEmployeeProps {
 }
 
 export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
+  const { updateShiftRestSchedule } = useSettings()
   const { open, onHandleClose } = props
 
   const { register, handleSubmit, reset } = useForm<infoEmployeeProps>()
@@ -60,7 +65,9 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
 
   function handleAddDayOffInArray() {
     if (!dayOff) {
-      alert('Informe uma data')
+      toast.error('Informe uma data', {
+        style: { height: '50px', padding: '15px' },
+      })
       return
     }
     if (dayOff) {
@@ -76,14 +83,23 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     setDayOff(null)
   }
 
-  function handleSaveForm(data: infoEmployeeProps) {
-    console.log('data', data)
-
-    if (data.selectedShift === null) {
-      return toast.error('Selecione um turno.', {
-        style: { height: '50px', padding: '15px' },
-      })
+  function handleSaveForm(employee: infoEmployeeProps) {
+    const updateEmployee: IEmployee = {
+      shift: employee.selectedShift,
+      startVacation: formatDate(selectedStartVacation),
+      finishVacation: formatDate(selectedFinishVacation),
+      arrayDaysOff: formatArrayDate(arrayDaysOff),
     }
+    const validationError = modalValidations(updateEmployee)
+
+    if (validationError) {
+      return
+    }
+
+    console.log('data', updateEmployee)
+
+    updateShiftRestSchedule(updateEmployee)
+
     reset()
     onHandleClose()
   }
@@ -161,15 +177,15 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
                   <Button
                     type="button"
                     text="Adicionar"
-                    color="#FFFFFF"
-                    bgColor="#449428"
+                    color="#449428"
+                    bgColor="#fff"
                     onClick={handleAddDayOffInArray}
                   />
                   <Button
                     type="button"
                     text="Limpar"
-                    color="#FFFFFF"
-                    bgColor="#FF9E00"
+                    color="#FF9E00"
+                    bgColor="#fff"
                     onClick={handleClearSelectedDaysOff}
                   />
                 </section>

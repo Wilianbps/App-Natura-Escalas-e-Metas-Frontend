@@ -61,8 +61,13 @@ export const SelectDayoffContainer = styled.section`
       padding: 10px;
       cursor: pointer;
       border-radius: 8px;
-      border: none;
-      color: white;
+
+      &:nth-of-type(1) {
+        border: 1px solid ${(props) => props.theme.greenMedium};
+      }
+      &:nth-of-type(2) {
+        border: 1px solid ${(props) => props.theme.orangeDark};
+      }
     }
   }
 `

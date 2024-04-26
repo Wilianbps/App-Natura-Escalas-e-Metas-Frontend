@@ -10,4 +10,7 @@ export const ContainerHeader = styled.header`
   justify-content: flex-end;
   gap: 2.5rem;
   padding-right: 3.125rem;
+  z-index: 1;
+  background-color: ${(props) => props.theme.white};
+  width: 85%;
 `

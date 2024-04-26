@@ -82,7 +82,7 @@ export function Employees() {
       <footer>
         <Button
           type="submit"
-          text="Salvar colaboladores"
+          text="Salvar Configurações"
           color="#000"
           bgColor="#ffe2b3"
         />

@@ -10,8 +10,6 @@ export interface SelectOptionsProps {
 export function SelectOptions(props: SelectOptionsProps) {
   const { onHandleSelectTypeRest, selectTypeRest } = props
 
-  console.log(selectTypeRest)
-
   const handleChange = (event: SelectChangeEvent<string>) => {
     onHandleSelectTypeRest(event.target.value as string)
   }
