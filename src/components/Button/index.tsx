@@ -1,16 +1,23 @@
+import { CircularProgress } from '@mui/material'
+
 import { ButtonProps } from './interfaces'
 import { ContainerButton } from './styles'
 
 export function Button(props: ButtonProps) {
-  const { type, text, color, bgColor, onClick } = props
+  const { type, text, color, bgColor, width, onClick, isSubmitting } = props
 
   return (
     <ContainerButton
-      variants={{ color, bgColor }}
+      variants={{ color, bgColor, width }}
       onClick={onClick}
+      disabled={isSubmitting}
       type={type}
     >
-      {text}
+      {isSubmitting === true ? (
+        <CircularProgress color="primary" size={15} />
+      ) : (
+        text
+      )}
     </ContainerButton>
   )
 }

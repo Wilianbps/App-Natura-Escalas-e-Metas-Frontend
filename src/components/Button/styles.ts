@@ -1,11 +1,12 @@
 import styled from '@emotion/styled'
 
 interface ContainerButtonProps {
-  variants: { color: string; bgColor: string }
+  variants: { color: string; bgColor: string; width?: string }
 }
 
 export const ContainerButton = styled.button<ContainerButtonProps>`
   padding: 9px 26px 9px 26px;
+  width: ${(props) => props.variants.width};
   color: ${(props) => props.variants.color};
   background-color: ${(props) => props.variants.bgColor};
   font-weight: 500;
