@@ -28,16 +28,31 @@ export const FormModal = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   gap: 2rem;
 
-  > button {
-    align-self: flex-end;
+  section.buttons-clear-save {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+
+    > button {
+      &:nth-of-type(1) {
+        border: 1px solid ${(props) => props.theme.orangeMedium};
+        transition: background 0.2s ease;
+
+        :hover {
+          background-color: ${(props) => props.theme.orangeMedium};
+          color: #fff;
+        }
+      }
+    }
   }
 `
 
 export const InfoEmployeeContainer = styled.section`
   display: flex;
+  justify-content: center;
   gap: 1rem;
 `
 
@@ -64,9 +79,6 @@ export const SelectDayoffContainer = styled.section`
 
       &:nth-of-type(1) {
         border: 1px solid ${(props) => props.theme.greenMedium};
-      }
-      &:nth-of-type(2) {
-        border: 1px solid ${(props) => props.theme.orangeDark};
       }
     }
   }
@@ -99,10 +111,36 @@ export const ContainerDaysOff = styled.section`
   justify-content: center;
   gap: 1rem;
 
-  > p {
-    font-weight: 500;
-    background-color: ${(props) => props.theme.yellowLight};
-    padding: 5px;
-    border-radius: 8px;
+  .content-dayOff {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    p {
+      font-weight: 500;
+      background-color: ${(props) => props.theme.yellowLight};
+      padding: 5px;
+      border-radius: 8px;
+      min-width: 100px;
+      text-align: center;
+    }
+
+    .delete-dayOff {
+      background-color: #f9d2da;
+      line-height: 0;
+      padding: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+
+      > svg {
+        color: ${(props) => props.theme.red};
+        font-size: 18px;
+      }
+
+      :hover {
+        opacity: 0.8;
+      }
+    }
   }
 `

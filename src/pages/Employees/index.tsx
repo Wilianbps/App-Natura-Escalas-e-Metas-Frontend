@@ -8,6 +8,7 @@ import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 
 import ModalEditEmployee from './componentes/ModalEditEmployee'
+import { IEmployee } from './interfaces'
 import { Container, ScaleFlowContainer } from './styles'
 
 interface IEmployeStatus {
@@ -18,16 +19,17 @@ interface IEmployeStatus {
 export function Employees() {
   const { employees, updateSettings } = useSettings()
   const [openModalEditEmpoyee, setOpenModalEditEmpoyee] = useState(false)
+  const [dataEmployee, setDataEmployee] = useState<IEmployee>()
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-
   const [employeeStatus, setEmployeeStatus] = useState<IEmployeStatus[]>([])
   const [selectedFlow, setSelectedFlow] = useState<string>('')
 
   const { handleSubmit } = useForm()
 
-  const handleOpenModalEditEmployee = () => {
+  const handleOpenModalEditEmployee = (employee: IEmployee) => {
     setOpenModalEditEmpoyee(true)
+    setDataEmployee(employee)
   }
 
   function handleCloseModalEditEmpoyee() {
@@ -70,7 +72,8 @@ export function Employees() {
       employeeStatus,
       flowScale: selectedFlow,
     }
-    setTimeout(async () => {
+
+    setTimeout(() => {
       updateSettings(settings)
       setIsSubmitting(false)
     }, 2000)
@@ -95,32 +98,30 @@ export function Employees() {
 
           <tbody>
             {employees?.map((employee) => (
-              <>
-                <tr key={employee.idSeler}>
-                  <td>
-                    <Switch
-                      checked={
-                        employeeStatus.find(
-                          (item) => item.idSeler === employee.idSeler,
-                        )?.status || false
-                      }
-                      onChange={() =>
-                        employee.idSeler && handleToggleStatus(employee.idSeler)
-                      }
-                    />
-                  </td>
-                  <td>{formatName(employee.name)}</td>
-                  <td>{employee.idSeler}</td>
-                  <td>
-                    <div
-                      className="circle"
-                      onClick={handleOpenModalEditEmployee}
-                    >
-                      <CgPen />
-                    </div>
-                  </td>
-                </tr>
-              </>
+              <tr key={employee.idSeler}>
+                <td>
+                  <Switch
+                    checked={
+                      employeeStatus.find(
+                        (item) => item.idSeler === employee.idSeler,
+                      )?.status || false
+                    }
+                    onChange={() =>
+                      employee.idSeler && handleToggleStatus(employee.idSeler)
+                    }
+                  />
+                </td>
+                <td>{formatName(employee.name)}</td>
+                <td>{employee.idSeler}</td>
+                <td>
+                  <div
+                    className="circle"
+                    onClick={() => handleOpenModalEditEmployee(employee)}
+                  >
+                    <CgPen />
+                  </div>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>
@@ -177,11 +178,12 @@ export function Employees() {
             isSubmitting={isSubmitting}
           />
         </footer>
-        <ModalEditEmployee
-          open={openModalEditEmpoyee}
-          onHandleClose={handleCloseModalEditEmpoyee}
-        />
       </form>
+      <ModalEditEmployee
+        open={openModalEditEmpoyee}
+        onHandleClose={handleCloseModalEditEmpoyee}
+        employee={dataEmployee}
+      />
     </Container>
   )
 }

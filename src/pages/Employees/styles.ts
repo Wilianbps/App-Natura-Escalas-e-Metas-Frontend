@@ -34,7 +34,7 @@ export const Container = styled.section`
         padding: 0.5rem 2rem;
         background-color: ${(props) => props.theme.grayLight};
         text-align: center;
-        &:first-child {
+        &:first-of-type {
           border-top-left-radius: 6px;
           border-bottom-left-radius: 6px;
         }
@@ -103,11 +103,19 @@ export const ScaleFlowContainer = styled.section`
           border: 1px solid ${(props) => props.theme.orangeDark};
           padding: 10px 15px;
           cursor: pointer;
+          transition: background 0.3s ease;
         }
 
         input[type='radio']:checked + label {
           background-color: ${(props) => props.theme.orangeMedium};
           color: #fff;
+          border: none;
+        }
+
+        input[type='radio']:hover + label {
+          background-color: ${(props) => props.theme.orangeMedium};
+          color: #fff;
+          border: none;
         }
       }
     }

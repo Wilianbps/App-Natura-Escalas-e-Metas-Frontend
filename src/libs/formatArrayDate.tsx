@@ -1,18 +1,24 @@
 import { format } from 'date-fns'
 
-type DateOrArray = Date[] | null
+interface IArrayDaysOff {
+  id?: number
+  date: Date
+  type?: string
+}
+
+type DateOrArray = IArrayDaysOff[] | null
 
 export function formatArrayDate(
   arrayDate: DateOrArray,
   formatString = 'yyyy-MM-dd',
 ) {
   if (arrayDate === null) {
-    return [] as Date[]
+    return [] as IArrayDaysOff[]
   }
 
   if (Array.isArray(arrayDate)) {
-    return arrayDate.map((date) => format(date, formatString))
+    return arrayDate.map((item) => format(item.date, formatString))
   }
 
-  return [] as Date[]
+  return [] as IArrayDaysOff[]
 }

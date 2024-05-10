@@ -7,10 +7,11 @@ import { UseFormRegister } from 'react-hook-form'
 
 interface WorkShiftProps {
   register: UseFormRegister<{ selectedShift: string | null }>
+  shift: string | null | undefined
 }
 
 export function WorkShift(props: WorkShiftProps) {
-  const { register } = props
+  const { register, shift } = props
 
   return (
     <FormControl>
@@ -28,23 +29,24 @@ export function WorkShift(props: WorkShiftProps) {
         aria-labelledby="demo-radio-buttons-group-label"
         name="selectedShift"
         sx={{ '.MuiFormControlLabel-label': { fontSize: '14px' } }}
+        defaultValue={shift}
       >
         <FormControlLabel
-          value="T1"
+          value="Matutino"
           control={<Radio size="small" />}
-          label="Matutino (09:30 - 18:00)"
+          label="Matutino (07:00 - 14:30)"
           {...register('selectedShift')}
         />
         <FormControlLabel
-          value="T2"
+          value="Vespertino"
           control={<Radio size="small" />}
-          label="Vespertino (12:00 - 20:30)"
+          label="Vespertino (11:00 - 18:30)"
           {...register('selectedShift')}
         />
         <FormControlLabel
-          value="T3"
+          value="Noturno"
           control={<Radio size="small" />}
-          label="Noturno (14:00 - 22:00)"
+          label="Noturno (14:30 - 22:00)"
           sx={{ fontSize: '13px' }}
           {...register('selectedShift')}
         />

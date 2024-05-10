@@ -1,7 +1,3 @@
-export interface SettingProviderProps {
-  children: React.ReactNode
-}
-
 export interface IEmployee {
   idSeler?: number
   idDayOff?: number
@@ -16,26 +12,11 @@ export interface IEmployee {
   finishTime?: string
   startVacation: string | null
   finishVacation: string | null
+  /*   arrayDaysOff: Date[] | string[] */
   arrayDaysOff?: {
     id?: number
     date: string | null
     type?: string
   }[]
   flowScale?: string
-}
-
-interface IEmployeStatus {
-  idSeler: number | undefined
-  status: boolean
-}
-
-export interface ISettings {
-  employeeStatus: IEmployeStatus[]
-  flowScale: string
-}
-
-export interface SettingsContextType {
-  updateShiftRestSchedule: (employee: IEmployee) => void
-  employees: IEmployee[]
-  updateSettings: (settings: ISettings) => void
 }

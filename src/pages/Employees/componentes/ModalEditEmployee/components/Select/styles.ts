@@ -3,4 +3,5 @@ import { Select } from '@mui/material'
 
 export const SelectStyled = styled(Select)`
   font-weight: bold;
+  margin: 0 auto;
 `

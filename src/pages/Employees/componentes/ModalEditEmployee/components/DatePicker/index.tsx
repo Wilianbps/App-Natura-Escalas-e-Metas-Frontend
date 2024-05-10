@@ -9,8 +9,6 @@ interface DatePickerEmployeeModalProps {
   onSelectDate: (date: Date | null) => void
 }
 
-const minDate = new Date()
-
 export function DatePickerEmployeeModal({
   label,
   selectDate,
@@ -19,7 +17,6 @@ export function DatePickerEmployeeModal({
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <StyledDatePicker
-        minDate={minDate}
         label={label}
         format="dd/MM/yyyy"
         value={selectDate}

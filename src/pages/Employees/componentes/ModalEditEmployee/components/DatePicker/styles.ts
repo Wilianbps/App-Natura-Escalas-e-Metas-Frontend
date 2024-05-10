@@ -5,6 +5,7 @@ export const StyledDatePicker = styled(DatePicker)`
   input {
     font-size: 13px;
     font-weight: 600;
+    color: ${(props) => props.theme.orangeDark};
 
     ::placeholder {
       font-size: 13px;

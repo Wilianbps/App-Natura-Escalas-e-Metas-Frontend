@@ -1,19 +1,28 @@
 import DialogTitle from '@mui/material/DialogTitle'
 import IconButton from '@mui/material/IconButton'
-import React, { useState } from 'react'
+import { format } from 'date-fns'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CgCloseO } from 'react-icons/cg'
+import { MdDeleteForever } from 'react-icons/md'
 import { toast } from 'sonner'
+import { v4 as uuidv4 } from 'uuid'
 
 import { Button } from '@/components/Button'
 import { useSettings } from '@/contexts/setting/SettingContext'
-import { formatArrayDate } from '@/libs/formatArrayDate'
 import { formatDate } from '@/libs/formatDate'
+import { formatOriginalDate } from '@/libs/formatHour'
+import { formatName } from '@/libs/formatName'
 
 import { DatePickerEmployeeModal } from './components/DatePicker'
 import { SelectOptions } from './components/Select'
 import { WorkShift } from './components/WorkShift'
-import { IEmployee, ModalEditEmployeeProps } from './interfaces'
+import {
+  IArrayDaysOff,
+  IEmployee,
+  infoEmployeeProps,
+  ModalEditEmployeeProps,
+} from './interfaces'
 import { modalValidations } from './modalValidations'
 import {
   ContainerDaysOff,
@@ -26,16 +35,15 @@ import {
   SelectVacationContainer,
 } from './styles'
 
-interface infoEmployeeProps {
-  selectedShift: string | null
-}
-
 export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
   const { updateShiftRestSchedule } = useSettings()
-  const { open, onHandleClose } = props
+  const { open, onHandleClose, employee } = props
+
+  console.log('employee', employee)
 
   const { register, handleSubmit, reset } = useForm<infoEmployeeProps>()
 
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [selectedStartVacation, setSelectedStartVacation] =
     useState<Date | null>(null)
 
@@ -43,7 +51,10 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     useState<Date | null>(null)
 
   const [dayOff, setDayOff] = useState<Date | null>(null)
-  const [arrayDaysOff, setArrayDaysOff] = useState<Date[] | null>([])
+  const [arrayDaysOff, setArrayDaysOff] = useState<IArrayDaysOff[] | null>([])
+  const [copyArrayDaysOff, setCopyArrayDaysOff] = useState<
+    IArrayDaysOff[] | null
+  >([])
 
   const [selectTypeRest, setSelectTypeRest] = useState('')
 
@@ -64,50 +75,171 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
   }
 
   function handleAddDayOffInArray() {
+    const id = uuidv4()
+    const currentDate = new Date()
     if (!dayOff) {
-      toast.error('Informe uma data', {
+      return toast.error('Informe uma data', {
         style: { height: '50px', padding: '15px' },
       })
-      return
     }
+
+    if (dayOff < currentDate) {
+      return toast.error('Selecione uma data válida.', {
+        style: { height: '50px', padding: '15px' },
+      })
+    }
+
     if (dayOff) {
       setArrayDaysOff((prevArrayDaysOff) =>
-        prevArrayDaysOff ? [...prevArrayDaysOff, dayOff] : [dayOff],
+        prevArrayDaysOff
+          ? [...prevArrayDaysOff, { id, date: dayOff, type: 'I' }]
+          : [{ date: dayOff }],
+      )
+
+      setCopyArrayDaysOff((prevArrayDaysOff) =>
+        prevArrayDaysOff
+          ? [...prevArrayDaysOff, { id, date: dayOff, type: 'I' }]
+          : [{ date: dayOff }],
       )
     }
     setDayOff(null)
   }
 
-  function handleClearSelectedDaysOff() {
-    setArrayDaysOff([])
-    setDayOff(null)
+  function handleRemoveDayOffInArray(id: string | undefined) {
+    if (id) {
+      if (arrayDaysOff) {
+        const filteredEmployess = arrayDaysOff.filter(
+          (employee) => employee.id?.toString() !== id,
+        )
+        setArrayDaysOff(filteredEmployess)
+      }
+
+      const idDayOff = daysOff?.find((dayOff) => dayOff.id?.toString() === id)
+
+      if (idDayOff) {
+        setCopyArrayDaysOff(
+          (prevArrayDaysOff) =>
+            prevArrayDaysOff &&
+            prevArrayDaysOff.map((item) =>
+              item.id?.toString() === id ? { ...item, type: 'D' } : item,
+            ),
+        )
+      } else {
+        if (copyArrayDaysOff) {
+          const filteredEmployess = copyArrayDaysOff?.filter((employee) => {
+            return employee.id?.toString() !== id
+          })
+
+          setCopyArrayDaysOff(filteredEmployess)
+        }
+      }
+    }
   }
 
-  function handleSaveForm(employee: infoEmployeeProps) {
+  function handleClearSelectedDaysOff() {
+    setDayOff(null)
+    setSelectedStartVacation(null)
+    setSelectedFinishVacation(null)
+  }
+
+  function handleSaveForm(register: infoEmployeeProps) {
+    setIsSubmitting(true)
+    if (employee?.idShift) {
+      switch (register.selectedShift) {
+        case 'Matutino':
+          employee.idShift = 1
+          break
+        case 'Vespertino':
+          employee.idShift = 2
+          break
+        case 'Noturno':
+          employee.idShift = 3
+          break
+      }
+    }
+
     const updateEmployee: IEmployee = {
-      shift: employee.selectedShift,
+      idSeler: employee?.idSeler,
+      idDayOff: employee?.idDayOff,
+      storeCode: '000008',
+      userLogin: 'DGCS',
+      idShift: employee?.idShift,
+      shift: register.selectedShift,
       startVacation: formatDate(selectedStartVacation),
       finishVacation: formatDate(selectedFinishVacation),
-      arrayDaysOff: formatArrayDate(arrayDaysOff),
+      arrayDaysOff: copyArrayDaysOff?.map((item) => ({
+        id: item.type === 'I' ? undefined : Number(item.id),
+        date: formatDate(item.date),
+        type: item.type ? item.type : '',
+      })),
     }
+
     const validationError = modalValidations(updateEmployee)
 
     if (validationError) {
+      setIsSubmitting(false)
       return
     }
 
-    console.log('data', updateEmployee)
+    setTimeout(() => {
+      updateShiftRestSchedule(updateEmployee)
+      setIsSubmitting(false)
+      reset()
+      setDayOff(null)
+      setSelectedStartVacation(null)
+      setSelectedFinishVacation(null)
+      setSelectTypeRest('')
+      onHandleClose()
+    }, 2000)
+  }
 
-    updateShiftRestSchedule(updateEmployee)
-
+  function handleCloseModal() {
+    setSelectTypeRest('')
+    setDayOff(null)
     reset()
     onHandleClose()
   }
 
+  const originalDateStartVacation =
+    employee?.startVacation &&
+    format(formatOriginalDate(new Date(employee?.startVacation)), 'dd/MM/yyyy')
+
+  const startVacation = useMemo(() => {
+    const date: Date | null = employee?.startVacation
+      ? formatOriginalDate(new Date(employee?.startVacation))
+      : null
+
+    return date
+  }, [employee?.startVacation])
+
+  const finishVacation = useMemo(() => {
+    const date: Date | null = employee?.finishVacation
+      ? formatOriginalDate(new Date(employee?.finishVacation))
+      : null
+    return date
+  }, [employee?.finishVacation])
+
+  const daysOff = useMemo(() => {
+    const datesFormated = employee?.arrayDaysOff
+      ? employee?.arrayDaysOff.map((item) => ({
+          id: item.id,
+          date: item.date ? new Date(item.date) : null,
+        }))
+      : null
+    return datesFormated
+  }, [employee?.arrayDaysOff])
+
+  useEffect(() => {
+    setSelectedStartVacation(startVacation)
+    setSelectedFinishVacation(finishVacation)
+    setArrayDaysOff(daysOff)
+    setCopyArrayDaysOff(daysOff)
+  }, [startVacation, finishVacation, daysOff])
+
   return (
     <React.Fragment>
       <ContainerModal
-        onClose={onHandleClose}
+        onClose={handleCloseModal}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
@@ -117,11 +249,11 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
               sx={{ m: 0, p: 2, fontSize: '0.875rem', fontWeight: 'bold' }}
               id="customized-dialog-title"
             >
-              Ana Luíza Ribeiro
+              {formatName(employee?.name)}
             </DialogTitle>
             <IconButton
               aria-label="close"
-              onClick={onHandleClose}
+              onClick={handleCloseModal}
               sx={{
                 position: 'absolute',
                 right: 8,
@@ -134,13 +266,13 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
           </div>
           <div className="infoEmployee">
             <p>
-              <span>ID Funcional:</span> 00040
+              <span>ID Funcional:</span> {employee?.idSeler}
             </p>
             <p>
-              <span>cargo:</span> 00040
+              <span>cargo:</span> {formatName(employee?.office)}
             </p>
             <p>
-              <span>Próximas férias:</span> 01/04/2024
+              <span>Próximas férias:</span> {originalDateStartVacation}
             </p>
           </div>
         </header>
@@ -181,17 +313,25 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
                     bgColor="#fff"
                     onClick={handleAddDayOffInArray}
                   />
-                  <Button
-                    type="button"
-                    text="Limpar"
-                    color="#FF9E00"
-                    bgColor="#fff"
-                    onClick={handleClearSelectedDaysOff}
-                  />
                 </section>
                 <ContainerDaysOff>
                   {arrayDaysOff?.map((item) => (
-                    <p key={item.toString()}>{item.toLocaleDateString()}</p>
+                    <section
+                      key={`${item.id && item.id}`}
+                      className="content-dayOff"
+                    >
+                      <p key={item.toString()}>
+                        {item.date && item.date.toLocaleDateString()}
+                      </p>
+                      <section
+                        className="delete-dayOff"
+                        onClick={() =>
+                          handleRemoveDayOffInArray(item.id?.toString())
+                        }
+                      >
+                        <MdDeleteForever />
+                      </section>
+                    </section>
                   ))}
                 </ContainerDaysOff>
               </SelectDayoffContainer>
@@ -202,15 +342,25 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
             )}
             <DividerVertical />
             <ContainerWorkShift>
-              <WorkShift register={register} />
+              <WorkShift register={register} shift={employee?.shift} />
             </ContainerWorkShift>
           </InfoEmployeeContainer>
-          <Button
-            type="submit"
-            text="Salvar"
-            color="#FFFFFF"
-            bgColor="#FF9E00"
-          />
+          <section className="buttons-clear-save">
+            <Button
+              type="button"
+              text="Limpar"
+              color="#FF9E00"
+              bgColor="#fff"
+              onClick={handleClearSelectedDaysOff}
+            />
+            <Button
+              text="Salvar"
+              color="#FFF"
+              bgColor="#449428"
+              width="100px"
+              isSubmitting={isSubmitting}
+            />
+          </section>
         </FormModal>
       </ContainerModal>
     </React.Fragment>

@@ -34,7 +34,7 @@ export function SelectOptions(props: SelectOptionsProps) {
             Férias
           </MenuItem>
           <MenuItem sx={{ fontSize: '13px' }} value="folga">
-            Folga
+            Folgas
           </MenuItem>
         </SelectStyled>
       </FormControl>

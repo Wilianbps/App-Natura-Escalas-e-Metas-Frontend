@@ -19,8 +19,6 @@ function SettingsProvider({ children }: SettingProviderProps) {
     const response = await api.get('settings/getAllEmployees')
 
     setEmployees(response.data)
-
-    console.log(response.data)
   }
 
   useEffect(() => {
@@ -28,20 +26,54 @@ function SettingsProvider({ children }: SettingProviderProps) {
   }, [])
 
   async function updateShiftRestSchedule(employee: IEmployee) {
-    const { shift, startVacation, finishVacation, arrayDaysOff } = employee
-
-    const response = await api.put('settings/updateShiftRestSchedule', {
+    const {
+      idSeler,
+      idDayOff,
+      storeCode,
+      userLogin,
+      idShift,
       shift,
       startVacation,
       finishVacation,
       arrayDaysOff,
-    })
+    } = employee
 
-    setEmployees(response.data)
+    await api
+      .put('settings/updateShiftRestSchedule', {
+        idSeler,
+        idDayOff,
+        storeCode,
+        userLogin,
+        idShift,
+        shift,
+        startVacation,
+        finishVacation,
+        arrayDaysOff,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          if (response.data.message) {
+            toast.success(response.data.message, {
+              style: { height: '50px', padding: '15px' },
+            })
+          }
+        }
+        fetchEmployes()
+      })
+      .catch((error) => {
+        if (error.response) {
+          const err = error.response.data.message
+          toast.error(err, {
+            style: { height: '50px', padding: '15px' },
+          })
+        }
+      })
   }
 
   async function updateSettings(settings: ISettings) {
     const { employeeStatus, flowScale } = settings
+
+    console.log('entrou aqui bonitao', settings)
 
     const employeeStatusFormated = employeeStatus.map((item) => ({
       idSeler: item.idSeler,
@@ -63,13 +95,13 @@ function SettingsProvider({ children }: SettingProviderProps) {
         : employee
     })
 
-    console.log('updatedEmployees', updatedEmployees)
-
     setEmployees(updatedEmployees)
 
-    toast.success(response.data.message, {
-      style: { height: '50px', padding: '15px' },
-    })
+    if (response.data.message) {
+      toast.success(response.data.message, {
+        style: { height: '50px', padding: '15px' },
+      })
+    }
   }
 
   return (
