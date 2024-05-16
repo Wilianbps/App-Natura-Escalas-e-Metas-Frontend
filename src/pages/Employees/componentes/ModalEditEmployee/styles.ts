@@ -69,27 +69,48 @@ export const SelectDayoffContainer = styled.section`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
 
     > button {
       height: 100%;
-      padding: 10px;
+      line-height: 0;
       cursor: pointer;
       border-radius: 8px;
+      background-color: ${(props) => props.theme.greenMedium};
+      padding: 0 8px;
+      border: none;
+      transition: background 0.3s ease;
 
-      &:nth-of-type(1) {
-        border: 1px solid ${(props) => props.theme.greenMedium};
+      :hover {
+        opacity: 0.7;
       }
     }
   }
 `
 
 export const SelectVacationContainer = styled.section`
-  display: flex;
-  justify-content: flex-start;
-  min-width: 30rem;
-  display: flex;
-  gap: 1rem;
+  .container-vacation-button {
+    display: flex;
+    justify-content: flex-start;
+    min-width: 30rem;
+    display: flex;
+    gap: 1rem;
+
+    > button {
+      height: 100%;
+      line-height: 0;
+      cursor: pointer;
+      border-radius: 8px;
+      background-color: ${(props) => props.theme.greenMedium};
+      padding: 11px 8px;
+      border: none;
+      transition: opacity 0.3s ease;
+
+      :hover {
+        opacity: 0.7;
+      }
+    }
+  }
 `
 
 export const DividerVertical = styled.div`
@@ -140,6 +161,57 @@ export const ContainerDaysOff = styled.section`
 
       :hover {
         opacity: 0.8;
+      }
+    }
+  }
+`
+export const ContainerVacation = styled.section`
+  table {
+    margin: 0 auto;
+    width: 50%;
+    margin-top: 20px;
+    text-align: center;
+
+    > thead {
+      th {
+        padding-bottom: 10px;
+      }
+    }
+    > tbody {
+      td {
+        font-weight: 500;
+        background-color: ${(props) => props.theme.yellowLight};
+        padding: 5px;
+        border-radius: 8px;
+        min-width: 100px;
+        text-align: center;
+
+        &:nth-of-type(3) {
+          background-color: #fff;
+        }
+
+        > section {
+          &.delete-vacation {
+            display: block;
+            margin: 0 auto;
+            width: 30px;
+            background-color: #f9d2da;
+            line-height: 0;
+            padding: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+
+            > svg {
+              color: ${(props) => props.theme.red};
+              font-size: 18px;
+            }
+
+            :hover {
+              opacity: 0.8;
+            }
+          }
+        }
       }
     }
   }

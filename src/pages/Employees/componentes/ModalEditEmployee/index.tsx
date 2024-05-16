@@ -1,9 +1,9 @@
 import DialogTitle from '@mui/material/DialogTitle'
 import IconButton from '@mui/material/IconButton'
-import { format } from 'date-fns'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CgCloseO } from 'react-icons/cg'
+import { IoIosAddCircle } from 'react-icons/io'
 import { MdDeleteForever } from 'react-icons/md'
 import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
@@ -11,14 +11,14 @@ import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/Button'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatDate } from '@/libs/formatDate'
-import { formatOriginalDate } from '@/libs/formatHour'
 import { formatName } from '@/libs/formatName'
 
 import { DatePickerEmployeeModal } from './components/DatePicker'
 import { SelectOptions } from './components/Select'
 import { WorkShift } from './components/WorkShift'
 import {
-  IArrayDaysOff,
+  IArrayDayOff,
+  IArrayVacation,
   IEmployee,
   infoEmployeeProps,
   ModalEditEmployeeProps,
@@ -27,6 +27,7 @@ import { modalValidations } from './modalValidations'
 import {
   ContainerDaysOff,
   ContainerModal,
+  ContainerVacation,
   ContainerWorkShift,
   DividerVertical,
   FormModal,
@@ -34,12 +35,11 @@ import {
   SelectDayoffContainer,
   SelectVacationContainer,
 } from './styles'
+import { validateVacations } from './utils/validateVacations'
 
 export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
   const { updateShiftRestSchedule } = useSettings()
   const { open, onHandleClose, employee } = props
-
-  console.log('employee', employee)
 
   const { register, handleSubmit, reset } = useForm<infoEmployeeProps>()
 
@@ -51,9 +51,16 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     useState<Date | null>(null)
 
   const [dayOff, setDayOff] = useState<Date | null>(null)
-  const [arrayDaysOff, setArrayDaysOff] = useState<IArrayDaysOff[] | null>([])
+  const [arrayDaysOff, setArrayDaysOff] = useState<IArrayDayOff[] | null>([])
   const [copyArrayDaysOff, setCopyArrayDaysOff] = useState<
-    IArrayDaysOff[] | null
+    IArrayDayOff[] | null
+  >([])
+
+  const [arrayVacations, setArrayVacations] = useState<IArrayVacation[] | null>(
+    [],
+  )
+  const [copyArrayVacations, setCopyArrayVacations] = useState<
+    IArrayVacation[] | null
   >([])
 
   const [selectTypeRest, setSelectTypeRest] = useState('')
@@ -136,6 +143,61 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     }
   }
 
+  function handleAddVacationOffInArray() {
+    const errorValidate = validateVacations(
+      selectedStartVacation,
+      selectedFinishVacation,
+    )
+
+    if (errorValidate) {
+      return
+    }
+    const id = uuidv4()
+
+    if (selectedStartVacation && selectedFinishVacation) {
+      setArrayVacations((prevArrayVacation) =>
+        prevArrayVacation
+          ? [
+              ...prevArrayVacation,
+              {
+                id,
+                startVacation: selectedStartVacation,
+                finishVacation: selectedFinishVacation,
+                type: 'I',
+              },
+            ]
+          : [
+              {
+                startVacation: selectedStartVacation,
+                finishVacation: selectedFinishVacation,
+              },
+            ],
+      )
+
+      setCopyArrayVacations((prevArrayVacation) =>
+        prevArrayVacation
+          ? [
+              ...prevArrayVacation,
+              {
+                id,
+                startVacation: selectedStartVacation,
+                finishVacation: selectedFinishVacation,
+                type: 'I',
+              },
+            ]
+          : [
+              {
+                startVacation: selectedStartVacation,
+                finishVacation: selectedFinishVacation,
+              },
+            ],
+      )
+    }
+
+    setSelectedStartVacation(null)
+    setSelectedFinishVacation(null)
+  }
+
   function handleClearSelectedDaysOff() {
     setDayOff(null)
     setSelectedStartVacation(null)
@@ -200,7 +262,7 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     onHandleClose()
   }
 
-  const originalDateStartVacation =
+  /*   const originalDateStartVacation =
     employee?.startVacation &&
     format(formatOriginalDate(new Date(employee?.startVacation)), 'dd/MM/yyyy')
 
@@ -217,7 +279,23 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
       ? formatOriginalDate(new Date(employee?.finishVacation))
       : null
     return date
-  }, [employee?.finishVacation])
+  }, [employee?.finishVacation]) */
+
+  const vacations = useMemo(() => {
+    const datesFormated = employee?.arrayVacation
+      ? employee?.arrayVacation.map((item) => ({
+          id: item.id,
+          startVacation: item.startVacation
+            ? new Date(item.startVacation)
+            : null,
+          finishVacation: item.finishVacation
+            ? new Date(item.finishVacation)
+            : null,
+        }))
+      : null
+
+    return datesFormated
+  }, [employee?.arrayVacation])
 
   const daysOff = useMemo(() => {
     const datesFormated = employee?.arrayDaysOff
@@ -230,11 +308,11 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
   }, [employee?.arrayDaysOff])
 
   useEffect(() => {
-    setSelectedStartVacation(startVacation)
-    setSelectedFinishVacation(finishVacation)
+    setArrayVacations(vacations)
+    setCopyArrayVacations(vacations)
     setArrayDaysOff(daysOff)
     setCopyArrayDaysOff(daysOff)
-  }, [startVacation, finishVacation, daysOff])
+  }, [daysOff, vacations])
 
   return (
     <React.Fragment>
@@ -272,7 +350,7 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
               <span>cargo:</span> {formatName(employee?.office)}
             </p>
             <p>
-              <span>Próximas férias:</span> {originalDateStartVacation}
+              {/* <span>Próximas férias:</span> {originalDateStartVacation} */}
             </p>
           </div>
         </header>
@@ -285,16 +363,52 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
           <InfoEmployeeContainer>
             {selectTypeRest === 'ferias' && (
               <SelectVacationContainer>
-                <DatePickerEmployeeModal
-                  selectDate={selectedStartVacation}
-                  onSelectDate={handleSelectStartVacation}
-                  label="Início Férias"
-                />
-                <DatePickerEmployeeModal
-                  selectDate={selectedFinishVacation}
-                  onSelectDate={handleSelectFinishVacation}
-                  label="Fim Férias"
-                />
+                <section className="container-vacation-button">
+                  <DatePickerEmployeeModal
+                    selectDate={selectedStartVacation}
+                    onSelectDate={handleSelectStartVacation}
+                    label="Início Férias"
+                  />
+                  <DatePickerEmployeeModal
+                    selectDate={selectedFinishVacation}
+                    onSelectDate={handleSelectFinishVacation}
+                    label="Fim Férias"
+                  />
+                  <button type="button" onClick={handleAddVacationOffInArray}>
+                    <IoIosAddCircle size={30} color="#fff" />
+                  </button>
+                </section>
+
+                <ContainerVacation>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Início férias</th>
+                        <th>Fim férias</th>
+                        <th>Deletar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {copyArrayVacations?.map((item) => (
+                        <tr key={`${item.id && item.id}`}>
+                          <td>
+                            {item.startVacation &&
+                              item.startVacation.toLocaleDateString()}
+                          </td>
+                          <td>
+                            {item.finishVacation &&
+                              item.finishVacation.toLocaleDateString()}
+                          </td>
+                          <td>
+                            <section className="delete-vacation">
+                              <MdDeleteForever />
+                            </section>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </ContainerVacation>
               </SelectVacationContainer>
             )}
 
@@ -306,13 +420,10 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
                     onSelectDate={handleSelectDayOff}
                     label="Folga"
                   />
-                  <Button
-                    type="button"
-                    text="Adicionar"
-                    color="#449428"
-                    bgColor="#fff"
-                    onClick={handleAddDayOffInArray}
-                  />
+
+                  <button type="button" onClick={handleAddDayOffInArray}>
+                    <IoIosAddCircle size={30} color="#fff" />
+                  </button>
                 </section>
                 <ContainerDaysOff>
                   {arrayDaysOff?.map((item) => (
@@ -338,7 +449,7 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
             )}
 
             {selectTypeRest === '' && (
-              <SelectVacationContainer></SelectVacationContainer>
+              <SelectDayoffContainer></SelectDayoffContainer>
             )}
             <DividerVertical />
             <ContainerWorkShift>

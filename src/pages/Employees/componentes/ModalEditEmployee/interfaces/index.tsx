@@ -18,12 +18,25 @@ export interface IEmployee {
     date: string | null
     type?: string
   }[]
+  arrayVacation: {
+    id?: number
+    startVacation: string | null
+    finishVacation: string | null
+    type?: string
+  }[]
   flowScale?: string
 }
 
-export interface IArrayDaysOff {
+export interface IArrayDayOff {
   id?: number | string
   date: Date | null
+  type?: string
+}
+
+export interface IArrayVacation {
+  id?: number | string
+  startVacation: Date | null
+  finishVacation: Date | null
   type?: string
 }
 
