@@ -1,6 +1,6 @@
 import { format } from 'date-fns/format'
 import { formatInTimeZone } from 'date-fns-tz'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 import { api } from '@/services/axios'
@@ -11,6 +11,7 @@ const ScalesContext = createContext({} as ScalesContextType)
 
 function ScalesProvider({ children }: { children: React.ReactNode }) {
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
+  const [scaleSummary, setScaleSummary] = useState([])
 
   async function fetchScaleByDate(date: string) {
     const dateFormatted = format(date, 'yyyy-MM-dd')
@@ -23,6 +24,18 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   function updateSetScalesByDate(scale: IScale[]) {
     setScalesByDate(scale)
   }
+
+  async function fetchScaleSummary() {
+    const response = await api.get('scales/get-scale-summary')
+
+    setScaleSummary(response.data)
+  }
+
+  useEffect(() => {
+    fetchScaleSummary()
+  }, [])
+
+  console.log('scaleSummary', scaleSummary)
 
   async function updateScalesByDate(scales: IScale[]) {
     console.log(scales)

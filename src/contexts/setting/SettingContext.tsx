@@ -21,7 +21,6 @@ function SettingsProvider({ children }: SettingProviderProps) {
     setEmployees(response.data)
   }
 
-  console.log('employees', employees)
   useEffect(() => {
     fetchEmployes()
   }, [])

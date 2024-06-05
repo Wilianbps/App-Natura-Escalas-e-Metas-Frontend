@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import { CgCloseO } from 'react-icons/cg'
 import { IoIosAddCircle } from 'react-icons/io'
 import { MdDeleteForever } from 'react-icons/md'
-import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
 
 import { Button } from '@/components/Button'
@@ -85,21 +84,18 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
   }
 
   function handleAddDayOffInArray() {
-    if (dayOff) {
-      // E você quer extrair os períodos de férias de `employee`
-      const arrayVacation = employee?.arrayVacation ?? []
-      const validate = validateDayOff(dayOff, arrayVacation)
+    // E você quer extrair os períodos de férias de `employee`
+    const arrayVacation = employee?.arrayVacation ?? []
 
-      if (validate) return
-    }
+    const validate = validateDayOff(
+      dayOff as Date,
+      arrayVacation,
+      copyArrayDaysOff as [],
+    )
+
+    if (validate) return
 
     const id = uuidv4()
-
-    if (!dayOff) {
-      return toast.error('Informe uma data', {
-        style: { height: '50px', padding: '15px' },
-      })
-    }
 
     /*  if (dayOff < currentDate) {
       return toast.error('Selecione uma data válida.', {
