@@ -9,6 +9,13 @@ export const Container = styled.section`
   text-transform: capitalize;
   font-weight: 500;
 
+  span {
+    width: 100%;
+    max-width: 175px;
+    display: flex;
+    justify-content: center;
+  }
+
   > button {
     border: 0;
     line-height: 0;

@@ -1,11 +1,14 @@
 import { addDays, format, isSameMonth, subDays } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CgChevronLeft, CgChevronRight } from 'react-icons/cg'
+
+import { useScales } from '@/contexts/scale/ScalesContext'
 
 import { Container } from './styles'
 
 export function PaginationPerDay() {
+  const { fetchScaleByDate } = useScales()
   const [currentDate, setCurrentDate] = useState(new Date())
 
   function advanceDay() {
@@ -23,6 +26,10 @@ export function PaginationPerDay() {
       setCurrentDate(newDate)
     }
   }
+
+  useEffect(() => {
+    fetchScaleByDate(currentDate.toString())
+  }, [currentDate])
 
   return (
     <Container>

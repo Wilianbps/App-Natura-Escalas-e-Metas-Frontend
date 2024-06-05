@@ -14,7 +14,7 @@ export function Button(props: ButtonProps) {
       type={type}
     >
       {isSubmitting === true ? (
-        <CircularProgress color="primary" size={15} />
+        <CircularProgress size={15} style={{ color: '#ffffff' }} />
       ) : (
         text
       )}

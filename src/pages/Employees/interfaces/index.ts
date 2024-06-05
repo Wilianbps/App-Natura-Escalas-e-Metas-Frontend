@@ -12,14 +12,13 @@ export interface IEmployee {
   finishTime?: string
   startVacation: string | null
   finishVacation: string | null
-  /*   arrayDaysOff: Date[] | string[] */
   arrayDaysOff?: {
     id?: number
     date: string | null
     type?: string
   }[]
-  arrayVacation: {
-    id: number
+  arrayVacation?: {
+    id?: number
     startVacation: string | null
     finishVacation: string | null
     type?: string

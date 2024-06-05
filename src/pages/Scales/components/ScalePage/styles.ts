@@ -2,6 +2,11 @@ import styled from '@emotion/styled'
 
 export const Container = styled.section`
   margin-top: 20px;
+
+  footer {
+    margin-top: 20px;
+    text-align: right;
+  }
 `
 
 export const ContainerTable = styled.main`

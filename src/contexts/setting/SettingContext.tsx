@@ -21,11 +21,13 @@ function SettingsProvider({ children }: SettingProviderProps) {
     setEmployees(response.data)
   }
 
+  console.log('employees', employees)
   useEffect(() => {
     fetchEmployes()
   }, [])
 
   async function updateShiftRestSchedule(employee: IEmployee) {
+    console.log('update folga', employee)
     const {
       idSeler,
       idDayOff,
@@ -36,6 +38,7 @@ function SettingsProvider({ children }: SettingProviderProps) {
       startVacation,
       finishVacation,
       arrayDaysOff,
+      arrayVacation,
     } = employee
 
     await api
@@ -49,6 +52,7 @@ function SettingsProvider({ children }: SettingProviderProps) {
         startVacation,
         finishVacation,
         arrayDaysOff,
+        arrayVacation,
       })
       .then((response) => {
         if (response.status === 200) {
@@ -72,8 +76,6 @@ function SettingsProvider({ children }: SettingProviderProps) {
 
   async function updateSettings(settings: ISettings) {
     const { employeeStatus, flowScale } = settings
-
-    console.log('entrou aqui bonitao', settings)
 
     const employeeStatusFormated = employeeStatus.map((item) => ({
       idSeler: item.idSeler,
