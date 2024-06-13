@@ -43,6 +43,8 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
   const { updateShiftRestSchedule } = useSettings()
   const { open, onHandleClose, employee } = props
 
+  console.log(employee)
+
   const { register, handleSubmit, reset } = useForm<infoEmployeeProps>()
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)

@@ -89,8 +89,14 @@ export const TDShift = styled.td<TDShiftProps>`
                 ? props.theme.orangeDark
                 : props.theme.gray
               : (props) =>
-                  props.shift === 'T3' &&
-                  (props.value === 'T' ? props.theme.brown : props.theme.gray)};
+                  props.shift === 'T3'
+                    ? props.value === 'T'
+                      ? props.theme.brown
+                      : props.theme.gray
+                    : (props) =>
+                        props.shift === '' && props.value === 'F'
+                          ? props.theme.gray
+                          : ''};
 
     width: 25px;
     height: 25px;

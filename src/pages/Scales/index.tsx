@@ -11,7 +11,7 @@ import { Summary } from './components/Summary'
 import { Container } from './styles'
 
 export function ScalePage() {
-  const [value, setValue] = useState('1')
+  const [value, setValue] = useState('2')
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue)

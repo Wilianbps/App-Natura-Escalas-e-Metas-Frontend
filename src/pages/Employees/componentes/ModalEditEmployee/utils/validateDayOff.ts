@@ -1,11 +1,4 @@
-import {
-  format,
-  isBefore,
-  isEqual,
-  isWithinInterval,
-  parseISO,
-  startOfMonth,
-} from 'date-fns'
+import { format, isEqual, isWithinInterval, parseISO } from 'date-fns'
 import { toast } from 'sonner'
 
 interface IVacation {
@@ -42,7 +35,11 @@ export function validateDayOff(
     if (!date?.startVacation || !date.finishVacation) {
       return false // Se qualquer uma das datas de início ou fim for null, não é um intervalo válido
     }
-    return isWithinInterval(dayOffToCheck, {
+
+    const newDate = new Date(dayOffToCheck)
+    const dateFormated = newDate.toISOString().substring(0, 10)
+
+    return isWithinInterval(dateFormated, {
       start: parseISO(date.startVacation),
       end: parseISO(date.finishVacation),
     })
@@ -81,7 +78,7 @@ export function validateDayOff(
     return true
   }
 
-  const currentDate = new Date()
+  /*  const currentDate = new Date()
 
   const startOfCurrentMonth = startOfMonth(currentDate)
 
@@ -97,5 +94,5 @@ export function validateDayOff(
       style: { height: '50px', padding: '15px', width: '380px' },
     })
     return true
-  }
+  } */
 }

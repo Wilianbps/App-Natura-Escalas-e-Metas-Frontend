@@ -5,13 +5,18 @@ import { toast } from 'sonner'
 
 import { api } from '@/services/axios'
 
-import { IScale, IScaleProps, ScalesContextType } from './interfaces'
+import {
+  IScale,
+  IScaleProps,
+  IScaleSummary,
+  ScalesContextType,
+} from './interfaces'
 
 const ScalesContext = createContext({} as ScalesContextType)
 
 function ScalesProvider({ children }: { children: React.ReactNode }) {
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
-  const [scaleSummary, setScaleSummary] = useState([])
+  const [scaleSummary, setScaleSummary] = useState<Array<IScaleSummary[]>>([])
 
   async function fetchScaleByDate(date: string) {
     const dateFormatted = format(date, 'yyyy-MM-dd')
@@ -34,8 +39,6 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     fetchScaleSummary()
   }, [])
-
-  console.log('scaleSummary', scaleSummary)
 
   async function updateScalesByDate(scales: IScale[]) {
     console.log(scales)
@@ -66,6 +69,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
               style: { height: '50px', padding: '15px' },
             })
           }
+          fetchScaleSummary()
         }
       })
       .catch((error) => {
@@ -85,6 +89,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         updateSetScalesByDate,
         updateScalesByDate,
         scalesByDate,
+        scaleSummary,
       }}
     >
       {children}

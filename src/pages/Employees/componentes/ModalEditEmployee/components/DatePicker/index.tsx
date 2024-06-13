@@ -25,6 +25,7 @@ export function DatePickerEmployeeModal({
     new Date().getMonth() + 3,
     0,
   )
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <StyledDatePicker
