@@ -1,0 +1,35 @@
+import { eachWeekOfInterval } from 'date-fns'
+
+interface Day {
+  day: number
+}
+type Week = Day[]
+type WeeksArray = Week[]
+
+export function daysOfWeek(month: number, year: number) {
+  const firstDay = new Date(year, month - 1, 1)
+  const lastDay = new Date(year, month, 0)
+
+  const result = eachWeekOfInterval(
+    {
+      start: firstDay,
+      end: lastDay,
+    },
+    { weekStartsOn: 1 },
+  )
+
+  const numberOfWeeks = result.length
+
+  const weeksArray: WeeksArray = Array.from({ length: numberOfWeeks }, () => [])
+
+  weeksArray.forEach((week, weekNumber) => {
+    const date = new Date(result[weekNumber])
+
+    for (let i = 1; i <= 7; i++) {
+      week.push({ day: date.getDate() })
+      date.setDate(date.getDate() + 1)
+    }
+  })
+
+  return weeksArray
+}

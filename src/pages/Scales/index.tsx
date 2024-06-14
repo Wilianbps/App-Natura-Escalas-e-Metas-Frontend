@@ -11,7 +11,7 @@ import { Summary } from './components/Summary'
 import { Container } from './styles'
 
 export function ScalePage() {
-  const [value, setValue] = useState('2')
+  const [value, setValue] = useState('setting')
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue)
@@ -36,7 +36,7 @@ export function ScalePage() {
                 label="Configurar"
                 icon={<CgPen />}
                 iconPosition="end"
-                value="1"
+                value="setting"
                 sx={{
                   textTransform: 'capitalize',
                   fontWeight: 'bold',
@@ -46,15 +46,15 @@ export function ScalePage() {
                 label="Resumo"
                 icon={<CgEye />}
                 iconPosition="end"
-                value="2"
+                value="summary"
                 sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
               />
             </TabList>
           </Box>
-          <TabPanel value="1" sx={{ padding: 0 }}>
+          <TabPanel value="setting" sx={{ padding: 0 }}>
             <Scale />
           </TabPanel>
-          <TabPanel value="2" sx={{ padding: 0 }}>
+          <TabPanel value="summary" sx={{ padding: 0 }}>
             <Summary />
           </TabPanel>
         </TabContext>

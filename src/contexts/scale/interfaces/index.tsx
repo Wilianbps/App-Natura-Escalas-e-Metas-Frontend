@@ -45,6 +45,7 @@ export interface IScaleSummary {
     startTime: string
     endTime: string
     dayOfWeek: number
+    turn: string
   }[]
 }
 

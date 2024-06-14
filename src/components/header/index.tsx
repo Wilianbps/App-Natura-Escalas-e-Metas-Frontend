@@ -10,6 +10,7 @@ export function Header() {
   function handleSelectDate(date: Date | null) {
     setSelectedDate(date)
   }
+
   return (
     <ContainerHeader>
       <SelectStores minWidth={120} heightSelect="40px" fontSize="13px" />
