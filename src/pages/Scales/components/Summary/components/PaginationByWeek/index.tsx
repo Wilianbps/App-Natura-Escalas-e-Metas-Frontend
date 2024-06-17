@@ -9,7 +9,7 @@ interface PaginationPerWeekProps {
   onPreviousPage: () => void
 }
 
-export function PaginationPerWeek(props: PaginationPerWeekProps) {
+export function PaginationByWeek(props: PaginationPerWeekProps) {
   const { currentPage, totalPages, onNextPage, onPreviousPage } = props
 
   return (

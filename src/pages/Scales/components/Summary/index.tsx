@@ -1,16 +1,26 @@
+import { CircularProgress } from '@mui/material'
+import { pdf } from '@react-pdf/renderer'
 import { useState } from 'react'
+import { CgPrinter } from 'react-icons/cg'
 
 import { useScales } from '@/contexts/scale/ScalesContext'
 import { formatName } from '@/libs/formatName'
 
-import { PaginationPerWeek } from './components/PaginationPerWeek'
-import { Container, ContainerTable, TDShift, TRShiftMorning } from './styles'
+import { PaginationByWeek } from './components/PaginationByWeek'
+import { ScaleSummaryPDF } from './components/ScaleSummaryPDF'
+import {
+  Container,
+  ContainerScaleSummaryPdf,
+  ContainerTable,
+  TDShift,
+  TRShiftMorning,
+} from './styles'
 import { daysOfWeek } from './utils/daysOfWeek'
 
 export function Summary() {
   const { scaleSummary } = useScales()
 
-  console.log(scaleSummary)
+  const [isLoadingPDF, setIsLoadingPDF] = useState(false)
 
   const [page, setPage] = useState(0)
 
@@ -26,6 +36,24 @@ export function Summary() {
     setPage((prevPage) => Math.max(prevPage - 1, 0))
   }
 
+  function handleGenerateScaleSummaryPDF() {
+    setIsLoadingPDF(true)
+
+    setTimeout(async () => {
+      const doc = <ScaleSummaryPDF scaleSummary={scaleSummary} />
+
+      const asPdf = pdf()
+
+      asPdf.updateContainer(doc)
+      const blob = await asPdf.toBlob()
+
+      const url = URL.createObjectURL(blob)
+      window.open(url)
+
+      setIsLoadingPDF(false)
+    }, 2000)
+  }
+
   const days = [
     'Segunda',
     'Terça',
@@ -38,12 +66,21 @@ export function Summary() {
 
   return (
     <Container>
-      <PaginationPerWeek
+      <PaginationByWeek
         currentPage={page}
         totalPages={totalPages}
         onNextPage={handleNextPage}
         onPreviousPage={handlePreviousPage}
       />
+      <ContainerScaleSummaryPdf onClick={handleGenerateScaleSummaryPDF}>
+        <section>
+          {!isLoadingPDF ? (
+            <CgPrinter size={24} />
+          ) : (
+            <CircularProgress size={24} style={{ color: '#ffffff' }} />
+          )}
+        </section>
+      </ContainerScaleSummaryPdf>
       <ContainerTable>
         <table>
           <thead>
