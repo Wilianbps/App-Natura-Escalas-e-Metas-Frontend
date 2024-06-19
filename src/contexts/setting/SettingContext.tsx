@@ -37,7 +37,6 @@ function SettingsProvider({ children }: SettingProviderProps) {
 
   async function fetchEmployes() {
     const response = await api.get('settings/getAllEmployees')
-
     setEmployees(response.data)
   }
 

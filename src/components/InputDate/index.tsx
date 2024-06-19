@@ -11,7 +11,16 @@ export function InputDate(props: InputDateProps) {
   const { selectMonth, onSelectMonth } = props
 
   function handleSelectDate(e: ChangeEvent<HTMLInputElement>) {
-    onSelectMonth(e.target.value)
+    const month = e.target.value
+
+    if (month === '') {
+      const now = new Date()
+      const year = now.getFullYear()
+      const month = String(now.getMonth() + 1).padStart(2, '0')
+      onSelectMonth(`${year}-${month}`)
+    } else {
+      onSelectMonth(month)
+    }
   }
 
   return (
