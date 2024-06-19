@@ -1,23 +1,24 @@
-import { useState } from 'react'
+import { useSettings } from '@/contexts/setting/SettingContext'
 
-import { DatePickerMUI } from '../DatePickerMUI'
+import { InputDate } from '../InputDate'
 import { SelectStores } from '../Select'
 import { ContainerHeader } from './styles'
 
 export function Header() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
+  const { monthValue, updateMonthValue } = useSettings()
 
-  function handleSelectDate(date: Date | null) {
-    setSelectedDate(date)
+  function handleSelectDate(month: string) {
+    updateMonthValue(month)
   }
 
   return (
     <ContainerHeader>
       <SelectStores minWidth={120} heightSelect="40px" fontSize="13px" />
-      <DatePickerMUI
+      {/*  <DatePickerMUI
         selectDate={selectedDate}
         onSelectDate={handleSelectDate}
-      />
+      /> */}
+      <InputDate selectMonth={monthValue} onSelectMonth={handleSelectDate} />
     </ContainerHeader>
   )
 }

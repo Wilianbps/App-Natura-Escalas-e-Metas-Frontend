@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 
 import { api } from '@/services/axios'
 
+import { useSettings } from '../setting/SettingContext'
 import {
   IScale,
   IScaleProps,
@@ -15,6 +16,7 @@ import {
 const ScalesContext = createContext({} as ScalesContextType)
 
 function ScalesProvider({ children }: { children: React.ReactNode }) {
+  const { fetchEmployes, monthValue } = useSettings()
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
   const [scaleSummary, setScaleSummary] = useState<Array<IScaleSummary[]>>([])
 
@@ -31,17 +33,22 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function fetchScaleSummary() {
-    const response = await api.get('scales/get-scale-summary')
+    /*     const month = selectedDate && selectedDate.getMonth() + 1
+    const year = selectedDate?.getFullYear() */
+
+    const month = monthValue.split('-')[1] // Split divide a string onde tiver "-"
+
+    // Para extrair o ano:
+    const year = monthValue.split('-')[0]
+
+    const response = await api.get(
+      `scales/get-scale-summary?month=${month}&year=${year}`,
+    )
 
     setScaleSummary(response.data)
   }
 
-  useEffect(() => {
-    fetchScaleSummary()
-  }, [])
-
   async function updateScalesByDate(scales: IScale[]) {
-    console.log(scales)
     const data = scales.map((scale) => {
       const objScale: IScaleProps = {
         id: scale.id,
@@ -70,6 +77,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
             })
           }
           fetchScaleSummary()
+          fetchEmployes()
         }
       })
       .catch((error) => {
@@ -81,6 +89,10 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         }
       })
   }
+
+  useEffect(() => {
+    fetchScaleSummary()
+  }, [monthValue])
 
   return (
     <ScalesContext.Provider

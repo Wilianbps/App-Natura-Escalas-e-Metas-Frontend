@@ -22,9 +22,18 @@ import { times } from './times'
 export function Scale() {
   const { scalesByDate, updateSetScalesByDate, updateScalesByDate } =
     useScales()
-
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { handleSubmit } = useForm()
+
+  const arraySumsEmployeesByTime = new Array(30).fill(0)
+
+  scalesByDate.forEach((item) => {
+    item.options.forEach((option, index) => {
+      if (option.type === 'T') {
+        arraySumsEmployeesByTime[index] += 1
+      }
+    })
+  })
 
   function adjustScale(updatedScales: IScale[], rowIndex: number) {
     let foundEmpty = false
@@ -42,7 +51,6 @@ export function Scale() {
     }
 
     if (foundEmpty && index !== undefined) {
-      console.log(index)
       for (let i = index; i >= 0; i--) {
         if (updatedScales[rowIndex].options[i].type === '') {
           for (let j = 0; i >= j; i--) {
@@ -216,6 +224,16 @@ export function Scale() {
                   ))}
               </tr>
 
+              <tr>
+                <td className="title-info-scale">Qnt Colab. Ativos</td>
+                <td></td>
+                {arraySumsEmployeesByTime.map((item, index) => (
+                  <>
+                    <td key={item + index}>{item}</td>
+                  </>
+                ))}
+              </tr>
+
               {dataScales?.infos?.map((info, indexTr) => (
                 <tr key={`scaleInfos_${indexTr}`}>
                   <td className="title-info-scale">{info.type}</td>
@@ -231,6 +249,15 @@ export function Scale() {
                   ))}
                 </tr>
               ))}
+              {/*  <tr>
+                <td className="title-info-scale">Qnt Colab. Ativos</td>
+                <td></td>
+                {arraySumsEmployeesByTime.map((item, index) => (
+                  <>
+                    <td>{item}</td>
+                  </>
+                ))}
+              </tr> */}
               <tr>
                 <td></td>
               </tr>

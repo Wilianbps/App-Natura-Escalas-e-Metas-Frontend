@@ -6,14 +6,14 @@ interface Day {
 type Week = Day[]
 type WeeksArray = Week[]
 
-export function daysOfWeek(month: number, year: number) {
-  const firstDay = new Date(year, month - 1, 1)
-  const lastDay = new Date(year, month, 0)
+export function daysOfWeek(month: number | null, year: number | undefined) {
+  const firstDay = month && year && new Date(year, month - 1, 1)
+  const lastDay = month && year && new Date(year, month, 0)
 
   const result = eachWeekOfInterval(
     {
-      start: firstDay,
-      end: lastDay,
+      start: firstDay || '',
+      end: lastDay || '',
     },
     { weekStartsOn: 1 },
   )

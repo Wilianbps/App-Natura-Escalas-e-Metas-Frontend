@@ -11,6 +11,12 @@ export const styles = StyleSheet.create({
     padding: 10,
   },
 
+  header: {
+    fontSize: '18px',
+    fontWeight: 'bold',
+    marginBottom: '20px',
+  },
+
   tableRow: {
     flexDirection: 'row',
   },
@@ -22,7 +28,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: '5px',
-    height: 60,
+    height: 38,
     width: 100,
     fontSize: 10,
     fontWeight: 'bold',
@@ -39,8 +45,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: '5px',
     width: 100,
-    height: 60,
-    fontSize: 10,
+    height: 38,
+    fontSize: 8,
     color: '#0f0f0f',
     backgroundColor: '#F8F8F8',
     padding: 3,
@@ -48,14 +54,14 @@ export const styles = StyleSheet.create({
   },
 
   tableCell: {
-    width: 25,
-    height: 25,
+    width: 17,
+    height: 17,
     color: '#000',
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
-    fontSize: 10,
+    fontSize: 8,
   },
 
   greenLight: { backgroundColor: '#e2d34c' },

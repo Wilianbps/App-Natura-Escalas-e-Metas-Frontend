@@ -61,6 +61,9 @@ export function ScaleSummaryPDF(props: ScaleSummaryProps) {
           orientation="landscape"
           style={styles.page}
         >
+          <View style={styles.header}>
+            <Text>Resumo Escala 06/2024 - Semana {pageIndex + 1}</Text>
+          </View>
           <View style={styles.tableRow}>
             <View style={styles.tableColHeaderContainer}>
               <Text>Nome Colab.</Text>

@@ -44,4 +44,9 @@ export interface SettingsContextType {
   updateShiftRestSchedule: (employee: IEmployee) => void
   employees: IEmployee[]
   updateSettings: (settings: ISettings) => void
+  updateselectDate: (date: Date | null) => void
+  selectedDate: Date | null
+  fetchEmployes: () => void
+  monthValue: string
+  updateMonthValue: (month: string) => void
 }

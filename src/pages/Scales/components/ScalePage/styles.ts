@@ -52,7 +52,7 @@ export const ContainerTable = styled.main`
         &:nth-last-of-type(3) {
           font-weight: bold;
         }
-        &:nth-last-of-type(4) {
+        &:nth-last-of-type(3) {
           color: ${(props) => props.theme.greenMedium};
           font-weight: bold;
         }

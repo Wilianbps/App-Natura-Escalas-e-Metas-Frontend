@@ -5,8 +5,6 @@ import { Container, ContainerTable, TDShift, TRShiftMorning } from './styles'
 export function Summary() {
   const { scaleSummary } = useScales()
 
-  console.log('scaleSummary teste', scaleSummary)
-
   return (
     <Container>
       <ContainerTable>

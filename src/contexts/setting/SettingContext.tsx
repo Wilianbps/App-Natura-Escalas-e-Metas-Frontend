@@ -15,6 +15,26 @@ const SettingsContext = createContext({} as SettingsContextType)
 function SettingsProvider({ children }: SettingProviderProps) {
   const [employees, setEmployees] = useState<IEmployee[]>([])
 
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
+
+  const getCurrentMonth = (): string => {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0') // Adiciona zero à esquerda se necessário
+    return `${year}-${month}`
+  }
+  const [monthValue, setMonthValue] = useState<string>(getCurrentMonth())
+
+  console.log('mes atual will gato', monthValue)
+
+  function updateMonthValue(month: string) {
+    setMonthValue(month)
+  }
+
+  function updateselectDate(date: Date | null) {
+    setSelectedDate(date)
+  }
+
   async function fetchEmployes() {
     const response = await api.get('settings/getAllEmployees')
 
@@ -26,7 +46,6 @@ function SettingsProvider({ children }: SettingProviderProps) {
   }, [])
 
   async function updateShiftRestSchedule(employee: IEmployee) {
-    console.log('update folga', employee)
     const {
       idSeler,
       idDayOff,
@@ -107,7 +126,16 @@ function SettingsProvider({ children }: SettingProviderProps) {
 
   return (
     <SettingsContext.Provider
-      value={{ updateShiftRestSchedule, employees, updateSettings }}
+      value={{
+        updateShiftRestSchedule,
+        employees,
+        updateSettings,
+        updateselectDate,
+        selectedDate,
+        fetchEmployes,
+        monthValue,
+        updateMonthValue,
+      }}
     >
       {children}
     </SettingsContext.Provider>
