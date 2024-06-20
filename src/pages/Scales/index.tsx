@@ -3,15 +3,22 @@ import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { CgEye, CgPen } from 'react-icons/cg'
+
+import { useScales } from '@/contexts/scale/ScalesContext'
 
 import { Scale } from './components/ScalePage'
 import { Summary } from './components/Summary'
 import { Container } from './styles'
 
 export function ScalePage() {
+  const { scaleSummary } = useScales()
   const [value, setValue] = useState('setting')
+
+  const infoScalePeriod = useMemo(() => {
+    return scaleSummary.some((item) => item.length > 0)
+  }, [scaleSummary])
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue)
@@ -52,7 +59,9 @@ export function ScalePage() {
             </TabList>
           </Box>
           <TabPanel value="setting" sx={{ padding: 0 }}>
-            <Scale />
+            {!infoScalePeriod && <p>Não há informações no período</p>}
+
+            {infoScalePeriod && <Scale />}
           </TabPanel>
           <TabPanel value="summary" sx={{ padding: 0 }}>
             <Summary />
