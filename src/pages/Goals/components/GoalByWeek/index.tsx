@@ -1,6 +1,6 @@
 import { Container, ContainerTable, Footer } from './styles'
 
-export function GoalPearWeek() {
+export function GoalByWeek() {
   return (
     <Container>
       <ContainerTable>

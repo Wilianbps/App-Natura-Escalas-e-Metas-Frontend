@@ -7,7 +7,7 @@ export const Container = styled.section`
 export const ContainerTable = styled.main`
   > table {
     width: 100%;
-    font-size: 13px;
+    font-size: 11px;
     border-collapse: collapse;
     font-weight: 500;
 
@@ -16,7 +16,9 @@ export const ContainerTable = styled.main`
         th {
           text-align: left;
           height: 3rem;
-          padding: 0 2.5rem;
+          /*         min-width: 50px; */
+          padding: 0 0.5rem;
+          text-align: center;
         }
 
         &:first-of-type {
@@ -44,7 +46,8 @@ export const ContainerTable = styled.main`
         td {
           width: 220px !important;
           height: 3rem;
-          padding: 0 2.5rem;
+          padding: 0 0.2rem;
+          text-align: center;
 
           &:first-of-type {
             width: 220px;
@@ -62,12 +65,13 @@ export const ContainerTable = styled.main`
     tfoot {
       tr {
         font-weight: bold;
-        td:nth-last-of-type(-n + 7) {
+        td:nth-of-type(n + 3) {
           background-color: #fff3e0;
         }
         td {
           height: 3rem;
-          padding: 0 2.5rem;
+          padding: 0 0.2rem;
+          text-align: center;
         }
       }
     }

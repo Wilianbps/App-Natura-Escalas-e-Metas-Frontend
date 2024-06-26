@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 
 import { api } from '@/services/axios'
 
+import { useGoals } from '../goals/GoalsContext'
 import {
   IEmployee,
   ISettings,
@@ -13,6 +14,7 @@ import {
 const SettingsContext = createContext({} as SettingsContextType)
 
 function SettingsProvider({ children }: SettingProviderProps) {
+  const { fetchGoals } = useGoals()
   const [employees, setEmployees] = useState<IEmployee[]>([])
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
@@ -24,8 +26,6 @@ function SettingsProvider({ children }: SettingProviderProps) {
     return `${year}-${month}`
   }
   const [monthValue, setMonthValue] = useState<string>(getCurrentMonth())
-
-  console.log('mes atual will gato', monthValue)
 
   function updateMonthValue(month: string) {
     setMonthValue(month)

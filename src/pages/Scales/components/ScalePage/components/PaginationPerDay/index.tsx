@@ -12,9 +12,6 @@ export function PaginationPerDay() {
   const { fetchScaleByDate } = useScales()
   const { monthValue } = useSettings()
 
-  /*   const month = selectedDate && selectedDate.getMonth() + 1
-  const year = selectedDate?.getFullYear() */
-
   const month = monthValue.split('-')[1]
 
   const year = monthValue.split('-')[0]

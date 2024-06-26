@@ -3,8 +3,8 @@ import { Box, Tab } from '@mui/material'
 import { useState } from 'react'
 
 import { GoalCards } from './components/Goal-Cards'
-import { GoalPerDay } from './components/GoalPearDay'
-import { GoalPearWeek } from './components/GoalPearWeek'
+import { GoalByDay } from './components/GoalByDay'
+import { GoalByWeek } from './components/GoalByWeek'
 import { Container } from './styles'
 
 export function Goals() {
@@ -46,10 +46,10 @@ export function Goals() {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            <GoalPerDay />
+            <GoalByDay />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
-            <GoalPearWeek />
+            <GoalByWeek />
           </TabPanel>
         </TabContext>
       </Box>

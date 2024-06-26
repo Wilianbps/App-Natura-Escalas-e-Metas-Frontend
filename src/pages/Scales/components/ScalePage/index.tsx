@@ -22,48 +22,95 @@ import { times } from './times'
 export function Scale() {
   const { scalesByDate, updateSetScalesByDate, updateScalesByDate } =
     useScales()
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { handleSubmit } = useForm()
 
-  const arraySumsEmployeesByTime = new Array(30).fill(0)
+  const arraySumsEmployeesByTime = new Array(30).fill(0).map((_, index) => ({
+    id: index,
+    value: 0,
+  }))
 
   scalesByDate.forEach((item) => {
     item.options.forEach((option, index) => {
-      if (option.type === 'T') {
-        arraySumsEmployeesByTime[index] += 1
+      if (option.type === 'T' && item.status === true) {
+        arraySumsEmployeesByTime[index].value += 1
       }
     })
   })
 
-  function adjustScale(updatedScales: IScale[], rowIndex: number) {
+  function adjustScale(
+    updatedScales: IScale[],
+    rowIndex: number,
+    value: string,
+  ) {
     let foundEmpty = false
-    let index
+    let foundT = false
+    let indexfoundEmpty
+    let indexfoundT
 
     for (let i = updatedScales[rowIndex].options.length - 1; i > 0; i--) {
       if (
         updatedScales[rowIndex].options[i].type === 'T' ||
         updatedScales[rowIndex].options[i].type === 'R'
       ) {
-        index = i - 1
+        indexfoundEmpty = i - 1
         foundEmpty = true
         break
       }
     }
 
-    if (foundEmpty && index !== undefined) {
-      for (let i = index; i >= 0; i--) {
-        if (updatedScales[rowIndex].options[i].type === '') {
-          for (let j = 0; i >= j; i--) {
-            updatedScales[rowIndex].options[i].type = ''
+    if (value === 'T' || value === 'R') {
+      if (foundEmpty && indexfoundEmpty !== undefined) {
+        for (let i = indexfoundEmpty; i >= 0; i--) {
+          if (
+            updatedScales[rowIndex].options[i].type === 'T' ||
+            updatedScales[rowIndex].options[i].type === 'R'
+          ) {
+            foundT = true
+            indexfoundT = i
           }
-          break
+        }
+      }
+
+      if (
+        foundT &&
+        indexfoundT !== undefined &&
+        indexfoundEmpty !== undefined
+      ) {
+        /* console.log('entrou aqui tbm', rowIndex, indexfoundEmpty, indexfoundT) */
+        for (let i = indexfoundEmpty; i >= indexfoundT; i--) {
+          console.log(updatedScales[rowIndex].options[i].type)
+          if (
+            updatedScales[rowIndex].options[i].type === '' ||
+            updatedScales[rowIndex].options[i].type === 'null' ||
+            updatedScales[rowIndex].options[i].type === null
+          ) {
+            updatedScales[rowIndex].options[i].type = 'T'
+          }
+        }
+      }
+    }
+
+    if (value === '') {
+      if (foundEmpty && indexfoundEmpty !== undefined) {
+        for (let i = indexfoundEmpty; i >= 0; i--) {
+          if (updatedScales[rowIndex].options[i].type === '') {
+            for (let j = 0; i >= j; i--) {
+              updatedScales[rowIndex].options[i].type = ''
+            }
+          }
         }
       }
     }
   }
 
-  async function updateTurn(updatedScales: IScale[], rowIndex: number) {
-    adjustScale(updatedScales, rowIndex)
+  async function updateTurn(
+    updatedScales: IScale[],
+    rowIndex: number,
+    value: string,
+  ) {
+    adjustScale(updatedScales, rowIndex, value)
     const index = updatedScales[rowIndex].options.findIndex(
       (option) => option.type === 'T' || option.type === 'R',
     )
@@ -79,6 +126,8 @@ export function Scale() {
         updatedScales[rowIndex].turn = 'T3'
         updateSetScalesByDate(updatedScales)
       }
+    } else {
+      updatedScales[rowIndex].status = false
     }
   }
 
@@ -102,9 +151,7 @@ export function Scale() {
       selectedOption.type = value
     }
 
-    /*     const adjustOptionScaleByRowIndex = adjustScale(updatedScales, rowIndex) */
-
-    updateTurn(updatedScales, rowIndex)
+    updateTurn(updatedScales, rowIndex, value)
 
     // Atualizar o estado com as novas escalas
     updateSetScalesByDate(updatedScales)
@@ -174,7 +221,7 @@ export function Scale() {
             </thead>
             <tbody>
               {scalesByDate?.map((scale, index) => (
-                <tr key={index}>
+                <tr key={scale.id}>
                   <td>{formatName(scale.name)}</td>
                   <td>
                     <Switch
@@ -203,12 +250,11 @@ export function Scale() {
                         </select>
 
                         <div className="styled-select">
-                          {option.type === 'T' ? (
+                          {option.type === 'T' && (
                             <IoPersonCircleOutline size={20} />
-                          ) : (
-                            option.type === 'R' && (
-                              <GiForkKnifeSpoon size={20} />
-                            )
+                          )}
+                          {option.type === 'R' && (
+                            <GiForkKnifeSpoon size={20} />
                           )}
                         </div>
                       </SelectStyled>
@@ -227,20 +273,18 @@ export function Scale() {
               <tr>
                 <td className="title-info-scale">Qnt Colab. Ativos</td>
                 <td></td>
-                {arraySumsEmployeesByTime.map((item, index) => (
-                  <>
-                    <td key={item + index}>{item}</td>
-                  </>
+                {arraySumsEmployeesByTime.map((item) => (
+                  <td key={item.id}>{item.value}</td>
                 ))}
               </tr>
 
-              {dataScales?.infos?.map((info, indexTr) => (
-                <tr key={`scaleInfos_${indexTr}`}>
+              {dataScales?.infos?.map((info) => (
+                <tr key={`scaleInfos_${info.values}`}>
                   <td className="title-info-scale">{info.type}</td>
                   <td></td>
                   {info?.values?.map((value, indexTd) => (
                     <TableDataInfo
-                      key={`value_${indexTd}`}
+                      key={`value_${info.type}_${indexTd}`}
                       type={info.type}
                       value={value}
                     >

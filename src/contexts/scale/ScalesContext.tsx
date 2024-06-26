@@ -1,3 +1,4 @@
+import { parse } from 'date-fns'
 import { format } from 'date-fns/format'
 import { formatInTimeZone } from 'date-fns-tz'
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -20,6 +21,9 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
   const [scaleSummary, setScaleSummary] = useState<Array<IScaleSummary[]>>([])
 
+  const month = monthValue.split('-')[1]
+  const year = monthValue.split('-')[0]
+
   async function fetchScaleByDate(date: string) {
     const dateFormatted = format(date, 'yyyy-MM-dd')
     const response = await api.get(
@@ -35,11 +39,6 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   async function fetchScaleSummary() {
     /*     const month = selectedDate && selectedDate.getMonth() + 1
     const year = selectedDate?.getFullYear() */
-
-    const month = monthValue.split('-')[1] // Split divide a string onde tiver "-"
-
-    // Para extrair o ano:
-    const year = monthValue.split('-')[0]
 
     const response = await api.get(
       `scales/get-scale-summary?month=${month}&year=${year}`,
@@ -76,6 +75,8 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
               style: { height: '50px', padding: '15px' },
             })
           }
+          const newDate = parse(`01/${month}/${year}`, 'dd/MM/yyyy', new Date())
+          fetchScaleByDate(newDate.toString())
           fetchScaleSummary()
           fetchEmployes()
         }
