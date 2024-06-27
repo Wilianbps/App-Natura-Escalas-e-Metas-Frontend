@@ -159,20 +159,13 @@ export const TRShiftNight = styled(TRShift)`
 `
 
 export const ContainerScaleSummaryPdf = styled.section`
-  margin-bottom: 1.063rem;
+  margin: 1.063rem auto;
   display: flex;
   justify-content: flex-end;
   cursor: pointer;
-  section {
-    width: 50px;
-    padding: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 2rem;
-
-    background-color: #fdbd54;
-
-    border-radius: 50%;
-  }
+  width: 50px;
+  padding: 12px;
+  margin-right: 2rem;
+  background-color: #fdbd54;
+  border-radius: 50%;
 `

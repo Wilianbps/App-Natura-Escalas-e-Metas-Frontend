@@ -25,12 +25,16 @@ interface IScaleSummary {
 
 interface ScaleSummaryProps {
   scaleSummary: Array<IScaleSummary[]>
+  monthValue: string
 }
 
 export function ScaleSummaryPDF(props: ScaleSummaryProps) {
-  const { scaleSummary } = props
+  const { scaleSummary, monthValue } = props
 
-  const weeks = daysOfWeek(6, 2024)
+  const month = monthValue.split('-')[1]
+  const year = monthValue.split('-')[0]
+
+  const weeks = daysOfWeek(Number(month), Number(year))
 
   const days = [
     'Segunda',
@@ -62,7 +66,9 @@ export function ScaleSummaryPDF(props: ScaleSummaryProps) {
           style={styles.page}
         >
           <View style={styles.header}>
-            <Text>Resumo Escala 06/2024 - Semana {pageIndex + 1}</Text>
+            <Text>
+              Resumo Escala {month}/{year} - Semana {pageIndex + 1}
+            </Text>
           </View>
           <View style={styles.tableRow}>
             <View style={styles.tableColHeaderContainer}>
@@ -74,7 +80,9 @@ export function ScaleSummaryPDF(props: ScaleSummaryProps) {
                   <View key={index}>
                     <View style={styles.tableColHeaderContainer}>
                       <Text>{dayName}</Text>
-                      <Text>{week[index].day}</Text>
+                      <Text>
+                        {week[index].day}/{week[index].month}
+                      </Text>
                     </View>
                   </View>
                 ))}

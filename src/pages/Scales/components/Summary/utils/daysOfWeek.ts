@@ -1,9 +1,10 @@
 import { eachWeekOfInterval } from 'date-fns'
 
-interface Day {
+interface DayAndMonth {
   day: number
+  month: number
 }
-type Week = Day[]
+type Week = DayAndMonth[]
 type WeeksArray = Week[]
 
 export function daysOfWeek(month: number | null, year: number | undefined) {
@@ -26,7 +27,7 @@ export function daysOfWeek(month: number | null, year: number | undefined) {
     const date = new Date(result[weekNumber])
 
     for (let i = 1; i <= 7; i++) {
-      week.push({ day: date.getDate() })
+      week.push({ day: date.getDate(), month: date.getMonth() + 1 })
       date.setDate(date.getDate() + 1)
     }
   })

@@ -49,7 +49,9 @@ export function Summary() {
     setIsLoadingPDF(true)
 
     setTimeout(async () => {
-      const doc = <ScaleSummaryPDF scaleSummary={scaleSummary} />
+      const doc = (
+        <ScaleSummaryPDF scaleSummary={scaleSummary} monthValue={monthValue} />
+      )
 
       const asPdf = pdf()
 
@@ -82,13 +84,11 @@ export function Summary() {
         onPreviousPage={handlePreviousPage}
       />
       <ContainerScaleSummaryPdf onClick={handleGenerateScaleSummaryPDF}>
-        <section>
-          {!isLoadingPDF ? (
-            <CgPrinter size={24} />
-          ) : (
-            <CircularProgress size={24} style={{ color: '#ffffff' }} />
-          )}
-        </section>
+        {!isLoadingPDF ? (
+          <CgPrinter size={24} />
+        ) : (
+          <CircularProgress size={24} style={{ color: '#ffffff' }} />
+        )}
       </ContainerScaleSummaryPdf>
       <ContainerTable>
         <table>
