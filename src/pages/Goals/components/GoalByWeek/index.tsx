@@ -1,6 +1,20 @@
+import { useGoals } from '@/contexts/goals/GoalsContext'
+import { formatName } from '@/libs/formatName'
+import { formatNumber } from '@/libs/formatNumber'
+
 import { Container, ContainerTable, Footer } from './styles'
 
 export function GoalByWeek() {
+  const { goalsByWeek } = useGoals()
+
+  console.log('goalsByWeek na meta', goalsByWeek)
+
+  goalsByWeek.employeesByWeeks.forEach((item) => {
+    item.weeks.forEach((week) => {
+      console.log(week.days.goalDayByEmployee)
+    })
+  })
+
   return (
     <Container>
       <ContainerTable>
@@ -9,11 +23,12 @@ export function GoalByWeek() {
             <tr>
               <th></th>
               <th></th>
-              <th>Semana 1</th>
-              <th>Semana 2</th>
-              <th>Semana 3</th>
-              <th>Semana 4</th>
-              <th>Semana 5</th>
+
+              {Array.from({ length: goalsByWeek.weeksSums.length }).map(
+                (_, index) => (
+                  <th key={index}>Semana {index + 1}</th>
+                ),
+              )}
             </tr>
             <tr>
               <th>Colaboladores</th>
@@ -27,68 +42,33 @@ export function GoalByWeek() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>José Maria</td>
-              <td>R$36.000,00</td>
-              <td>R$9.000,00</td>
-              <td>R$7.500,00</td>
-              <td>R$9.000,00</td>
-              <td>R$7.500,00</td>
-              <td>R$3.000,00</td>
-            </tr>
-            <tr>
-              <td>Mario Andrade</td>
-              <td>R$36.000,00</td>
-              <td>R$9.000,00</td>
-              <td>R$7.500,00</td>
-              <td>R$9.000,00</td>
-              <td>R$7.500,00</td>
-              <td>R$3.000,00</td>
-            </tr>
-            <tr>
-              <td>Maria Soares</td>
-              <td>R$36.000,00</td>
-              <td>R$9.000,00</td>
-              <td>R$7.500,00</td>
-              <td>R$9.000,00</td>
-              <td>R$7.500,00</td>
-              <td>R$3.000,00</td>
-            </tr>
-            <tr>
-              <td>Ana Vieira</td>
-              <td>R$36.000,00</td>
-              <td>R$9.000,00</td>
-              <td>R$7.500,00</td>
-              <td>R$9.000,00</td>
-              <td>R$7.500,00</td>
-              <td>R$3.000,00</td>
-            </tr>
-            <tr>
-              <td>Julia Andresa</td>
-              <td>R$36.000,00</td>
-              <td>R$9.000,00</td>
-              <td>R$7.500,00</td>
-              <td>R$9.000,00</td>
-              <td>R$7.500,00</td>
-              <td>R$3.000,00</td>
-            </tr>
+            {goalsByWeek?.employeesByWeeks?.map((item) => (
+              <tr key={item.id}>
+                <td>{formatName(item.name)}</td>
+                <td>{formatNumber(item.totalAmountMonth)}</td>
+                {item.weeks.map((week, index) => (
+                  <td key={item.id + index}>
+                    {formatNumber(week?.amountWeek)}
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
           <tfoot>
             <tr>
               <td>Total semanal loja</td>
               <td></td>
-              <td>R$6.000,00</td>
-              <td>R$6.000,00</td>
-              <td>R$6.000,00</td>
-              <td>R$6.240,00</td>
-              <td>R$4.500,00</td>
+
+              {goalsByWeek?.weeksSums?.map((value, index) => (
+                <td key={value + index}>{formatNumber(value)}</td>
+              ))}
             </tr>
           </tfoot>
         </table>
       </ContainerTable>
 
       <Footer>
-        <p>Colaborador Extra</p>
+        {/*      <p>Colaborador Extra</p>
 
         <table>
           <tbody>
@@ -102,7 +82,7 @@ export function GoalByWeek() {
               <td>R$1.500,00</td>
             </tr>
           </tbody>
-        </table>
+        </table> */}
       </Footer>
     </Container>
   )
