@@ -13,6 +13,7 @@ import {
 const GoalsContext = createContext({} as GoalsContextType)
 
 function GoalsProvider({ children }: GoalsProviderProps) {
+  const { fetchEmployes } = useSettings()
   const [goals, setGoals] = useState<Array<IGoals[]>>([])
   const [goalsByWeek, setGoalsByWeek] = useState<IGoalsByWeek>(
     {} as IGoalsByWeek,
@@ -40,7 +41,7 @@ function GoalsProvider({ children }: GoalsProviderProps) {
   useEffect(() => {
     fetchGoals()
     fetchGoalsByWeek()
-  }, [monthValue])
+  }, [monthValue, fetchEmployes])
 
   return (
     <GoalsContext.Provider value={{ goals, fetchGoals, goalsByWeek }}>

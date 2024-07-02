@@ -3,6 +3,7 @@ import { pdf } from '@react-pdf/renderer'
 import { useState } from 'react'
 import { CgPrinter } from 'react-icons/cg'
 
+import { TextInfo } from '@/components/TextInfo'
 import { useScales } from '@/contexts/scale/ScalesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
@@ -25,6 +26,8 @@ export function Summary() {
   /*   const month = selectedDate && selectedDate.getMonth() + 1
   const year = selectedDate?.getFullYear()
  */
+
+  console.log(scaleSummary)
   const month = monthValue && monthValue.split('-')[1]
 
   const year = monthValue.split('-')[0]
@@ -77,12 +80,15 @@ export function Summary() {
 
   return (
     <Container>
-      <PaginationByWeek
-        currentPage={page}
-        totalPages={totalPages}
-        onNextPage={handleNextPage}
-        onPreviousPage={handlePreviousPage}
-      />
+      {scaleSummary[0]?.length > 0 && (
+        <PaginationByWeek
+          currentPage={page}
+          totalPages={totalPages}
+          onNextPage={handleNextPage}
+          onPreviousPage={handlePreviousPage}
+        />
+      )}
+
       <ContainerScaleSummaryPdf onClick={handleGenerateScaleSummaryPDF}>
         {!isLoadingPDF ? (
           <CgPrinter size={24} />
@@ -91,75 +97,81 @@ export function Summary() {
         )}
       </ContainerScaleSummaryPdf>
       <ContainerTable>
-        <table>
-          <thead>
-            <tr>
-              <th>Nome Colab.</th>
-              {/*               <th>HT-M</th>
-              <th>DT</th> */}
+        {scaleSummary[0]?.length === 0 && (
+          <TextInfo text="Não há informações no período" marginTop="2rem" />
+        )}
 
-              {/* Renderiza os dias da semana uma vez */}
-              {week[page] && (
+        {scaleSummary[0]?.length > 0 && (
+          <table>
+            <thead>
+              <tr>
+                <th>Nome Colab.</th>
+                {week[page] && (
+                  <>
+                    {days?.map((dayName, index) => (
+                      <th key={index}>
+                        <p>{dayName}</p>
+                        <p>{week[page][index].day}</p>
+                      </th>
+                    ))}
+                  </>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {scaleSummary[page]?.map((collaborator) => (
                 <>
-                  {days?.map((dayName, index) => (
-                    <th key={index}>
-                      <p>{dayName}</p>
-                      <p>{week[page][index].day}</p>
-                    </th>
-                  ))}
-                </>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {scaleSummary[page]?.map((collaborator) => (
-              <>
-                <TRShiftMorning>
-                  <td rowSpan={2} className="td-name">
-                    {formatName(collaborator.name)}
-                  </td>
-                  {/*     <td rowSpan={2}>27</td>
+                  <TRShiftMorning>
+                    <td rowSpan={2} className="td-name">
+                      {formatName(collaborator.name)}
+                    </td>
+                    {/*     <td rowSpan={2}>27</td>
                   <td rowSpan={2}></td> */}
 
-                  {Array.from({ length: 7 }).map((_, index) => {
-                    const day = collaborator.days.find(
-                      (day) => day.dayOfWeek === index + 1,
-                    )
-                    return (
-                      <td key={index} width={140}>
-                        {day?.status === 1
-                          ? `${day.startTime} - ${day.endTime}`
-                          : ''}
-                      </td>
-                    )
-                  })}
-                </TRShiftMorning>
-                <TRShiftMorning>
-                  {Array.from({ length: 7 }).map((_, index) => {
-                    const day = collaborator.days.find(
-                      (day) => day.dayOfWeek === index + 1,
-                    )
-                    return (
-                      <TDShift
-                        key={index}
-                        value={
-                          day?.status === 1 ? 'T' : day?.status === 0 ? 'F' : ''
-                        }
-                        shift={day?.status === 1 ? day.turn : ''}
-                      >
-                        {!day?.month ? (
-                          <div></div>
-                        ) : (
-                          <div>{day?.status === 1 ? 'T' : 'F'}</div>
-                        )}
-                      </TDShift>
-                    )
-                  })}
-                </TRShiftMorning>
-              </>
-            ))}
-          </tbody>
-        </table>
+                    {Array.from({ length: 7 }).map((_, index) => {
+                      const day = collaborator.days.find(
+                        (day) => day.dayOfWeek === index + 1,
+                      )
+                      return (
+                        <td key={index} width={140}>
+                          {day?.status === 1
+                            ? `${day.startTime} - ${day.endTime}`
+                            : ''}
+                        </td>
+                      )
+                    })}
+                  </TRShiftMorning>
+                  <TRShiftMorning>
+                    {Array.from({ length: 7 }).map((_, index) => {
+                      const day = collaborator.days.find(
+                        (day) => day.dayOfWeek === index + 1,
+                      )
+                      return (
+                        <TDShift
+                          key={index}
+                          value={
+                            day?.status === 1
+                              ? 'T'
+                              : day?.status === 0
+                                ? 'F'
+                                : ''
+                          }
+                          shift={day?.status === 1 ? day.turn : ''}
+                        >
+                          {!day?.month ? (
+                            <div></div>
+                          ) : (
+                            <div>{day?.status === 1 ? 'T' : 'F'}</div>
+                          )}
+                        </TDShift>
+                      )
+                    })}
+                  </TRShiftMorning>
+                </>
+              ))}
+            </tbody>
+          </table>
+        )}
       </ContainerTable>
     </Container>
   )

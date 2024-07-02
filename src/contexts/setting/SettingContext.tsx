@@ -3,7 +3,6 @@ import { toast } from 'sonner'
 
 import { api } from '@/services/axios'
 
-import { useGoals } from '../goals/GoalsContext'
 import {
   IEmployee,
   ISettings,
@@ -14,7 +13,6 @@ import {
 const SettingsContext = createContext({} as SettingsContextType)
 
 function SettingsProvider({ children }: SettingProviderProps) {
-  const { fetchGoals } = useGoals()
   const [employees, setEmployees] = useState<IEmployee[]>([])
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
@@ -116,10 +114,12 @@ function SettingsProvider({ children }: SettingProviderProps) {
 
     setEmployees(updatedEmployees)
 
-    if (response.data.message) {
-      toast.success(response.data.message, {
-        style: { height: '50px', padding: '15px' },
-      })
+    if (response.status === 200) {
+      if (response.data.message) {
+        toast.success(response.data.message, {
+          style: { height: '50px', padding: '15px' },
+        })
+      }
     }
   }
 

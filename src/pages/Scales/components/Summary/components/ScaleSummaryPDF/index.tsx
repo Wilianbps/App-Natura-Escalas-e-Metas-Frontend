@@ -58,83 +58,95 @@ export function ScaleSummaryPDF(props: ScaleSummaryProps) {
   }
   return (
     <Document>
-      {weeks.map((week, pageIndex) => (
-        <Page
-          key={pageIndex}
-          size="A4"
-          orientation="landscape"
-          style={styles.page}
-        >
+      {scaleSummary[0]?.length === 0 && (
+        <Page size="A4" orientation="landscape" style={styles.page}>
           <View style={styles.header}>
-            <Text>
-              Resumo Escala {month}/{year} - Semana {pageIndex + 1}
-            </Text>
+            <Text>Não há Relatório no Período</Text>
           </View>
-          <View style={styles.tableRow}>
-            <View style={styles.tableColHeaderContainer}>
-              <Text>Nome Colab.</Text>
-            </View>
-            {week && (
-              <>
-                {days?.map((dayName, index) => (
-                  <View key={index}>
-                    <View style={styles.tableColHeaderContainer}>
-                      <Text>{dayName}</Text>
-                      <Text>
-                        {week[index].day}/{week[index].month}
-                      </Text>
-                    </View>
-                  </View>
-                ))}
-              </>
-            )}
-          </View>
+        </Page>
+      )}
 
-          {scaleSummary[pageIndex].map((collaborator, indexScale) => (
-            <View style={styles.tableRow} key={indexScale}>
-              <View style={styles.tableColBodyContainer}>
-                <Text>{formatName(collaborator.name)}</Text>
+      {scaleSummary[0]?.length > 0 && (
+        <>
+          {weeks.map((week, pageIndex) => (
+            <Page
+              key={pageIndex}
+              size="A4"
+              orientation="landscape"
+              style={styles.page}
+            >
+              <View style={styles.header}>
+                <Text>
+                  Resumo Escala {month}/{year} - Semana {pageIndex + 1}
+                </Text>
+              </View>
+              <View style={styles.tableRow}>
+                <View style={styles.tableColHeaderContainer}>
+                  <Text>Nome Colab.</Text>
+                </View>
+                {week && (
+                  <>
+                    {days?.map((dayName, index) => (
+                      <View key={index}>
+                        <View style={styles.tableColHeaderContainer}>
+                          <Text>{dayName}</Text>
+                          <Text>
+                            {week[index].day}/{week[index].month}
+                          </Text>
+                        </View>
+                      </View>
+                    ))}
+                  </>
+                )}
               </View>
 
-              {Array.from({ length: 7 }).map((_, index) => {
-                const day = collaborator.days.find(
-                  (day) => day.dayOfWeek === index + 1,
-                )
-                return (
-                  <View style={styles.tableColBodyContainer} key={index}>
-                    <Text key={index}>
-                      {day?.status === 1
-                        ? `${day.startTime} - ${day.endTime}`
-                        : ''}
-                    </Text>
-
-                    <View
-                      key={index}
-                      style={[
-                        styles.tableCell,
-                        getShiftStyle(
-                          day?.turn,
-                          day?.status === 1
-                            ? 'T'
-                            : day?.status === 0
-                              ? 'F'
-                              : '',
-                        ),
-                      ]}
-                    >
-                      {!day?.month ? (
-                        <Text></Text>
-                      ) : (
-                        <Text>{day?.status === 1 ? 'T' : 'F'}</Text>
-                      )}
-                    </View>
+              {scaleSummary[pageIndex].map((collaborator, indexScale) => (
+                <View style={styles.tableRow} key={indexScale}>
+                  <View style={styles.tableColBodyContainer}>
+                    <Text>{formatName(collaborator.name)}</Text>
                   </View>
-                )
-              })}
-            </View>
+
+                  {Array.from({ length: 7 }).map((_, index) => {
+                    const day = collaborator.days.find(
+                      (day) => day.dayOfWeek === index + 1,
+                    )
+                    return (
+                      <View style={styles.tableColBodyContainer} key={index}>
+                        <Text key={index}>
+                          {day?.status === 1
+                            ? `${day.startTime} - ${day.endTime}`
+                            : ''}
+                        </Text>
+
+                        <View
+                          key={index}
+                          style={[
+                            styles.tableCell,
+                            getShiftStyle(
+                              day?.turn,
+                              day?.status === 1
+                                ? 'T'
+                                : day?.status === 0
+                                  ? 'F'
+                                  : '',
+                            ),
+                          ]}
+                        >
+                          {!day?.month ? (
+                            <Text></Text>
+                          ) : (
+                            <Text>{day?.status === 1 ? 'T' : 'F'}</Text>
+                          )}
+                        </View>
+                      </View>
+                    )
+                  })}
+                </View>
+              ))}
+            </Page>
           ))}
-        </Page>
-      ))}
+        </>
+      )}
     </Document>
   )
 }

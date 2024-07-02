@@ -182,7 +182,6 @@ export function Scale() {
   return (
     <Container>
       <PaginationPerDay />
-
       <form onSubmit={handleSubmit(handleUpdateScale)}>
         <ContainerTable>
           <table>
@@ -293,15 +292,6 @@ export function Scale() {
                   ))}
                 </tr>
               ))}
-              {/*  <tr>
-                <td className="title-info-scale">Qnt Colab. Ativos</td>
-                <td></td>
-                {arraySumsEmployeesByTime.map((item, index) => (
-                  <>
-                    <td>{item}</td>
-                  </>
-                ))}
-              </tr> */}
               <tr>
                 <td></td>
               </tr>

@@ -37,9 +37,6 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function fetchScaleSummary() {
-    /*     const month = selectedDate && selectedDate.getMonth() + 1
-    const year = selectedDate?.getFullYear() */
-
     const response = await api.get(
       `scales/get-scale-summary?month=${month}&year=${year}`,
     )

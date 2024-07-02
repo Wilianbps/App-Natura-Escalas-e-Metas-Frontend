@@ -127,3 +127,15 @@ export const Footer = styled.footer`
     }
   }
 `
+
+export const ContainerGoalsByWeekPdf = styled.section`
+  margin: 1.063rem auto;
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
+  width: 50px;
+  padding: 12px;
+  margin-right: 2rem;
+  background-color: #fdbd54;
+  border-radius: 50%;
+`

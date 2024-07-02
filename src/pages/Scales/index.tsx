@@ -6,6 +6,7 @@ import Tab from '@mui/material/Tab'
 import { useMemo, useState } from 'react'
 import { CgEye, CgPen } from 'react-icons/cg'
 
+import { TextInfo } from '@/components/TextInfo'
 import { useScales } from '@/contexts/scale/ScalesContext'
 
 import { Scale } from './components/ScalePage'
@@ -59,7 +60,9 @@ export function ScalePage() {
             </TabList>
           </Box>
           <TabPanel value="setting" sx={{ padding: 0 }}>
-            {!infoScalePeriod && <p>Não há informações no período</p>}
+            {!infoScalePeriod && (
+              <TextInfo text="Não há informações no período" marginTop="2rem" />
+            )}
 
             {infoScalePeriod && <Scale />}
           </TabPanel>

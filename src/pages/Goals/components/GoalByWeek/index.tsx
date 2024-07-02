@@ -1,70 +1,109 @@
+import { CircularProgress } from '@mui/material'
+import { pdf } from '@react-pdf/renderer'
+import { useState } from 'react'
+import { CgPrinter } from 'react-icons/cg'
+
+import { TextInfo } from '@/components/TextInfo'
 import { useGoals } from '@/contexts/goals/GoalsContext'
+import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 import { formatNumber } from '@/libs/formatNumber'
 
-import { Container, ContainerTable, Footer } from './styles'
+import { GoalsByWeekPDF } from '../GoalByDay/components/GoalsSummaryPDF copy'
+import {
+  Container,
+  ContainerGoalsByWeekPdf,
+  ContainerTable,
+  Footer,
+} from './styles'
 
 export function GoalByWeek() {
   const { goalsByWeek } = useGoals()
+  const [isLoadingPDF, setIsLoadingPDF] = useState(false)
+  const { monthValue } = useSettings()
 
-  console.log('goalsByWeek na meta', goalsByWeek)
+  function handleGenerateGoalByWeekPDF() {
+    setIsLoadingPDF(true)
 
-  goalsByWeek.employeesByWeeks.forEach((item) => {
-    item.weeks.forEach((week) => {
-      console.log(week.days.goalDayByEmployee)
-    })
-  })
+    setTimeout(async () => {
+      const doc = (
+        <GoalsByWeekPDF goalsByWeek={goalsByWeek} monthValue={monthValue} />
+      )
+      const asPdf = pdf()
+
+      asPdf.updateContainer(doc)
+      const blob = await asPdf.toBlob()
+
+      const url = URL.createObjectURL(blob)
+      window.open(url)
+
+      setIsLoadingPDF(false)
+    }, 2000)
+  }
 
   return (
     <Container>
       <ContainerTable>
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th></th>
+        <ContainerGoalsByWeekPdf onClick={handleGenerateGoalByWeekPDF}>
+          {!isLoadingPDF ? (
+            <CgPrinter size={24} />
+          ) : (
+            <CircularProgress size={24} style={{ color: '#ffffff' }} />
+          )}
+        </ContainerGoalsByWeekPdf>
 
-              {Array.from({ length: goalsByWeek.weeksSums.length }).map(
-                (_, index) => (
-                  <th key={index}>Semana {index + 1}</th>
-                ),
-              )}
-            </tr>
-            <tr>
-              <th>Colaboladores</th>
-              <th>Total Mês</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
+        {goalsByWeek.employeesByWeeks.length === 0 && (
+          <TextInfo text="Não há informações no período" marginTop="2rem" />
+        )}
 
-          <tbody>
-            {goalsByWeek?.employeesByWeeks?.map((item) => (
-              <tr key={item.id}>
-                <td>{formatName(item.name)}</td>
-                <td>{formatNumber(item.totalAmountMonth)}</td>
-                {item.weeks.map((week, index) => (
-                  <td key={item.id + index}>
-                    {formatNumber(week?.amountWeek)}
-                  </td>
+        {goalsByWeek.employeesByWeeks.length > 0 && (
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th></th>
+                {Array.from({ length: goalsByWeek?.weeksSums?.length }).map(
+                  (_, index) => (
+                    <th key={index}>Semana {index + 1}</th>
+                  ),
+                )}
+              </tr>
+              <tr>
+                <th>Colaboladores</th>
+                <th>Total Mês</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {goalsByWeek?.employeesByWeeks?.map((item) => (
+                <tr key={item.id}>
+                  <td>{formatName(item.name)}</td>
+                  <td>{formatNumber(item.totalAmountMonth)}</td>
+                  {item.weeks.map((week, index) => (
+                    <td key={item.id + index}>
+                      {formatNumber(week?.amountWeek)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>Total semanal loja</td>
+                <td></td>
+
+                {goalsByWeek?.weeksSums?.map((value, index) => (
+                  <td key={value + index}>{formatNumber(value)}</td>
                 ))}
               </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td>Total semanal loja</td>
-              <td></td>
-
-              {goalsByWeek?.weeksSums?.map((value, index) => (
-                <td key={value + index}>{formatNumber(value)}</td>
-              ))}
-            </tr>
-          </tfoot>
-        </table>
+            </tfoot>
+          </table>
+        )}
       </ContainerTable>
 
       <Footer>

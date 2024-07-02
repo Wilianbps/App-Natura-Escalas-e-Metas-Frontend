@@ -3,6 +3,7 @@ import { pdf } from '@react-pdf/renderer'
 import React, { useMemo, useState } from 'react'
 import { CgPrinter } from 'react-icons/cg'
 
+import { TextInfo } from '@/components/TextInfo'
 import { useGoals } from '@/contexts/goals/GoalsContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
@@ -116,7 +117,9 @@ export function GoalByDay() {
         )}
       </ContainerGoalsSummaryPdf>
 
-      {goals[0]?.length === 0 && <p>Não há relatório no período</p>}
+      {goals[0]?.length === 0 && (
+        <TextInfo text="Não há informações no período" marginTop="2rem" />
+      )}
       {goals[0]?.length > 0 && (
         <>
           <ContainerTable>
