@@ -1,5 +1,5 @@
 import { Switch } from '@mui/material'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { GiForkKnifeSpoon } from 'react-icons/gi'
 import { IoPersonCircleOutline } from 'react-icons/io5'
@@ -8,19 +8,20 @@ import { Button } from '@/components/Button'
 import { useScales } from '@/contexts/scale/ScalesContext'
 import { formatName } from '@/libs/formatName'
 
+import { CaptionFlowPeople } from '../CaptionFlowPeople'
 import { PaginationPerDay } from './components/PaginationPerDay'
 import { IScale } from './interfaces'
-import { dataScales } from './scales'
 import {
   Container,
   ContainerTable,
+  Footer,
   SelectStyled,
   TableDataInfo,
 } from './styles'
 import { times } from './times'
 
 export function Scale() {
-  const { scalesByDate, updateSetScalesByDate, updateScalesByDate } =
+  const { scalesByDate, updateSetScalesByDate, updateScalesByDate, inputFlow } =
     useScales()
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -78,9 +79,7 @@ export function Scale() {
         indexfoundT !== undefined &&
         indexfoundEmpty !== undefined
       ) {
-        /* console.log('entrou aqui tbm', rowIndex, indexfoundEmpty, indexfoundT) */
         for (let i = indexfoundEmpty; i >= indexfoundT; i--) {
-          console.log(updatedScales[rowIndex].options[i].type)
           if (
             updatedScales[rowIndex].options[i].type === '' ||
             updatedScales[rowIndex].options[i].type === 'null' ||
@@ -277,7 +276,7 @@ export function Scale() {
                 ))}
               </tr>
 
-              {dataScales?.infos?.map((info) => (
+              {/*  {dataScales?.infos?.map((info) => (
                 <tr key={`scaleInfos_${info.values}`}>
                   <td className="title-info-scale">{info.type}</td>
                   <td></td>
@@ -291,14 +290,32 @@ export function Scale() {
                     </TableDataInfo>
                   ))}
                 </tr>
-              ))}
+              ))} */}
+
+              <tr>
+                <td className="title-info-scale">Atendimento Médio</td>
+                <td></td>
+                {inputFlow?.map((obj, index) => (
+                  <React.Fragment key={index}>
+                    {Object.entries(obj).map(([key, value]) => (
+                      <TableDataInfo
+                        key={`${index}-${key}`}
+                        value={Number(value)}
+                      >
+                        <span>{value}</span>
+                      </TableDataInfo>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </tr>
               <tr>
                 <td></td>
               </tr>
             </tbody>
           </table>
         </ContainerTable>
-        <footer>
+        <Footer>
+          <CaptionFlowPeople />
           <Button
             type="submit"
             text="Salvar informações do dia"
@@ -307,7 +324,7 @@ export function Scale() {
             width="250px"
             isSubmitting={isSubmitting}
           />
-        </footer>
+        </Footer>
       </form>
     </Container>
   )

@@ -9,7 +9,7 @@ import { useSettings } from '@/contexts/setting/SettingContext'
 import { Container } from './styles'
 
 export function PaginationPerDay() {
-  const { fetchScaleByDate } = useScales()
+  const { fetchScaleByDate, fetchInputFlow } = useScales()
   const { monthValue } = useSettings()
 
   const month = monthValue.split('-')[1]
@@ -43,6 +43,7 @@ export function PaginationPerDay() {
 
   useEffect(() => {
     fetchScaleByDate(currentDate.toString())
+    fetchInputFlow(currentDate.toString())
   }, [currentDate])
 
   return (

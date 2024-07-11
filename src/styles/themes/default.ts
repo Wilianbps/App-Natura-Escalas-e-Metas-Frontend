@@ -15,6 +15,8 @@ declare module '@mui/material/styles' {
     beigeDark: React.CSSProperties['color']
     grayLight: React.CSSProperties['color']
     gray: React.CSSProperties['color']
+    grayMedium: React.CSSProperties['color']
+    grayDark: React.CSSProperties['color']
     blueLight: React.CSSProperties['color']
     greenLight: React.CSSProperties['color']
     greenMedium: React.CSSProperties['color']
@@ -32,6 +34,8 @@ declare module '@mui/material/styles' {
     beigeDark: React.CSSProperties['color']
     grayLight: React.CSSProperties['color']
     gray: React.CSSProperties['color']
+    grayMedium: React.CSSProperties['color']
+    grayDark: React.CSSProperties['color']
     blueLight: React.CSSProperties['color']
     greenLight: React.CSSProperties['color']
     greenMedium: React.CSSProperties['color']
@@ -58,6 +62,8 @@ export const defaultTheme = createTheme({
 
   gray: '#C8C8C8',
   grayLight: '#F4F4F4',
+  grayMedium: '#5d5d5d',
+  grayDark: '#414141',
 
   greenMedium: '#449428',
   greenLight: '#e2d34c',

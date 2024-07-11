@@ -4,18 +4,19 @@ import TabPanel from '@mui/lab/TabPanel'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
 import { useMemo, useState } from 'react'
-import { CgEye, CgPen } from 'react-icons/cg'
+import { CgCheck, CgEye, CgPen } from 'react-icons/cg'
 
 import { TextInfo } from '@/components/TextInfo'
 import { useScales } from '@/contexts/scale/ScalesContext'
 
+import { Approvals } from './components/Approvals'
 import { Scale } from './components/ScalePage'
 import { Summary } from './components/Summary'
 import { Container } from './styles'
 
 export function ScalePage() {
   const { scaleSummary } = useScales()
-  const [value, setValue] = useState('setting')
+  const [value, setValue] = useState('approvals')
 
   const infoScalePeriod = useMemo(() => {
     return scaleSummary.some((item) => item.length > 0)
@@ -57,6 +58,13 @@ export function ScalePage() {
                 value="summary"
                 sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
               />
+              <Tab
+                label="Aprovações"
+                icon={<CgCheck size={26} />}
+                iconPosition="end"
+                value="approvals"
+                sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
+              />
             </TabList>
           </Box>
           <TabPanel value="setting" sx={{ padding: 0 }}>
@@ -68,6 +76,9 @@ export function ScalePage() {
           </TabPanel>
           <TabPanel value="summary" sx={{ padding: 0 }}>
             <Summary />
+          </TabPanel>
+          <TabPanel value="approvals" sx={{ padding: 0 }}>
+            <Approvals />
           </TabPanel>
         </TabContext>
       </Box>

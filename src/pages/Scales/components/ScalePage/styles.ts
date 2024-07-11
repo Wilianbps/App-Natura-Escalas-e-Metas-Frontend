@@ -135,20 +135,15 @@ export const SelectStyled = styled.div<SelectStyledProps>`
 `
 
 interface TableDataInfo {
-  type: string
+  type?: string
   value: number | string
 }
 
 export const TableDataInfo = styled.td<TableDataInfo>`
-  color: ${(props) =>
-    props.type === 'Atendimento Médio' &&
-    Number(props.value) > 9 &&
-    Number(props.value) <= 25 &&
-    '#fff'};
+  color: ${(props) => Number(props.value) > 9 && '#fff'};
 
   background-color: ${(props) =>
-    props.type === 'Atendimento Médio' &&
-    (Number(props.value) > 0 && Number(props.value) <= 3
+    /*   Number(props.value) > 0 && Number(props.value) <= 3
       ? '#FFEFEF'
       : Number(props.value) > 3 && Number(props.value) <= 6
         ? '#FFCDCD'
@@ -160,5 +155,24 @@ export const TableDataInfo = styled.td<TableDataInfo>`
               ? '#FF1A1A'
               : Number(props.value) > 20 && Number(props.value) <= 25
                 ? '#C60000'
-                : 'transparent')};
+                : 'transparent'}; */
+    Number(props.value) > 0 && Number(props.value) <= 5
+      ? '#FFEFEF'
+      : Number(props.value) > 5 && Number(props.value) <= 10
+        ? '#FFCDCD'
+        : Number(props.value) > 10 && Number(props.value) <= 15
+          ? '#FF9494'
+          : Number(props.value) > 15 && Number(props.value) <= 20
+            ? '#FB4949'
+            : Number(props.value) > 20 && Number(props.value) <= 25
+              ? '#FF1A1A'
+              : Number(props.value) > 25
+                ? '#C60000'
+                : 'transparent'};
+`
+
+export const Footer = styled.footer`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `

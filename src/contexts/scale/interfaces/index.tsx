@@ -49,10 +49,15 @@ export interface IScaleSummary {
   }[]
 }
 
+export type DataType = {
+  [key: string]: number | null
+}
 export interface ScalesContextType {
   fetchScaleByDate: (date: string) => void
   updateSetScalesByDate: (scale: IScale[]) => void
   updateScalesByDate: (scale: IScale[]) => void
   scalesByDate: IScale[]
   scaleSummary: Array<IScaleSummary[]>
+  inputFlow: DataType[]
+  fetchInputFlow: (date: string) => void
 }
