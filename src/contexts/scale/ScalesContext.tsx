@@ -1,4 +1,3 @@
-import { parse } from 'date-fns'
 import { format } from 'date-fns/format'
 import { formatInTimeZone } from 'date-fns-tz'
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -22,9 +21,14 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
   const [scaleSummary, setScaleSummary] = useState<Array<IScaleSummary[]>>([])
   const [inputFlow, setInputFlow] = useState<DataType[]>([])
+  const [getCurrentDate, setGetCurrentDate] = useState('')
 
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
+
+  function updateGetCurrenDate(date: string) {
+    setGetCurrentDate(date)
+  }
 
   async function fetchScaleByDate(date: string) {
     const dateFormatted = format(date, 'yyyy-MM-dd')
@@ -83,8 +87,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
               style: { height: '50px', padding: '15px' },
             })
           }
-          const newDate = parse(`01/${month}/${year}`, 'dd/MM/yyyy', new Date())
-          fetchScaleByDate(newDate.toString())
+          fetchScaleByDate(getCurrentDate)
           fetchScaleSummary()
           fetchEmployes()
         }
@@ -110,6 +113,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         updateSetScalesByDate,
         updateScalesByDate,
         scalesByDate,
+        updateGetCurrenDate,
         scaleSummary,
         inputFlow,
         fetchInputFlow,

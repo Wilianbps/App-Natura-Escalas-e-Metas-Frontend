@@ -9,7 +9,7 @@ export const Container = styled.section`
   text-transform: capitalize;
   font-weight: 500;
 
-  span {
+  > span {
     width: 100%;
     max-width: 175px;
     display: flex;

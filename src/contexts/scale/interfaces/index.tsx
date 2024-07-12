@@ -4,6 +4,7 @@ export interface IScale {
   date: Date
   turn: string
   status: boolean
+  activeDays?: number
   options: { id: number; type: string }[]
 
   info?: {
@@ -19,17 +20,6 @@ export interface IScaleProps {
   status: number
   options: { id: number; type: string }[]
 }
-
-/* export interface IScaleSummary {
-  id: string
-  name: string
-  date: string
-  turnId: number
-  status: number
-  startTime: string
-  endTime: string
-  dayOfWeek: number
-} */
 
 export interface IScaleSummary {
   id: string
@@ -57,6 +47,7 @@ export interface ScalesContextType {
   updateSetScalesByDate: (scale: IScale[]) => void
   updateScalesByDate: (scale: IScale[]) => void
   scalesByDate: IScale[]
+  updateGetCurrenDate: (date: string) => void
   scaleSummary: Array<IScaleSummary[]>
   inputFlow: DataType[]
   fetchInputFlow: (date: string) => void

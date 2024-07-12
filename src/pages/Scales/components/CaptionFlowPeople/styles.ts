@@ -13,7 +13,7 @@ export const Container = styled.section`
 export const ContentCardFlowPeople = styled.section`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 
   section {
     display: flex;
@@ -31,7 +31,7 @@ interface ICardColor {
 }
 
 export const CardColor = styled.section<ICardColor>`
-  width: 37px;
-  height: 19px;
+  width: 25px;
+  height: 20px;
   background-color: ${(props) => props.color};
 `

@@ -16,7 +16,7 @@ import { Container } from './styles'
 
 export function ScalePage() {
   const { scaleSummary } = useScales()
-  const [value, setValue] = useState('approvals')
+  const [value, setValue] = useState('setting')
 
   const infoScalePeriod = useMemo(() => {
     return scaleSummary.some((item) => item.length > 0)

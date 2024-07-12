@@ -5,6 +5,7 @@ import { GiForkKnifeSpoon } from 'react-icons/gi'
 import { IoPersonCircleOutline } from 'react-icons/io5'
 
 import { Button } from '@/components/Button'
+import { Modal } from '@/components/Modal'
 import { useScales } from '@/contexts/scale/ScalesContext'
 import { formatName } from '@/libs/formatName'
 
@@ -23,10 +24,10 @@ import { times } from './times'
 export function Scale() {
   const { scalesByDate, updateSetScalesByDate, updateScalesByDate, inputFlow } =
     useScales()
-
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [modalMessage, setModalMessage] = useState<Array<string>>([])
   const { handleSubmit } = useForm()
-
   const arraySumsEmployeesByTime = new Array(30).fill(0).map((_, index) => ({
     id: index,
     value: 0,
@@ -166,11 +167,51 @@ export function Scale() {
 
     updatedStatus[rowIndex].status = checked
 
+    const nameEmployees: Array<string> = []
+
+    const activeDaysGreaterSeven = updatedStatus.map((item) => {
+      let isTrue = false
+      if (item.activeDays !== undefined) {
+        if (item?.activeDays >= 7 && item.status === true) {
+          const name = formatName(item.name)
+          nameEmployees.push(name!)
+          isTrue = true
+        }
+      }
+      return isTrue
+    })
+
+    if (nameEmployees.length > 0 && activeDaysGreaterSeven) {
+      setModalMessage(nameEmployees)
+    }
+
     updateSetScalesByDate(updatedStatus)
   }
 
   function handleUpdateScale() {
     setIsSubmitting(true)
+
+    const nameEmployees: Array<string> = []
+
+    const updatedStatus = [...scalesByDate]
+
+    const activeDaysGreaterSeven = updatedStatus.map((item) => {
+      let isTrue = false
+      if (item.activeDays !== undefined) {
+        if (item?.activeDays >= 7 && item.status === true) {
+          const name = formatName(item.name)
+          nameEmployees.push(name!)
+          isTrue = true
+        }
+      }
+      return isTrue
+    })
+
+    if (nameEmployees.length > 0 && activeDaysGreaterSeven) {
+      setModalMessage(nameEmployees)
+      setIsModalOpen(true)
+      setIsSubmitting(false)
+    }
 
     setTimeout(() => {
       updateScalesByDate(scalesByDate)
@@ -326,6 +367,12 @@ export function Scale() {
           />
         </Footer>
       </form>
+
+      <Modal
+        message={modalMessage}
+        open={isModalOpen}
+        onHandleClose={() => setIsModalOpen(false)}
+      />
     </Container>
   )
 }
