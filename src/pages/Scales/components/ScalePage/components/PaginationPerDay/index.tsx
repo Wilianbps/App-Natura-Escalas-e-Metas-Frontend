@@ -41,7 +41,7 @@ export function PaginationPerDay() {
     const activeDaysGreaterSeven = scalesByDate.map((item) => {
       let isTrue = false
       if (item.activeDays !== undefined) {
-        if (item?.activeDays >= 7 && item.status === true) {
+        if (item?.activeDays >= 7) {
           const name = formatName(item.name)
           nameEmployees.push(name!)
           isTrue = true

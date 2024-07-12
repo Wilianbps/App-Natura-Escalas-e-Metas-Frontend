@@ -90,6 +90,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
           fetchScaleByDate(getCurrentDate)
           fetchScaleSummary()
           fetchEmployes()
+          return false
         }
       })
       .catch((error) => {
@@ -99,6 +100,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
             style: { height: '50px', padding: '15px' },
           })
         }
+        return false
       })
   }
 
