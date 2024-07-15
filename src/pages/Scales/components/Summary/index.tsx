@@ -27,7 +27,6 @@ export function Summary() {
   const year = selectedDate?.getFullYear()
  */
 
-  console.log(scaleSummary)
   const month = monthValue && monthValue.split('-')[1]
 
   const year = monthValue.split('-')[0]

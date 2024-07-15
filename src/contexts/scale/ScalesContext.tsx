@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 
 import { api } from '@/services/axios'
 
+import { useProfiles } from '../profiles/ProfilesContext'
 import { useSettings } from '../setting/SettingContext'
 import {
   DataType,
@@ -17,6 +18,7 @@ import {
 const ScalesContext = createContext({} as ScalesContextType)
 
 function ScalesProvider({ children }: { children: React.ReactNode }) {
+  const { cookieStoreCode } = useProfiles()
   const { fetchEmployes, monthValue } = useSettings()
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
   const [scaleSummary, setScaleSummary] = useState<Array<IScaleSummary[]>>([])
@@ -53,7 +55,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   async function fetchInputFlow(date: string) {
     const dateFormatted = format(date, 'yyyy-MM-dd')
     const response = await api.get(
-      `http://localhost:3333/api/scales/get-input-flow?date=${dateFormatted}&codeStore=000008`,
+      `http://localhost:3333/api/scales/get-input-flow?date=${dateFormatted}&codeStore=${cookieStoreCode}`,
     )
 
     setInputFlow(response.data)

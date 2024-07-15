@@ -10,6 +10,7 @@ import { MdDeleteForever } from 'react-icons/md'
 import { v4 as uuidv4 } from 'uuid'
 
 import { Button } from '@/components/Button'
+import { useProfiles } from '@/contexts/profiles/ProfilesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatDate } from '@/libs/formatDate'
 import { formatName } from '@/libs/formatName'
@@ -40,6 +41,7 @@ import { validateDayOff } from './utils/validateDayOff'
 import { validateVacations } from './utils/validateVacations'
 
 export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
+  const { cookieStoreCode, cookieUserLogin } = useProfiles()
   const { updateShiftRestSchedule } = useSettings()
   const { open, onHandleClose, employee } = props
 
@@ -282,8 +284,8 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     const updateEmployee: IEmployee = {
       idSeler: employee?.idSeler,
       idDayOff: employee?.idDayOff,
-      storeCode: '000008',
-      userLogin: 'DGCS',
+      storeCode: cookieStoreCode,
+      userLogin: cookieUserLogin,
       idShift: employee?.idShift,
       shift: register.selectedShift,
       startVacation: formatDate(selectedStartVacation),

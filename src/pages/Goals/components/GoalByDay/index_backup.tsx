@@ -15,8 +15,6 @@ export function GoalByDay() {
 
   const daysOfMonth = splitDaysOfMonthIntoTwoParts(Number(month), Number(year))
 
-  console.log('daysOfMonth', daysOfMonth)
-
   const [page, setPage] = useState(0)
 
   const totalPages = goals.length
