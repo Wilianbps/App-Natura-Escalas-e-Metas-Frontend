@@ -195,6 +195,15 @@ export function Scale() {
 
     const updatedStatus = [...scalesByDate]
 
+    updatedStatus.forEach((item) => {
+      const hasNonNullType = item.options.some(
+        (option) => option.type === 'T' || option.type === 'R',
+      )
+      if (!hasNonNullType) {
+        item.status = false
+      }
+    })
+
     const activeDaysGreaterSeven = updatedStatus.map((item) => {
       let isTrue = false
       if (item.activeDays !== undefined) {
@@ -316,22 +325,6 @@ export function Scale() {
                   <td key={item.id}>{item.value}</td>
                 ))}
               </tr>
-
-              {/*  {dataScales?.infos?.map((info) => (
-                <tr key={`scaleInfos_${info.values}`}>
-                  <td className="title-info-scale">{info.type}</td>
-                  <td></td>
-                  {info?.values?.map((value, indexTd) => (
-                    <TableDataInfo
-                      key={`value_${info.type}_${indexTd}`}
-                      type={info.type}
-                      value={value}
-                    >
-                      <span>{value}</span>
-                    </TableDataInfo>
-                  ))}
-                </tr>
-              ))} */}
 
               <tr>
                 <td className="title-info-scale">Atendimento Médio</td>

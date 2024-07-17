@@ -4,6 +4,7 @@ export const StyledInputDate = styled.input`
   cursor: pointer;
   border-radius: 0.3rem;
   background-color: ${(props) => props.theme.yellowMedium};
+  color: #6d6d6d;
   font-size: 13px;
   height: 40px;
   font-weight: 600;

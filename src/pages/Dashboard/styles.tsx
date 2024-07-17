@@ -1,14 +1,17 @@
 import styled from '@emotion/styled'
 
 export const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   margin-top: 6.25rem;
   padding: 1.25rem 3.125rem;
   height: 100hv;
 `
 
 export const ContainerGoals = styled.section`
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  width: 100%;
+  display: flex;
   gap: 2rem;
 `
 
@@ -28,12 +31,13 @@ export const Card = styled.section`
 
 export const ContentInfoTextAndMonthlyGoal = styled.section`
   display: flex;
-  flex-direction: column;
+  width: 100%;
   justify-content: space-between;
   gap: 2rem;
 `
 
 export const InfoText = styled.section`
+  min-width: 450px;
   h1 {
     font-size: 28px;
     font-weight: 400;
@@ -45,6 +49,7 @@ export const InfoText = styled.section`
 `
 
 export const MonthlyGoalChart = styled(Card)`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;

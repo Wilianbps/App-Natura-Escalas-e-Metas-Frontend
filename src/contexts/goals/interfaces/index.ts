@@ -34,8 +34,16 @@ export interface IGoalsByWeek {
   weeksSums: number[]
 }
 
+export type GoalType = 'HIPER_META' | 'META' | 'SUPER_META'
+
+export interface IGoalsByMonth {
+  goalValue: number
+  goalType: GoalType
+}
+
 export interface GoalsContextType {
   goals: Array<IGoals[]>
-  goalsByWeek: IGoalsByWeek
   fetchGoals: () => void
+  goalsByWeek: IGoalsByWeek
+  goalsByMonth: IGoalsByMonth[]
 }
