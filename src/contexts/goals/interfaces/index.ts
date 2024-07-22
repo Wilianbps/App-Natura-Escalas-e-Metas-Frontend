@@ -41,9 +41,24 @@ export interface IGoalsByMonth {
   goalType: GoalType
 }
 
+export interface IGoalEmployeeByMonth {
+  id: string
+  name: string
+  metas: number
+}
+
+export interface IRankingGoalsLastTwelveMonths {
+  name: string
+  hiperMeta: number
+  superMeta: number
+  meta: number
+}
+
 export interface GoalsContextType {
   goals: Array<IGoals[]>
-  fetchGoals: () => void
+  fetchGoalsByFortnight: () => void
   goalsByWeek: IGoalsByWeek
   goalsByMonth: IGoalsByMonth[]
+  goalEmployeeByMonth: IGoalEmployeeByMonth[]
+  rankingGoalsLastTwelveMonths: IRankingGoalsLastTwelveMonths[]
 }

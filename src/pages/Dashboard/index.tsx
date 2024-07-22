@@ -41,7 +41,7 @@ export function Dashboard() {
         </ContentInfoTextAndMonthlyGoal>
       </ContainerGoals>
       <ContainerChartGoalEmployees>
-        <header>Meta de Colaboladores</header>
+        <header>Meta de Colaboladores por Mês</header>
         <section>
           <GoalEmployeesChart />
         </section>

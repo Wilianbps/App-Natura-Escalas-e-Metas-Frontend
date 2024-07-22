@@ -9,7 +9,10 @@ import {
   YAxis,
 } from 'recharts'
 
-const data = [
+import { TextInfo } from '@/components/TextInfo'
+import { useGoals } from '@/contexts/goals/GoalsContext'
+
+/* const data = [
   {
     name: 'Julia B.',
     uv: 4000,
@@ -40,37 +43,47 @@ const data = [
     Vendas: 4800,
     amt: 2181,
   },
-]
+] */
 
 export function GoalEmployeesChart() {
+  const { goalEmployeeByMonth } = useGoals()
+
+  const currencyFormatter = (value: number) => {
+    return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+  }
+
   return (
     <ResponsiveContainer width="100%" height={250}>
-      <BarChart
-        width={500}
-        height={300}
-        data={data}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-        barSize={20}
-        style={{ fontSize: 12, fontWeight: 500 }}
-      >
-        <XAxis
-          dataKey="name"
-          scale="point"
-          padding={{ left: 10, right: 10 }}
-          fontSize={12}
-          fontWeight={500}
-        />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <CartesianGrid strokeDasharray="3 3" />
-        <Bar dataKey="Vendas" fill="#FF9E00" background={{ fill: '#eee' }} />
-      </BarChart>
+      {goalEmployeeByMonth.length === 0 ? (
+        <TextInfo marginTop="2rem" text="Não há informações no período" />
+      ) : (
+        <BarChart
+          width={500}
+          height={300}
+          data={goalEmployeeByMonth}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+          barSize={20}
+          style={{ fontSize: 12, fontWeight: 500 }}
+        >
+          <XAxis
+            dataKey="name"
+            scale="point"
+            padding={{ left: 10, right: 10 }}
+            fontSize={12}
+            fontWeight={500}
+          />
+          <YAxis />
+          <Tooltip formatter={currencyFormatter} />
+          <Legend />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Bar dataKey="metas" fill="#FF9E00" background={{ fill: '#eee' }} />
+        </BarChart>
+      )}
     </ResponsiveContainer>
   )
 }

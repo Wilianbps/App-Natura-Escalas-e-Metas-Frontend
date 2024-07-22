@@ -10,8 +10,6 @@ export default function SliderSizes() {
 
   const [sliderValue, setSliderValue] = useState(0)
 
-  console.log('sliderValue', sliderValue)
-
   useEffect(() => {
     if (goalsByMonth.length !== 0) {
       const numberValue = Math.floor(goalsByMonth[0].goalValue) // Use Math.floor to remove decimal part

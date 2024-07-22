@@ -8,7 +8,9 @@ import {
   YAxis,
 } from 'recharts'
 
-const data = [
+import { useGoals } from '@/contexts/goals/GoalsContext'
+
+/* const data = [
   {
     name: 'Mai',
     hiperMeta: 80000,
@@ -82,14 +84,15 @@ const data = [
     meta: 100000,
   },
 ]
-
+ */
 export function AverageSalesMonthChart() {
+  const { rankingGoalsLastTwelveMonths } = useGoals()
   return (
     <ResponsiveContainer width="100%" height={250}>
       <AreaChart
         width={500}
         height={400}
-        data={data}
+        data={rankingGoalsLastTwelveMonths}
         margin={{
           top: 10,
           right: 30,
