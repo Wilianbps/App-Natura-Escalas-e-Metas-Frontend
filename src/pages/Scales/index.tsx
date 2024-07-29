@@ -10,7 +10,6 @@ import { Button } from '@/components/Button'
 import { TextInfo } from '@/components/TextInfo'
 import { useScales } from '@/contexts/scale/ScalesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
-import { api } from '@/services/axios'
 
 import { Approvals } from './components/Approvals'
 import { Scale } from './components/ScalePage'
@@ -18,7 +17,7 @@ import { Summary } from './components/Summary'
 import { Container, ContainerLoadScale } from './styles'
 
 export function ScalePage() {
-  const { scaleSummary } = useScales()
+  const { scaleSummary, fetchLoadMonthScale } = useScales()
   const [value, setValue] = useState('setting')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
@@ -31,10 +30,8 @@ export function ScalePage() {
     const dateFormatted = `${year}${month}01`
 
     setTimeout(async () => {
-      await api.get(`scales/load-scale-of-month?date=${dateFormatted}`)
+      fetchLoadMonthScale(dateFormatted)
       setIsSubmitting(false)
-      /*       const date = `${year}-${month}-01`
-      fetchScaleByDate(date) */
     }, 3000)
   }
 

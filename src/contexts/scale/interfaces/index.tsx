@@ -46,9 +46,11 @@ export interface ScalesContextType {
   fetchScaleByDate: (date: string) => void
   updateSetScalesByDate: (scale: IScale[]) => void
   updateScalesByDate: (scale: IScale[]) => void
-  scalesByDate: IScale[]
+  fetchLoadMonthScale: (date: string) => void
+  fetchInputFlow: (date: string) => void
   updateGetCurrenDate: (date: string) => void
+  scalesByDate: IScale[]
   scaleSummary: Array<IScaleSummary[]>
   inputFlow: DataType[]
-  fetchInputFlow: (date: string) => void
+ 
 }

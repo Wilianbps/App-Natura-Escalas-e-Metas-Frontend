@@ -106,6 +106,15 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
       })
   }
 
+  async function fetchLoadMonthScale(date: string) {
+    await api.get(`scales/load-scale-of-month?date=${date}`).then(() => {
+      const dateFormatted = `${year}-${month}-01`
+      fetchScaleByDate(dateFormatted)
+      fetchScaleSummary()
+      fetchEmployes()
+    })
+  }
+
   useEffect(() => {
     fetchScaleSummary()
   }, [monthValue])
@@ -121,6 +130,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         scaleSummary,
         inputFlow,
         fetchInputFlow,
+        fetchLoadMonthScale,
       }}
     >
       {children}
