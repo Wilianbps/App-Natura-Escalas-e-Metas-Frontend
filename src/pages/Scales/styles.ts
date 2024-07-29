@@ -11,3 +11,8 @@ export const Container = styled.section`
     }
   }
 `
+
+export const ContainerLoadScale = styled.section`
+  display: flex;
+  justify-content: center;
+`

@@ -42,14 +42,14 @@ export function GoalByDay() {
               <th></th>
               <th></th>
               {daysOfMonth[page].map((day) => (
-                <th key={day.daymonth}>{day.daymonth}</th>
+                <th key={day.dayMonth}>{day.dayMonth}</th>
               ))}
             </tr>
             <tr>
               <th>Colaboladores</th>
               <th>Total Mês</th>
               {daysOfMonth[page].map((day) => (
-                <th key={day.daymonth}>{day.dayweek}</th>
+                <th key={day.dayMonth}>{day.dayweek}</th>
               ))}
             </tr>
           </thead>
