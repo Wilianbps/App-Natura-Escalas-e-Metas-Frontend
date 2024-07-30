@@ -22,8 +22,13 @@ import {
 import { times } from './times'
 
 export function Scale() {
-  const { scalesByDate, updateSetScalesByDate, updateScalesByDate, inputFlow } =
-    useScales()
+  const {
+    scalesByDate,
+    updateSetScalesByDate,
+    updateScalesByDate,
+    inputFlow,
+    dataFinishScale,
+  } = useScales()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [modalMessage, setModalMessage] = useState<Array<string>>([])
@@ -350,14 +355,16 @@ export function Scale() {
         </ContainerTable>
         <Footer>
           <CaptionFlowPeople />
-          <Button
-            type="submit"
-            text="Salvar informações do dia"
-            color="#000"
-            bgColor="#7EC864"
-            width="250px"
-            isSubmitting={isSubmitting}
-          />
+          {dataFinishScale[0]?.finished === false && (
+            <Button
+              type="submit"
+              text="Salvar informações do dia"
+              color="#000"
+              bgColor="#7EC864"
+              width="250px"
+              isSubmitting={isSubmitting}
+            />
+          )}
         </Footer>
       </form>
 

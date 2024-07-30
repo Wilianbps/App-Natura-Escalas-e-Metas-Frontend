@@ -44,7 +44,7 @@ export interface IDataFinishScale {
   loginUser: string
   startDate: string
   endDate: string
-  finished: number
+  finished: boolean
 }
 
 export type DataType = {
@@ -57,6 +57,7 @@ export interface ScalesContextType {
   fetchLoadMonthScale: (date: string) => void
   fetchInputFlow: (date: string) => void
   updateGetCurrenDate: (date: string) => void
+  updateFinishedScaleByMonth: () => void
   scalesByDate: IScale[]
   scaleSummary: Array<IScaleSummary[]>
   inputFlow: DataType[]

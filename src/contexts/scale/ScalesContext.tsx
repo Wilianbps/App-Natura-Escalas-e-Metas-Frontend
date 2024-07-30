@@ -118,16 +118,14 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
 
   async function fetchLoadMonthScale(date: string) {
     await fetchFinishedScaleByMonth()
-
-    console.log(
-      'dataFinishScale dentro do fetchLoadMonthScale',
-      dataFinishScale,
-    )
+    const newDate = new Date()
+    const day = newDate.getDate().toString().padStart(2, '0')
+    const currentDate = `${year}${month}${day}`
 
     if (dataFinishScale.length === 0) {
       await api
         .get(
-          `scales/load-scale-of-month?storeCode=${cookieStoreCode}&loginUser=${cookieUserLogin}&date=${date}&finished=${0}`,
+          `scales/load-scale-of-month?storeCode=${cookieStoreCode}&loginUser=${cookieUserLogin}&date=${date}&currentDate=${currentDate}&finished=${0}`,
         )
         .then(() => {
           const dateFormatted = `${year}-${month}-01`
@@ -144,6 +142,27 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         style: { height: '50px', padding: '15px' },
       })
     }
+  }
+
+  async function updateFinishedScaleByMonth() {
+    const newDate = new Date()
+    const day = newDate.getDate().toString().padStart(2, '0')
+    const currentDate = `${year}${month}${day}`
+    await api
+      .put(
+        `scales/update-finished-scale?storeCode=${cookieStoreCode}&month=${month}&year=${year}&endScaleDate=${currentDate}`,
+      )
+      .then(() => {
+        if (dataFinishScale) {
+          setDataFinishScale((prevState) =>
+            prevState.map((item) => ({
+              ...item,
+              endDate: currentDate,
+              finished: true,
+            })),
+          )
+        }
+      })
   }
 
   useEffect(() => {
@@ -164,6 +183,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         fetchInputFlow,
         fetchLoadMonthScale,
         dataFinishScale,
+        updateFinishedScaleByMonth,
       }}
     >
       {children}

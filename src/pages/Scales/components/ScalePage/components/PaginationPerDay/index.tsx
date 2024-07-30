@@ -24,9 +24,12 @@ export function PaginationPerDay() {
     fetchInputFlow,
     scalesByDate,
     updateGetCurrenDate,
+    dataFinishScale,
+    updateFinishedScaleByMonth,
   } = useScales()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [modalMessage, setModalMessage] = useState<Array<string>>([])
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const { monthValue } = useSettings()
   const month = monthValue.split('-')[1]
@@ -55,7 +58,6 @@ export function PaginationPerDay() {
       setIsModalOpen(true)
       return true
     }
-
     return false
   }
 
@@ -79,6 +81,14 @@ export function PaginationPerDay() {
     }
   }
 
+  function handleUpdateFinishedScale() {
+    setIsSubmitting(true)
+    setTimeout(() => {
+      updateFinishedScaleByMonth()
+      setIsSubmitting(false)
+    }, 3000)
+  }
+
   useEffect(() => {
     const newDate = parse(`01/${month}/${year}`, 'dd/MM/yyyy', new Date())
     setCurrentDate(newDate)
@@ -100,6 +110,7 @@ export function PaginationPerDay() {
           <CgChevronLeft />
         </button>
         <span>{format(currentDate, 'dd - EEEE', { locale: ptBR })}</span>
+
         <button
           onClick={advanceDay}
           disabled={currentDate.getTime() === lastDate.getTime()}
@@ -107,15 +118,19 @@ export function PaginationPerDay() {
           <CgChevronRight />
         </button>
       </section>
-      {currentDate.getTime() === lastDate.getTime() && (
-        <Button
-          type="submit"
-          text="Finalizar escala"
-          color="#000"
-          bgColor="#7EC864"
-          width="170px"
-        />
-      )}
+
+      {currentDate.getTime() === lastDate.getTime() &&
+        dataFinishScale[0]?.finished === false && (
+          <Button
+            type="button"
+            text="Finalizar escala"
+            color="#000"
+            bgColor="#7EC864"
+            width="170px"
+            isSubmitting={isSubmitting}
+            onClick={handleUpdateFinishedScale}
+          />
+        )}
 
       <Modal
         message={modalMessage}

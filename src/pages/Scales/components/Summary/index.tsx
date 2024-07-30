@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material'
 import { pdf } from '@react-pdf/renderer'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { CgPrinter } from 'react-icons/cg'
 
 import { TextInfo } from '@/components/TextInfo'
@@ -21,7 +21,11 @@ import { daysOfWeek } from './utils/daysOfWeek'
 
 export function Summary() {
   const { monthValue } = useSettings()
-  const { scaleSummary } = useScales()
+  const { scaleSummary, dataFinishScale } = useScales()
+
+  const infoScalePeriod = useMemo(() => {
+    return scaleSummary.some((item) => item.length > 0)
+  }, [scaleSummary])
 
   /*   const month = selectedDate && selectedDate.getMonth() + 1
   const year = selectedDate?.getFullYear()
@@ -79,99 +83,113 @@ export function Summary() {
 
   return (
     <Container>
-      {scaleSummary[0]?.length > 0 && (
-        <PaginationByWeek
-          currentPage={page}
-          totalPages={totalPages}
-          onNextPage={handleNextPage}
-          onPreviousPage={handlePreviousPage}
-        />
+      {!infoScalePeriod && (
+        <TextInfo text="Não há informações no período" marginTop="2rem" />
       )}
 
-      <ContainerScaleSummaryPdf onClick={handleGenerateScaleSummaryPDF}>
-        {!isLoadingPDF ? (
-          <CgPrinter size={24} />
-        ) : (
-          <CircularProgress size={24} style={{ color: '#ffffff' }} />
-        )}
-      </ContainerScaleSummaryPdf>
-      <ContainerTable>
-        {scaleSummary[0]?.length === 0 && (
-          <TextInfo text="Não há informações no período" marginTop="2rem" />
-        )}
+      {dataFinishScale[0]?.finished === false && (
+        <TextInfo
+          text="Necessário finalizar a escala para visualizar os dados."
+          marginTop="2rem"
+        />
+      )}
+      {dataFinishScale[0]?.finished === true && (
+        <>
+          {scaleSummary[0]?.length > 0 && (
+            <PaginationByWeek
+              currentPage={page}
+              totalPages={totalPages}
+              onNextPage={handleNextPage}
+              onPreviousPage={handlePreviousPage}
+            />
+          )}
 
-        {scaleSummary[0]?.length > 0 && (
-          <table>
-            <thead>
-              <tr>
-                <th>Nome Colab.</th>
-                {week[page] && (
-                  <>
-                    {days?.map((dayName, index) => (
-                      <th key={index}>
-                        <p>{dayName}</p>
-                        <p>{week[page][index].day}</p>
-                      </th>
-                    ))}
-                  </>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {scaleSummary[page]?.map((collaborator) => (
-                <>
-                  <TRShiftMorning>
-                    <td rowSpan={2} className="td-name">
-                      {formatName(collaborator.name)}
-                    </td>
-                    {/*     <td rowSpan={2}>27</td>
+          <ContainerScaleSummaryPdf onClick={handleGenerateScaleSummaryPDF}>
+            {!isLoadingPDF ? (
+              <CgPrinter size={24} />
+            ) : (
+              <CircularProgress size={24} style={{ color: '#ffffff' }} />
+            )}
+          </ContainerScaleSummaryPdf>
+          <ContainerTable>
+            {scaleSummary[0]?.length === 0 && (
+              <TextInfo text="Não há informações no período" marginTop="2rem" />
+            )}
+
+            {scaleSummary[0]?.length > 0 && (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nome Colab.</th>
+                    {week[page] && (
+                      <>
+                        {days?.map((dayName, index) => (
+                          <th key={index}>
+                            <p>{dayName}</p>
+                            <p>{week[page][index].day}</p>
+                          </th>
+                        ))}
+                      </>
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {scaleSummary[page]?.map((collaborator) => (
+                    <>
+                      <TRShiftMorning>
+                        <td rowSpan={2} className="td-name">
+                          {formatName(collaborator.name)}
+                        </td>
+                        {/*     <td rowSpan={2}>27</td>
                   <td rowSpan={2}></td> */}
 
-                    {Array.from({ length: 7 }).map((_, index) => {
-                      const day = collaborator.days.find(
-                        (day) => day.dayOfWeek === index + 1,
-                      )
-                      return (
-                        <td key={index} width={140}>
-                          {day?.status === 1
-                            ? `${day.startTime} - ${day.endTime}`
-                            : ''}
-                        </td>
-                      )
-                    })}
-                  </TRShiftMorning>
-                  <TRShiftMorning>
-                    {Array.from({ length: 7 }).map((_, index) => {
-                      const day = collaborator.days.find(
-                        (day) => day.dayOfWeek === index + 1,
-                      )
-                      return (
-                        <TDShift
-                          key={index}
-                          value={
-                            day?.status === 1
-                              ? 'T'
-                              : day?.status === 0
-                                ? 'F'
-                                : ''
-                          }
-                          shift={day?.status === 1 ? day.turn : ''}
-                        >
-                          {!day?.month ? (
-                            <div></div>
-                          ) : (
-                            <div>{day?.status === 1 ? 'T' : 'F'}</div>
-                          )}
-                        </TDShift>
-                      )
-                    })}
-                  </TRShiftMorning>
-                </>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </ContainerTable>
+                        {Array.from({ length: 7 }).map((_, index) => {
+                          const day = collaborator.days.find(
+                            (day) => day.dayOfWeek === index + 1,
+                          )
+                          return (
+                            <td key={index} width={140}>
+                              {day?.status === 1
+                                ? `${day.startTime} - ${day.endTime}`
+                                : ''}
+                            </td>
+                          )
+                        })}
+                      </TRShiftMorning>
+                      <TRShiftMorning>
+                        {Array.from({ length: 7 }).map((_, index) => {
+                          const day = collaborator.days.find(
+                            (day) => day.dayOfWeek === index + 1,
+                          )
+                          return (
+                            <TDShift
+                              key={index}
+                              value={
+                                day?.status === 1
+                                  ? 'T'
+                                  : day?.status === 0
+                                    ? 'F'
+                                    : ''
+                              }
+                              shift={day?.status === 1 ? day.turn : ''}
+                            >
+                              {!day?.month ? (
+                                <div></div>
+                              ) : (
+                                <div>{day?.status === 1 ? 'T' : 'F'}</div>
+                              )}
+                            </TDShift>
+                          )
+                        })}
+                      </TRShiftMorning>
+                    </>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </ContainerTable>
+        </>
+      )}
     </Container>
   )
 }
