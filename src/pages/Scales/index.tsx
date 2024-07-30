@@ -17,11 +17,13 @@ import { Summary } from './components/Summary'
 import { Container, ContainerLoadScale } from './styles'
 
 export function ScalePage() {
-  const { scaleSummary, fetchLoadMonthScale } = useScales()
+  const { scaleSummary, fetchLoadMonthScale, dataFinishScale } = useScales()
   const [value, setValue] = useState('setting')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const { monthValue } = useSettings()
+  const currentDate = new Date()
+  const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0')
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
 
@@ -90,16 +92,18 @@ export function ScalePage() {
             )}
 
             <ContainerLoadScale>
-              {!infoScalePeriod && (
-                <Button
-                  text="Carregar Escala do Mês"
-                  color="#000"
-                  bgColor="#7EC864"
-                  width="250px"
-                  onClick={loadMonthScale}
-                  isSubmitting={isSubmitting}
-                />
-              )}
+              {!infoScalePeriod &&
+                dataFinishScale.length === 0 &&
+                month === currentMonth && (
+                  <Button
+                    text="Carregar Escala do Mês"
+                    color="#000"
+                    bgColor="#7EC864"
+                    width="250px"
+                    onClick={loadMonthScale}
+                    isSubmitting={isSubmitting}
+                  />
+                )}
             </ContainerLoadScale>
 
             {infoScalePeriod && <Scale />}

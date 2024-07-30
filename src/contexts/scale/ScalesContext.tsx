@@ -9,6 +9,7 @@ import { useProfiles } from '../profiles/ProfilesContext'
 import { useSettings } from '../setting/SettingContext'
 import {
   DataType,
+  IDataFinishScale,
   IScale,
   IScaleProps,
   IScaleSummary,
@@ -18,9 +19,10 @@ import {
 const ScalesContext = createContext({} as ScalesContextType)
 
 function ScalesProvider({ children }: { children: React.ReactNode }) {
-  const { cookieStoreCode } = useProfiles()
+  const { cookieStoreCode, cookieUserLogin } = useProfiles()
   const { fetchEmployes, monthValue } = useSettings()
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
+  const [dataFinishScale, setDataFinishScale] = useState<IDataFinishScale[]>([])
   const [scaleSummary, setScaleSummary] = useState<Array<IScaleSummary[]>>([])
   const [inputFlow, setInputFlow] = useState<DataType[]>([])
   const [getCurrentDate, setGetCurrentDate] = useState('')
@@ -106,17 +108,47 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
       })
   }
 
+  async function fetchFinishedScaleByMonth() {
+    await api
+      .get(`scales/get-finished-scale-by-month?month=${month}&year=${year}`)
+      .then((response) => {
+        setDataFinishScale(response.data)
+      })
+  }
+
   async function fetchLoadMonthScale(date: string) {
-    await api.get(`scales/load-scale-of-month?date=${date}`).then(() => {
-      const dateFormatted = `${year}-${month}-01`
-      fetchScaleByDate(dateFormatted)
-      fetchScaleSummary()
-      fetchEmployes()
-    })
+    await fetchFinishedScaleByMonth()
+
+    console.log(
+      'dataFinishScale dentro do fetchLoadMonthScale',
+      dataFinishScale,
+    )
+
+    if (dataFinishScale.length === 0) {
+      await api
+        .get(
+          `scales/load-scale-of-month?storeCode=${cookieStoreCode}&loginUser=${cookieUserLogin}&date=${date}&finished=${0}`,
+        )
+        .then(() => {
+          const dateFormatted = `${year}-${month}-01`
+          fetchFinishedScaleByMonth()
+          fetchScaleByDate(dateFormatted)
+          fetchScaleSummary()
+          fetchEmployes()
+          toast.success('Escala carregada com sucesso', {
+            style: { height: '50px', padding: '15px' },
+          })
+        })
+    } else {
+      toast.error('Escala desse mês ja foi carregada', {
+        style: { height: '50px', padding: '15px' },
+      })
+    }
   }
 
   useEffect(() => {
     fetchScaleSummary()
+    fetchFinishedScaleByMonth()
   }, [monthValue])
 
   return (
@@ -131,6 +163,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         inputFlow,
         fetchInputFlow,
         fetchLoadMonthScale,
+        dataFinishScale,
       }}
     >
       {children}

@@ -39,6 +39,14 @@ export interface IScaleSummary {
   }[]
 }
 
+export interface IDataFinishScale {
+  storeCode: string
+  loginUser: string
+  startDate: string
+  endDate: string
+  finished: number
+}
+
 export type DataType = {
   [key: string]: number | null
 }
@@ -52,5 +60,5 @@ export interface ScalesContextType {
   scalesByDate: IScale[]
   scaleSummary: Array<IScaleSummary[]>
   inputFlow: DataType[]
- 
+  dataFinishScale: IDataFinishScale[]
 }
