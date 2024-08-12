@@ -1,4 +1,4 @@
-import { Document, Page, Text, View } from '@react-pdf/renderer' // Componente do documento PDF
+import { Document, Page, Text, View } from '@react-pdf/renderer'
 
 import { formatName } from '@/libs/formatName'
 import { formatNumber } from '@/libs/formatNumber'
@@ -10,6 +10,7 @@ export interface IGoals {
   id: string
   name: string
   codeStore: string
+  activeSeller: boolean
   days: {
     date: string
     goalDay: number | string
@@ -112,43 +113,48 @@ export function GoalsSummaryPDF(props: GoalsSummaryProps) {
 
               {goals[pageIndex]?.map((item, index) => (
                 <View style={styles.tableRow} key={`${item.id}-${index}`}>
-                  <View
-                    style={[
-                      index % 2 === 0
-                        ? styles.tableColLeftBody
-                        : styles.tableColLeftBodyOdd,
-                    ]}
-                  >
-                    <Text>{formatName(item?.name)}</Text>
-                  </View>
+                  {!item.activeSeller && (
+                    <>
+                      <View
+                        style={[
+                          index % 2 === 0
+                            ? styles.tableColLeftBody
+                            : styles.tableColLeftBodyOdd,
+                        ]}
+                      >
+                        <Text>{formatName(item?.name)}</Text>
+                      </View>
 
-                  <View
-                    style={[
-                      index % 2 === 0
-                        ? styles.tableColLeftBody
-                        : styles.tableColLeftBodyOdd,
-                    ]}
-                  >
-                    <Text>{calculateMonthTotal(item.id)}</Text>
-                  </View>
-                  {item?.days?.map((day, indexDay) => (
-                    <View
-                      style={[
-                        index % 2 === 0
-                          ? styles.tableColBodyContainer
-                          : styles.tableColBodyContainerOdd,
-                      ]}
-                      key={`${item.id}-${indexDay}`}
-                    >
-                      <Text>
-                        {!isNaN(Number(day.goalDayByEmployee))
-                          ? formatNumber(Number(day.goalDayByEmployee))
-                          : '-'}
-                      </Text>
-                    </View>
-                  ))}
+                      <View
+                        style={[
+                          index % 2 === 0
+                            ? styles.tableColLeftBody
+                            : styles.tableColLeftBodyOdd,
+                        ]}
+                      >
+                        <Text>{calculateMonthTotal(item.id)}</Text>
+                      </View>
+                      {item?.days?.map((day, indexDay) => (
+                        <View
+                          style={[
+                            index % 2 === 0
+                              ? styles.tableColBodyContainer
+                              : styles.tableColBodyContainerOdd,
+                          ]}
+                          key={`${item.id}-${indexDay}`}
+                        >
+                          <Text>
+                            {!isNaN(Number(day.goalDayByEmployee))
+                              ? formatNumber(Number(day.goalDayByEmployee))
+                              : '-'}
+                          </Text>
+                        </View>
+                      ))}
+                    </>
+                  )}
                 </View>
               ))}
+
               <View style={styles.tableRow}>
                 <View style={styles.tableColLeftFooter}>
                   <Text>Total diário Loja</Text>
@@ -171,6 +177,74 @@ export function GoalsSummaryPDF(props: GoalsSummaryProps) {
                   </>
                 ))}
               </View>
+
+              {goals[pageIndex]?.some((item) => item.activeSeller) && (
+                <>
+                  <View style={styles.headerFootter}>
+                    <Text>Colabolador Extra</Text>
+                  </View>
+
+                  {goals[pageIndex]?.map((item, index) => (
+                    <View style={styles.tableRow} key={`${item.id}-${index}`}>
+                      {item.activeSeller && (
+                        <>
+                          <View style={styles.tableColBodyBlue}>
+                            <Text>{formatName(item?.name)}</Text>
+                          </View>
+
+                          <View style={styles.tableColBodyBlue}>
+                            <Text>{calculateMonthTotal(item.id)}</Text>
+                          </View>
+                          {item?.days?.map((day, indexDay) => (
+                            <View
+                              style={styles.tableColBodyContainerBlue}
+                              key={`${item.id}-${indexDay}`}
+                            >
+                              <Text>
+                                {!isNaN(Number(day.goalDayByEmployee))
+                                  ? formatNumber(Number(day.goalDayByEmployee))
+                                  : '-'}
+                              </Text>
+                            </View>
+                          ))}
+                        </>
+                      )}
+                    </View>
+                  ))}
+                </>
+              )}
+
+              {/*  <View style={styles.headerFootter}>
+                <Text>Colabolador Extra</Text>
+              </View>
+
+              {goals[pageIndex]?.map((item, index) => (
+                <View style={styles.tableRow} key={`${item.id}-${index}`}>
+                  {item.activeSeller && (
+                    <>
+                      <View style={styles.tableColBodyBlue}>
+                        <Text>{formatName(item?.name)}</Text>
+                      </View>
+
+                      <View style={styles.tableColBodyBlue}>
+                        <Text>{calculateMonthTotal(item.id)}</Text>
+                      </View>
+                      {item?.days?.map((day, indexDay) => (
+                        <View
+                          style={styles.tableColBodyContainerBlue}
+                          key={`${item.id}-${indexDay}`}
+                        >
+                          <Text>
+                            {!isNaN(Number(day.goalDayByEmployee))
+                              ? formatNumber(Number(day.goalDayByEmployee))
+                              : '-'}
+                          </Text>
+                        </View>
+                      ))}
+                    </>
+                  )}
+                </View>
+              ))} */}
             </Page>
           ))}
         </>

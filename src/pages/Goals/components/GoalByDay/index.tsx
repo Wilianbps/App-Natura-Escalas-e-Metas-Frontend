@@ -98,6 +98,10 @@ export function GoalByDay() {
     }, 2000)
   }
 
+  const hasExtraSeller = useMemo(() => {
+    return goals[page]?.some((employee) => employee.activeSeller)
+  }, [goals, page])
+
   return (
     <Container>
       {goals[0]?.length > 0 && (
@@ -142,9 +146,9 @@ export function GoalByDay() {
               </thead>
 
               <tbody>
-                {goals[page]?.map((employee) => (
-                  <>
-                    {!employee.activeSeller && (
+                {goals[page]?.map(
+                  (employee) =>
+                    !employee.activeSeller && (
                       <tr key={employee.id}>
                         <td>{formatName(employee.name)}</td>
                         <td>{calculateMonthTotal(employee.id)}</td>
@@ -156,9 +160,8 @@ export function GoalByDay() {
                           </td>
                         ))}
                       </tr>
-                    )}
-                  </>
-                ))}
+                    ),
+                )}
               </tbody>
               <tfoot>
                 <tr>
@@ -182,47 +185,47 @@ export function GoalByDay() {
             </table>
           </ContainerTable>
 
-          <Footer>
-            <h3>Colaborador Extra</h3>
-
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th></th>
-                  {daysOfMonth[page]?.map((day) => (
-                    <th key={day.dayAndmonth}>{day.dayAndmonth}</th>
-                  ))}
-                </tr>
-                <tr>
-                  <th>Colaboladores</th>
-                  <th>Total Mês</th>
-                  {daysOfMonth[page]?.map((day) => (
-                    <th key={day.dayAndmonth}>{day.dayweek}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {goals[page]?.map((employee) => (
-                  <>
-                    {employee.activeSeller && (
-                      <tr key={employee.id}>
-                        <td>{formatName(employee.name)}</td>
-                        <td>{calculateMonthTotal(employee.id)}</td>
-                        {employee.days.map((day, index) => (
-                          <td key={index}>
-                            {!isNaN(Number(day.goalDayByEmployee))
-                              ? formatNumber(Number(day.goalDayByEmployee))
-                              : '-'}
-                          </td>
-                        ))}
-                      </tr>
-                    )}
-                  </>
-                ))}
-              </tbody>
-            </table>
-          </Footer>
+          {hasExtraSeller && (
+            <Footer>
+              <h3>Colaborador Extra</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    {daysOfMonth[page]?.map((day) => (
+                      <th key={day.dayAndmonth}>{day.dayAndmonth}</th>
+                    ))}
+                  </tr>
+                  <tr>
+                    <th>Colaboladores</th>
+                    <th>Total Mês</th>
+                    {daysOfMonth[page]?.map((day) => (
+                      <th key={day.dayAndmonth}>{day.dayweek}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {goals[page]?.map(
+                    (employee) =>
+                      employee.activeSeller && (
+                        <tr key={employee.id}>
+                          <td>{formatName(employee.name)}</td>
+                          <td>{calculateMonthTotal(employee.id)}</td>
+                          {employee.days.map((day, index) => (
+                            <td key={index}>
+                              {!isNaN(Number(day.goalDayByEmployee))
+                                ? formatNumber(Number(day.goalDayByEmployee))
+                                : '-'}
+                            </td>
+                          ))}
+                        </tr>
+                      ),
+                  )}
+                </tbody>
+              </table>
+            </Footer>
+          )}
         </>
       )}
     </Container>

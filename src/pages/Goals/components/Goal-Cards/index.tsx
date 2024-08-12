@@ -14,7 +14,7 @@ export function GoalCards() {
         </header>
         {goalsByMonth.length === 0 && <p>R$000,000,00</p>}
         {goalsByMonth.length !== 0 && (
-          <p>{formatNumber(goalsByMonth[0]?.goalValue)}</p>
+          <p>{formatNumber(goalsByMonth[1]?.goalValue)}</p>
         )}
       </Card>
       <Card colorCard="super-goal">
@@ -23,7 +23,7 @@ export function GoalCards() {
         </header>
         {goalsByMonth.length === 0 && <p>R$000,000,00</p>}
         {goalsByMonth.length !== 0 && (
-          <p>{formatNumber(goalsByMonth[1]?.goalValue)}</p>
+          <p>{formatNumber(goalsByMonth[2]?.goalValue)}</p>
         )}
       </Card>
       <Card colorCard="hiper-goal">
@@ -32,7 +32,7 @@ export function GoalCards() {
         </header>
         {goalsByMonth.length === 0 && <p>R$000,000,00</p>}
         {goalsByMonth.length !== 0 && (
-          <p>{formatNumber(goalsByMonth[2]?.goalValue)}</p>
+          <p>{formatNumber(goalsByMonth[0]?.goalValue)}</p>
         )}
       </Card>
     </Container>

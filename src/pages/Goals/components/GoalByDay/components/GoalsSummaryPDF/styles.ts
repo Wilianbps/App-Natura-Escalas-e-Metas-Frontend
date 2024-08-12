@@ -12,9 +12,9 @@ export const styles = StyleSheet.create({
   },
 
   header: {
-    fontSize: '18px',
+    fontSize: '16px',
     fontWeight: 'bold',
-    marginBottom: '20px',
+    marginBottom: '10px',
   },
 
   tableRow: {
@@ -114,6 +114,32 @@ export const styles = StyleSheet.create({
     width: 68,
   },
 
+  tableColBodyBlue: {
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    color: '#0f0f0f',
+    fontSize: 6.5,
+    fontWeight: 'bold',
+    backgroundColor: '#daedff',
+    width: 68,
+  },
+
+  tableColBodyContainerBlue: {
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 43,
+    height: 38,
+    fontSize: 6.5,
+    color: '#0f0f0f',
+    backgroundColor: '#daedff',
+    padding: 5,
+  },
+
   tableColLeftBodyOdd: {
     textAlign: 'center',
     display: 'flex',
@@ -159,4 +185,11 @@ export const styles = StyleSheet.create({
   orangeDark: { backgroundColor: '#FF9E00' },
   brown: { backgroundColor: '#B77100' },
   gray: { backgroundColor: '#C8C8C8' },
+
+  headerFootter: {
+    fontSize: '13px',
+    fontWeight: 'bold',
+    marginTop: '10px',
+    marginBottom: '10px',
+  },
 })
