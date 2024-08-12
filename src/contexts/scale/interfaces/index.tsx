@@ -47,9 +47,20 @@ export interface IDataFinishScale {
   finished: boolean
 }
 
+export interface IScaleApprovalRequest {
+  storeCode?: string
+  description: string
+  responsible: string
+  branch: string
+  requestDate: string
+  approvalDate?: string
+  status: number
+}
+
 export type DataType = {
   [key: string]: number | null
 }
+
 export interface ScalesContextType {
   fetchScaleByDate: (date: string) => void
   updateSetScalesByDate: (scale: IScale[]) => void
@@ -58,8 +69,11 @@ export interface ScalesContextType {
   fetchInputFlow: (date: string) => void
   updateGetCurrenDate: (date: string) => void
   updateFinishedScaleByMonth: () => void
+  postScaleApprovalRequest: () => void
+  fetchGetScaleApprovalByDate: () => void
   scalesByDate: IScale[]
   scaleSummary: Array<IScaleSummary[]>
   inputFlow: DataType[]
   dataFinishScale: IDataFinishScale[]
+  dataScaleApprovalRequest: IScaleApprovalRequest[]
 }

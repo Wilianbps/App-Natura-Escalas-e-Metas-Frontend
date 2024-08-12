@@ -11,6 +11,7 @@ import {
   DataType,
   IDataFinishScale,
   IScale,
+  IScaleApprovalRequest,
   IScaleProps,
   IScaleSummary,
   ScalesContextType,
@@ -19,12 +20,15 @@ import {
 const ScalesContext = createContext({} as ScalesContextType)
 
 function ScalesProvider({ children }: { children: React.ReactNode }) {
-  const { cookieStoreCode, cookieUserLogin } = useProfiles()
+  const { store, cookieUserLogin } = useProfiles()
   const { fetchEmployes, monthValue } = useSettings()
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
   const [dataFinishScale, setDataFinishScale] = useState<IDataFinishScale[]>([])
   const [scaleSummary, setScaleSummary] = useState<Array<IScaleSummary[]>>([])
   const [inputFlow, setInputFlow] = useState<DataType[]>([])
+  const [dataScaleApprovalRequest, setDataScaleApprovalRequest] = useState<
+    IScaleApprovalRequest[]
+  >([])
   const [getCurrentDate, setGetCurrentDate] = useState('')
 
   const month = monthValue.split('-')[1]
@@ -35,11 +39,13 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function fetchScaleByDate(date: string) {
-    const dateFormatted = format(date, 'yyyy-MM-dd')
-    const response = await api.get(
-      `scales/get-scale-by-date?date=${dateFormatted}`,
-    )
-    setScalesByDate(response.data.result)
+    if (date) {
+      const dateFormatted = format(date, 'yyyy-MM-dd')
+      const response = await api.get(
+        `scales/get-scale-by-date?date=${dateFormatted}&storeCode=${store}`,
+      )
+      setScalesByDate(response.data.result)
+    }
   }
 
   function updateSetScalesByDate(scale: IScale[]) {
@@ -57,7 +63,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   async function fetchInputFlow(date: string) {
     const dateFormatted = format(date, 'yyyy-MM-dd')
     const response = await api.get(
-      `http://localhost:3333/api/scales/get-input-flow?date=${dateFormatted}&codeStore=${cookieStoreCode}`,
+      `http://localhost:3333/api/scales/get-input-flow?date=${dateFormatted}&codeStore=${store}`,
     )
 
     setInputFlow(response.data)
@@ -125,7 +131,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
     if (dataFinishScale.length === 0) {
       await api
         .get(
-          `scales/load-scale-of-month?storeCode=${cookieStoreCode}&loginUser=${cookieUserLogin}&date=${date}&currentDate=${currentDate}&finished=${0}`,
+          `scales/load-scale-of-month?storeCode=${store}&loginUser=${cookieUserLogin}&date=${date}&currentDate=${currentDate}&finished=${0}`,
         )
         .then(() => {
           const dateFormatted = `${year}-${month}-01`
@@ -150,7 +156,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
     const currentDate = `${year}${month}${day}`
     await api
       .put(
-        `scales/update-finished-scale?storeCode=${cookieStoreCode}&month=${month}&year=${year}&endScaleDate=${currentDate}`,
+        `scales/update-finished-scale?storeCode=${store}&month=${month}&year=${year}&endScaleDate=${currentDate}`,
       )
       .then(() => {
         if (dataFinishScale) {
@@ -165,10 +171,45 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
       })
   }
 
+  async function fetchGetScaleApprovalByDate() {
+    await api
+      .get(`scales/get-scales-approval-request?month=${month}&year=${year}`)
+      .then((response) => {
+        setDataScaleApprovalRequest(response.data)
+      })
+  }
+
+  async function postScaleApprovalRequest() {
+    await fetchGetScaleApprovalByDate()
+    const newDate = new Date()
+    const day = newDate.getDate().toString().padStart(2, '0')
+    const currentDate = `${year}${month}${day}`
+    const data = {
+      description: 'solicitaçao de aprovação',
+      responsible: cookieUserLogin,
+      storeCode: store,
+      branch: 'Iguatemi 08',
+      requestDate: currentDate,
+      status: 0,
+    }
+    await api
+      .post(`scales/post-scales-approval-request`, data)
+      .then(async (response) => {
+        await fetchGetScaleApprovalByDate()
+        if (response.status === 200) {
+          toast.success('Aprovação solicitada com sucesso', {
+            style: { height: '50px', padding: '15px' },
+          })
+        }
+      })
+  }
+
   useEffect(() => {
+    fetchGetScaleApprovalByDate()
     fetchScaleSummary()
     fetchFinishedScaleByMonth()
-  }, [monthValue])
+    fetchScaleByDate(getCurrentDate)
+  }, [monthValue, store])
 
   return (
     <ScalesContext.Provider
@@ -184,6 +225,9 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         fetchLoadMonthScale,
         dataFinishScale,
         updateFinishedScaleByMonth,
+        postScaleApprovalRequest,
+        fetchGetScaleApprovalByDate,
+        dataScaleApprovalRequest,
       }}
     >
       {children}

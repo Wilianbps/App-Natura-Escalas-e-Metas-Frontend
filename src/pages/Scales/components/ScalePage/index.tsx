@@ -6,7 +6,9 @@ import { IoPersonCircleOutline } from 'react-icons/io5'
 
 import { Button } from '@/components/Button'
 import { Modal } from '@/components/Modal'
+import { useProfiles } from '@/contexts/profiles/ProfilesContext'
 import { useScales } from '@/contexts/scale/ScalesContext'
+import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 
 import { CaptionFlowPeople } from '../CaptionFlowPeople'
@@ -37,6 +39,14 @@ export function Scale() {
     id: index,
     value: 0,
   }))
+
+  const { cookieProfile } = useProfiles()
+  const { monthValue } = useSettings()
+  const currentDate = new Date()
+  const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0')
+  const currentYear = currentDate.getFullYear().toString()
+  const month = monthValue.split('-')[1]
+  const year = monthValue.split('-')[0]
 
   scalesByDate.forEach((item) => {
     item.options.forEach((option, index) => {
@@ -355,16 +365,19 @@ export function Scale() {
         </ContainerTable>
         <Footer>
           <CaptionFlowPeople />
-          {dataFinishScale[0]?.finished === false && (
-            <Button
-              type="submit"
-              text="Salvar informações do dia"
-              color="#000"
-              bgColor="#7EC864"
-              width="250px"
-              isSubmitting={isSubmitting}
-            />
-          )}
+          {dataFinishScale[0]?.finished === false &&
+            cookieProfile === 'Gerente Loja' &&
+            month === currentMonth &&
+            year === currentYear && (
+              <Button
+                type="submit"
+                text="Salvar informações do dia"
+                color="#000"
+                bgColor="#7EC864"
+                width="250px"
+                isSubmitting={isSubmitting}
+              />
+            )}
         </Footer>
       </form>
 

@@ -62,25 +62,17 @@ export function ScalePage() {
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue)
   }
-
   return (
     <Container>
       <header>
         <h1>Escalas</h1>
       </header>
 
-      {/*    dataScaleApprovalRequest.length === 0  - significa que a escala ainda nao carregou */}
-
-      {/* dataScaleApprovalRequest[0]?.status === 0 - significa que a escala carregou, mas ainda nao finalizou a escala */}
-
       {isCurrentDateAfterFifth &&
       (dataScaleApprovalRequest.length === 0 ||
         dataScaleApprovalRequest[0]?.status === 0) &&
-      (dataFinishScale.length === 0 ||
-        dataFinishScale[0]?.finished === false) &&
       month === currentMonth &&
-      year === currentYear &&
-      cookieProfile === 'Gerente Loja' ? (
+      year === currentYear ? (
         <InfoTextScaleDeadline />
       ) : (
         <Box sx={{ width: '100%', marginTop: '10px' }}>
@@ -111,15 +103,15 @@ export function ScalePage() {
                   sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
                 />
                 {/* {cookieProfile === 'Supervisão Loja' ||
-                    (cookieProfile === 'Master' && (
-                      <Tab
-                        label="Aprovações"
-                        icon={<CgCheck size={26} />}
-                        iconPosition="end"
-                        value="approvals"
-                        sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
-                      />
-                    ))} */}
+                  (cookieProfile === 'Master' && (
+                    <Tab
+                      label="Aprovações"
+                      icon={<CgCheck size={26} />}
+                      iconPosition="end"
+                      value="approvals"
+                      sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
+                    />
+                  ))} */}
                 <Tab
                   label="Aprovações"
                   icon={<CgCheck size={26} />}

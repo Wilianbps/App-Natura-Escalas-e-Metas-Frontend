@@ -52,11 +52,11 @@ export function GoalByWeek() {
           )}
         </ContainerGoalsByWeekPdf>
 
-        {goalsByWeek.employeesByWeeks.length === 0 && (
+        {goalsByWeek.employeesByWeeks?.length === 0 && (
           <TextInfo text="Não há informações no período" marginTop="2rem" />
         )}
 
-        {goalsByWeek.employeesByWeeks.length > 0 && (
+        {goalsByWeek.employeesByWeeks?.length > 0 && (
           <table>
             <thead>
               <tr>

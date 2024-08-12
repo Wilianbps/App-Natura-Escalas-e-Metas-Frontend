@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 
 import { api } from '@/services/axios'
 
+import { useProfiles } from '../profiles/ProfilesContext'
 import {
   IEmployee,
   ISettings,
@@ -13,6 +14,7 @@ import {
 const SettingsContext = createContext({} as SettingsContextType)
 
 function SettingsProvider({ children }: SettingProviderProps) {
+  const { store } = useProfiles()
   const [employees, setEmployees] = useState<IEmployee[]>([])
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
@@ -34,13 +36,17 @@ function SettingsProvider({ children }: SettingProviderProps) {
   }
 
   async function fetchEmployes() {
-    const response = await api.get('settings/getAllEmployees')
+    const response = await api.get(
+      `settings/getAllEmployees?storeCode=${store}`,
+    )
     setEmployees(response.data)
   }
 
   useEffect(() => {
-    fetchEmployes()
-  }, [])
+    if (store) {
+      fetchEmployes()
+    }
+  }, [store])
 
   async function updateShiftRestSchedule(employee: IEmployee) {
     const {
@@ -57,7 +63,7 @@ function SettingsProvider({ children }: SettingProviderProps) {
     } = employee
 
     await api
-      .put('settings/updateShiftRestSchedule', {
+      .put(`settings/updateShiftRestSchedule?storeCode=${store}`, {
         idSeler,
         idDayOff,
         storeCode,
@@ -97,10 +103,13 @@ function SettingsProvider({ children }: SettingProviderProps) {
       status: item.status ? 1 : 0,
     }))
 
-    const response = await api.put('settings/updateSettings', {
-      employeeStatus: employeeStatusFormated,
-      flowScale,
-    })
+    const response = await api.put(
+      `settings/updateSettings?storeCode=${store}`,
+      {
+        employeeStatus: employeeStatusFormated,
+        flowScale,
+      },
+    )
 
     const updatedEmployees = employees.map((employee) => {
       const updatedStatus = employeeStatus.find(

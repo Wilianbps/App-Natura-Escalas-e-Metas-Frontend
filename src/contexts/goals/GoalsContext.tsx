@@ -18,7 +18,7 @@ import {
 const GoalsContext = createContext({} as GoalsContextType)
 
 function GoalsProvider({ children }: GoalsProviderProps) {
-  const { cookieStoreCode } = useProfiles()
+  const { store } = useProfiles()
   const { fetchEmployes } = useSettings()
   const [goals, setGoals] = useState<Array<IGoals[]>>([])
   const [goalsByWeek, setGoalsByWeek] = useState<IGoalsByWeek>(
@@ -40,7 +40,7 @@ function GoalsProvider({ children }: GoalsProviderProps) {
   async function fetchGoalsByFortnight() {
     await api
       .get(
-        `goals/get-goals-by-fortnight?storeCode=${cookieStoreCode}&month=${month}&year=${year}`,
+        `goals/get-goals-by-fortnight?storeCode=${store}&month=${month}&year=${year}`,
       )
       .then((response) => {
         setGoals(response.data)
@@ -50,7 +50,7 @@ function GoalsProvider({ children }: GoalsProviderProps) {
   async function fetchGoalsByWeek() {
     await api
       .get(
-        `goals/get-goals-by-week?storeCode=${cookieStoreCode}&month=${month}&year=${year}`,
+        `goals/get-goals-by-week?storeCode=${store}&month=${month}&year=${year}`,
       )
       .then((response) => {
         setGoalsByWeek(response.data)
@@ -65,7 +65,7 @@ function GoalsProvider({ children }: GoalsProviderProps) {
 
     await api
       .get(
-        `goals/get-goals-by-month?storeCode=${cookieStoreCode}&initialDate=${formattedInitialDate}&lastDate=${formattedLastDate}`,
+        `goals/get-goals-by-month?storeCode=${store}&initialDate=${formattedInitialDate}&lastDate=${formattedLastDate}`,
       )
       .then((response) => {
         setGoalsByMonth(response.data)
@@ -75,7 +75,7 @@ function GoalsProvider({ children }: GoalsProviderProps) {
   async function fetchGoalEmployeeByMonth() {
     await api
       .get(
-        `goals/get-goals-employees-by-month?storeCode=${cookieStoreCode}&month=${month}&year=${year}`,
+        `goals/get-goals-employees-by-month?storeCode=${store}&month=${month}&year=${year}`,
       )
       .then((response) => {
         setGoalEmployeeByMonth(response.data)
@@ -90,7 +90,7 @@ function GoalsProvider({ children }: GoalsProviderProps) {
 
     await api
       .get(
-        `goals/get-ranking-goals-last-twelve-months?storeCode=${cookieStoreCode}&initialDate=${formattedInitialDate}&lastDate=${formattedLastDate}`,
+        `goals/get-ranking-goals-last-twelve-months?storeCode=${store}&initialDate=${formattedInitialDate}&lastDate=${formattedLastDate}`,
       )
       .then((response) => {
         setRankingGoalsLastTwelveMonths(response.data)
@@ -98,14 +98,14 @@ function GoalsProvider({ children }: GoalsProviderProps) {
   }
 
   useEffect(() => {
-    if (cookieStoreCode) {
+    if (store) {
       fetchGoalsByFortnight()
       fetchGoalsByWeek()
       fetchGoalsByMonth()
       fetchGoalEmployeeByMonth()
       fetchRankingGoalsLastTwelveMonths()
     }
-  }, [monthValue, fetchEmployes])
+  }, [monthValue, store, fetchEmployes])
 
   return (
     <GoalsContext.Provider

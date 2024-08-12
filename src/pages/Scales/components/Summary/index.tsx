@@ -21,7 +21,7 @@ import { daysOfWeek } from './utils/daysOfWeek'
 
 export function Summary() {
   const { monthValue } = useSettings()
-  const { scaleSummary, dataFinishScale } = useScales()
+  const { scaleSummary } = useScales()
 
   const infoScalePeriod = useMemo(() => {
     return scaleSummary.some((item) => item.length > 0)
@@ -87,13 +87,7 @@ export function Summary() {
         <TextInfo text="Não há informações no período" marginTop="2rem" />
       )}
 
-      {dataFinishScale[0]?.finished === false && (
-        <TextInfo
-          text="Necessário finalizar a escala para visualizar os dados."
-          marginTop="2rem"
-        />
-      )}
-      {dataFinishScale[0]?.finished === true && (
+      {infoScalePeriod && (
         <>
           {scaleSummary[0]?.length > 0 && (
             <PaginationByWeek

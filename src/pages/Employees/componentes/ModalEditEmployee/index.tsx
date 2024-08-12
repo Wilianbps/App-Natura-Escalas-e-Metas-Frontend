@@ -41,7 +41,7 @@ import { validateDayOff } from './utils/validateDayOff'
 import { validateVacations } from './utils/validateVacations'
 
 export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
-  const { cookieStoreCode, cookieUserLogin } = useProfiles()
+  const { store, cookieUserLogin } = useProfiles()
   const { updateShiftRestSchedule } = useSettings()
   const { open, onHandleClose, employee } = props
 
@@ -284,7 +284,7 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     const updateEmployee: IEmployee = {
       idSeler: employee?.idSeler,
       idDayOff: employee?.idDayOff,
-      storeCode: cookieStoreCode,
+      storeCode: store,
       userLogin: cookieUserLogin,
       idShift: employee?.idShift,
       shift: register.selectedShift,

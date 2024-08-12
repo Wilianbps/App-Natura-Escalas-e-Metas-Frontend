@@ -12,6 +12,7 @@ import { CgChevronLeft, CgChevronRight } from 'react-icons/cg'
 
 import { Button } from '@/components/Button'
 import { Modal } from '@/components/Modal'
+import { useProfiles } from '@/contexts/profiles/ProfilesContext'
 import { useScales } from '@/contexts/scale/ScalesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
@@ -31,7 +32,11 @@ export function PaginationPerDay() {
   const [modalMessage, setModalMessage] = useState<Array<string>>([])
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
+  const { cookieProfile } = useProfiles()
   const { monthValue } = useSettings()
+  const date = new Date()
+  const currentMonth = (date.getMonth() + 1).toString().padStart(2, '0')
+  const currentYear = date.getFullYear().toString()
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
   const initialDate = parse(`01/${month}/${year}`, 'dd/MM/yyyy', new Date())
@@ -120,7 +125,10 @@ export function PaginationPerDay() {
       </section>
 
       {currentDate.getTime() === lastDate.getTime() &&
-        dataFinishScale[0]?.finished === false && (
+        dataFinishScale[0]?.finished === false &&
+        cookieProfile === 'Gerente Loja' &&
+        month === currentMonth &&
+        year === currentYear && (
           <Button
             type="button"
             text="Finalizar escala"

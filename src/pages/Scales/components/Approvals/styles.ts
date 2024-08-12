@@ -10,8 +10,8 @@ export const Table = styled.table`
   thead {
     tr {
       th {
-        padding-bottom: 20px;
         text-align: left;
+        padding-bottom: 20px;
         color: ${(props) => props.theme.grayMedium};
         font-size: 0.875rem;
       }
@@ -54,11 +54,11 @@ export const TDStatus = styled.td<ITDStatus>`
       height: 8px;
       border-radius: 50%;
       background-color: ${(props) =>
-        props.status === 1
+        props.status === 0
           ? props.theme.grayMedium
-          : props.status === 2
+          : props.status === 1
             ? props.theme.greenMedium
-            : props.status === 3 && props.theme.red};
+            : props.status === 2 && props.theme.red};
     }
   }
 `

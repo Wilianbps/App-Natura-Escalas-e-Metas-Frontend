@@ -33,6 +33,8 @@ export function GoalByDay() {
 
   const totalPages = 2
 
+  console.log('goals', goals)
+
   function handleNextPage() {
     setPage((prevPage) => Math.min(prevPage + 1, totalPages - 1))
   }
@@ -179,23 +181,23 @@ export function GoalByDay() {
           </ContainerTable>
 
           <Footer>
-            {/*  <p>Colaborador Extra</p>
+            <p>Colaborador Extra</p>
 
-        <table>
-          <tbody>
-            <tr>
-              <td>Márcia Santos</td>
-              <td>R$36.000,00</td>
-              <td>R$1.500,00</td>
-              <td>R$1.500,00</td>
-              <td>R$1.500,00</td>
-              <td>R$1.500,00</td>
-              <td>R$1.500,00</td>
-              <td>R$1.500,00</td>
-              <td>R$1.500,00</td>
-            </tr>
-          </tbody>
-        </table> */}
+            <table>
+              <tbody>
+                <tr>
+                  <td>Márcia Santos</td>
+                  <td>R$36.000,00</td>
+                  <td>R$1.500,00</td>
+                  <td>R$1.500,00</td>
+                  <td>R$1.500,00</td>
+                  <td>R$1.500,00</td>
+                  <td>R$1.500,00</td>
+                  <td>R$1.500,00</td>
+                  <td>R$1.500,00</td>
+                </tr>
+              </tbody>
+            </table>
           </Footer>
         </>
       )}

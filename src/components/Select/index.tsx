@@ -1,37 +1,57 @@
 import { Box, FormControl, MenuItem, SelectChangeEvent } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
+import { useProfiles } from '@/contexts/profiles/ProfilesContext'
 
 import { SelectStoresProps } from './interfaces'
 import { SelectStyled } from './styles'
 
 export function SelectStores(props: SelectStoresProps) {
   const { minWidth, heightSelect, fontSize } = props
+  const { storesByUser, updateSetStore } = useProfiles()
 
-  const [store, setStore] = useState<string>('Loja Iguatemi')
+  const [selectedStore, setSelectedStore] = useState<string>('')
 
-  const handleChange = (event: SelectChangeEvent<string>) => {
-    setStore(event.target.value as string)
+  useEffect(() => {
+    if (storesByUser.length > 0) {
+      const initialStore = storesByUser[0]
+      setSelectedStore(initialStore.branch)
+      updateSetStore(initialStore.storeCode)
+    }
+  }, [storesByUser])
+
+  const handleChange = (event: SelectChangeEvent<unknown>) => {
+    const selectedBranch = event.target.value as string
+    setSelectedStore(selectedBranch)
+
+    const selectedStoreCode = storesByUser.find(
+      (store) => store.branch === selectedBranch,
+    )?.storeCode
+    if (selectedStoreCode) {
+      updateSetStore(selectedStoreCode)
+    }
   }
+
   return (
     <Box sx={{ minWidth }}>
       <FormControl fullWidth>
         <SelectStyled
-          value={store}
-          onChange={(event) => handleChange(event as SelectChangeEvent<string>)}
+          value={selectedStore}
+          onChange={handleChange}
           sx={{
             height: heightSelect,
             fontSize,
           }}
         >
-          <MenuItem sx={{ fontSize }} value="Loja Iguatemi">
-            Loja Iguatemi
-          </MenuItem>
-          <MenuItem sx={{ fontSize }} value="Loja 2">
-            Loja2
-          </MenuItem>
-          <MenuItem sx={{ fontSize }} value="Loja 3">
-            Loja3
-          </MenuItem>
+          {storesByUser?.map((item) => (
+            <MenuItem
+              sx={{ fontSize }}
+              value={item.branch}
+              key={item.storeCode}
+            >
+              {item.branch}
+            </MenuItem>
+          ))}
         </SelectStyled>
       </FormControl>
     </Box>

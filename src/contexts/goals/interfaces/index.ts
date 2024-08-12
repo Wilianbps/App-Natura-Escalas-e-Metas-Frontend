@@ -6,6 +6,7 @@ export interface IGoals {
   id: string
   name: string
   codeStore: string
+  activeSeller: boolean
   days: {
     date: string
     goalDay: number | string
@@ -18,6 +19,7 @@ export interface IGoalsByWeek {
     id: string
     name: string
     codeStore: string
+    activeSeller: boolean
     totalAmountMonth: number
     weeks: {
       days: {
