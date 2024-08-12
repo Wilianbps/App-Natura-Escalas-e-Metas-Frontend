@@ -33,8 +33,6 @@ export function GoalByDay() {
 
   const totalPages = 2
 
-  console.log('goals', goals)
-
   function handleNextPage() {
     setPage((prevPage) => Math.min(prevPage + 1, totalPages - 1))
   }
@@ -145,17 +143,21 @@ export function GoalByDay() {
 
               <tbody>
                 {goals[page]?.map((employee) => (
-                  <tr key={employee.id}>
-                    <td>{formatName(employee.name)}</td>
-                    <td>{calculateMonthTotal(employee.id)}</td>
-                    {employee.days.map((day, index) => (
-                      <td key={index}>
-                        {!isNaN(Number(day.goalDayByEmployee))
-                          ? formatNumber(Number(day.goalDayByEmployee))
-                          : '-'}
-                      </td>
-                    ))}
-                  </tr>
+                  <>
+                    {!employee.activeSeller && (
+                      <tr key={employee.id}>
+                        <td>{formatName(employee.name)}</td>
+                        <td>{calculateMonthTotal(employee.id)}</td>
+                        {employee.days.map((day, index) => (
+                          <td key={index}>
+                            {!isNaN(Number(day.goalDayByEmployee))
+                              ? formatNumber(Number(day.goalDayByEmployee))
+                              : '-'}
+                          </td>
+                        ))}
+                      </tr>
+                    )}
+                  </>
                 ))}
               </tbody>
               <tfoot>
@@ -181,21 +183,43 @@ export function GoalByDay() {
           </ContainerTable>
 
           <Footer>
-            <p>Colaborador Extra</p>
+            <h3>Colaborador Extra</h3>
 
             <table>
-              <tbody>
+              <thead>
                 <tr>
-                  <td>Márcia Santos</td>
-                  <td>R$36.000,00</td>
-                  <td>R$1.500,00</td>
-                  <td>R$1.500,00</td>
-                  <td>R$1.500,00</td>
-                  <td>R$1.500,00</td>
-                  <td>R$1.500,00</td>
-                  <td>R$1.500,00</td>
-                  <td>R$1.500,00</td>
+                  <th></th>
+                  <th></th>
+                  {daysOfMonth[page]?.map((day) => (
+                    <th key={day.dayAndmonth}>{day.dayAndmonth}</th>
+                  ))}
                 </tr>
+                <tr>
+                  <th>Colaboladores</th>
+                  <th>Total Mês</th>
+                  {daysOfMonth[page]?.map((day) => (
+                    <th key={day.dayAndmonth}>{day.dayweek}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {goals[page]?.map((employee) => (
+                  <>
+                    {employee.activeSeller && (
+                      <tr key={employee.id}>
+                        <td>{formatName(employee.name)}</td>
+                        <td>{calculateMonthTotal(employee.id)}</td>
+                        {employee.days.map((day, index) => (
+                          <td key={index}>
+                            {!isNaN(Number(day.goalDayByEmployee))
+                              ? formatNumber(Number(day.goalDayByEmployee))
+                              : '-'}
+                          </td>
+                        ))}
+                      </tr>
+                    )}
+                  </>
+                ))}
               </tbody>
             </table>
           </Footer>
