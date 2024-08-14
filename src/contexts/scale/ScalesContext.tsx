@@ -188,7 +188,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
       description: 'solicitaçao de aprovação',
       responsible: cookieUserLogin,
       storeCode: store,
-      branch: 'Iguatemi 08',
+      branch: store,
       requestDate: currentDate,
       status: 0,
     }
@@ -196,8 +196,31 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
       .post(`scales/post-scales-approval-request`, data)
       .then(async (response) => {
         await fetchGetScaleApprovalByDate()
+
         if (response.status === 200) {
           toast.success('Aprovação solicitada com sucesso', {
+            style: { height: '50px', padding: '15px' },
+          })
+        }
+      })
+  }
+
+  async function updateScaleApprovalRequest(status: number) {
+    const newDate = new Date()
+    const day = newDate.getDate().toString().padStart(2, '0')
+    const currentDate = `${year}${month}${day}`
+    await api
+      .put(
+        `scales/put-scales-approval-request?month=${month}&year=${year}&storeCode=${store}&approvalDate=${currentDate}&status=${status}`,
+      )
+      .then(async () => {
+        await fetchGetScaleApprovalByDate()
+        if (status === 1) {
+          toast.success('Aprovação feita com sucesso', {
+            style: { height: '50px', padding: '15px' },
+          })
+        } else if (status === 2) {
+          toast.success('Cancelado com sucesso', {
             style: { height: '50px', padding: '15px' },
           })
         }
@@ -227,6 +250,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         updateFinishedScaleByMonth,
         postScaleApprovalRequest,
         fetchGetScaleApprovalByDate,
+        updateScaleApprovalRequest,
         dataScaleApprovalRequest,
       }}
     >

@@ -2,11 +2,16 @@ import { Text } from './styles'
 
 interface ITextInfoProps {
   text: string
-  marginTop: string
+  marginTop?: string
+  color?: string
 }
 
 export function TextInfo(props: ITextInfoProps) {
-  const { text, marginTop } = props
+  const { text, marginTop, color } = props
 
-  return <Text marginTop={marginTop}>{text}</Text>
+  return (
+    <Text marginTop={marginTop} color={color}>
+      {text}
+    </Text>
+  )
 }

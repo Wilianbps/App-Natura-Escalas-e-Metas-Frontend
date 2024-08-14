@@ -64,6 +64,8 @@ export const TDStatus = styled.td<ITDStatus>`
 `
 
 export const ButtonApproval = styled.button`
+  width: 90px;
+  height: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -79,12 +81,13 @@ export const ButtonApproval = styled.button`
   transition: background 0.2s ease-in;
 
   &:hover {
-    background-color: ${(props) => props.theme.greenMedium};
-    color: #fff;
+    opacity: 0.8;
   }
 `
 
 export const ButtonCanceled = styled.button`
+  width: 90px;
+  height: 35px;
   display: flex;
   justify-content: center;
   align-items: center;

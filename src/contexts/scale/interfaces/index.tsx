@@ -71,6 +71,7 @@ export interface ScalesContextType {
   updateFinishedScaleByMonth: () => void
   postScaleApprovalRequest: () => void
   fetchGetScaleApprovalByDate: () => void
+  updateScaleApprovalRequest: (status: number) => void
   scalesByDate: IScale[]
   scaleSummary: Array<IScaleSummary[]>
   inputFlow: DataType[]

@@ -1,6 +1,9 @@
+import CircularProgress from '@mui/material/CircularProgress/CircularProgress'
 import { formatInTimeZone } from 'date-fns-tz'
+import { useState } from 'react'
 import { CgArrowRight, CgClose } from 'react-icons/cg'
 
+import { TextInfo } from '@/components/TextInfo'
 import { useScales } from '@/contexts/scale/ScalesContext'
 
 import {
@@ -12,7 +15,29 @@ import {
 } from './styles'
 
 export function Approvals() {
-  const { dataScaleApprovalRequest } = useScales()
+  const { dataScaleApprovalRequest, updateScaleApprovalRequest } = useScales()
+  const [isSubmittingApprovalRequest, setIsSubmittingApprovalRequest] =
+    useState(false)
+  const [isSubmittingCanceledRequest, setIsSubmittingCanceledRequest] =
+    useState(false)
+
+  console.log('dataScaleApprovalRequest', dataScaleApprovalRequest)
+
+  function handleUpdateApprovalRequest() {
+    setIsSubmittingApprovalRequest(true)
+    setTimeout(() => {
+      updateScaleApprovalRequest(1)
+      setIsSubmittingApprovalRequest(false)
+    }, 3000)
+  }
+
+  function handleUpdateCanceledRequest() {
+    setIsSubmittingCanceledRequest(true)
+    setTimeout(() => {
+      updateScaleApprovalRequest(2)
+      setIsSubmittingCanceledRequest(false)
+    }, 3000)
+  }
 
   return (
     <Container>
@@ -33,16 +58,16 @@ export function Approvals() {
           {dataScaleApprovalRequest?.map((item, index) => (
             <tr key={item.approvalDate + index.toString()}>
               <td width={250}>{item.description}</td>
-              <td width={250}>{item.responsible}</td>
+              <td width={200}>{item.responsible}</td>
               <td width={150}>{item.branch}</td>
-              <td width={200}>
+              <td width={180}>
                 {formatInTimeZone(item.requestDate, 'UTC', 'dd/MM/yyyy')}
               </td>
-              <td width={200}>
+              <td width={180}>
                 {item.approvalDate &&
                   formatInTimeZone(item.approvalDate, 'UTC', 'dd/MM/yyyy')}
               </td>
-              <TDStatus status={0} width={150}>
+              <TDStatus status={item.status} width={150}>
                 <section>
                   <span></span>
                   <p>{item.status === 0 && 'pendente'}</p>
@@ -50,17 +75,42 @@ export function Approvals() {
                   <p>{item.status === 2 && 'cancelado'}</p>
                 </section>
               </TDStatus>
-              <td>
-                <ButtonApproval>
-                  <CgArrowRight size={20} />
-                  Aprovar
-                </ButtonApproval>
+              <td width={150}>
+                {dataScaleApprovalRequest[0]?.status === 0 && (
+                  <ButtonApproval onClick={handleUpdateApprovalRequest}>
+                    {isSubmittingApprovalRequest === true ? (
+                      <CircularProgress
+                        size={15}
+                        style={{ color: '#449428' }}
+                      />
+                    ) : (
+                      <>
+                        <CgArrowRight size={20} /> <span>Aprovar</span>
+                      </>
+                    )}
+                  </ButtonApproval>
+                )}
+                {dataScaleApprovalRequest[0]?.status === 1 && (
+                  <TextInfo text="aprovado" color="#449428" />
+                )}
               </td>
-              <td>
-                <ButtonCanceled>
-                  <CgClose />
-                  cancelar
-                </ButtonCanceled>
+              <td width={150}>
+                {dataScaleApprovalRequest[0]?.status === 0 && (
+                  <ButtonCanceled onClick={handleUpdateCanceledRequest}>
+                    {isSubmittingCanceledRequest === true ? (
+                      <CircularProgress size={15} style={{ color: 'red' }} />
+                    ) : (
+                      <>
+                        <CgClose />
+                        <span>cancelar</span>
+                      </>
+                    )}
+                  </ButtonCanceled>
+                )}
+
+                {dataScaleApprovalRequest[0]?.status === 2 && (
+                  <TextInfo text="cancelado" color="red" />
+                )}
               </td>
             </tr>
           ))}
