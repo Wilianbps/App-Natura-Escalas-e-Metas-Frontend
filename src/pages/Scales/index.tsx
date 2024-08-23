@@ -73,14 +73,22 @@ export function ScalePage() {
 
       {/* dataScaleApprovalRequest[0]?.status === 0 - significa que a escala carregou, mas ainda nao finalizou a escala */}
 
-      {isCurrentDateAfterFifth &&
-      (dataScaleApprovalRequest.length === 0 ||
-        dataScaleApprovalRequest[0]?.status === 0) &&
-      (dataFinishScale.length === 0 ||
-        dataFinishScale[0]?.finished === false) &&
-      month === currentMonth &&
-      year === currentYear &&
+      {dataScaleApprovalRequest.length !== 0 &&
+      dataScaleApprovalRequest[0]?.status === 2 &&
       cookieProfile === 'Gerente Loja' ? (
+        <TextInfo
+          text="Supervior não aprovou liberação da escala."
+          color="red"
+          marginTop="20px"
+        />
+      ) : isCurrentDateAfterFifth &&
+        (dataScaleApprovalRequest.length === 0 ||
+          dataScaleApprovalRequest[0]?.status === 0) &&
+        (dataFinishScale.length === 0 ||
+          dataFinishScale[0]?.finished === false) &&
+        month === currentMonth &&
+        year === currentYear &&
+        cookieProfile === 'Gerente Loja' ? (
         <InfoTextScaleDeadline />
       ) : (
         <Box sx={{ width: '100%', marginTop: '10px' }}>

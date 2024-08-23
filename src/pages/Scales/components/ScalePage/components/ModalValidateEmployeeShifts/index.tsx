@@ -9,16 +9,16 @@ import { IoIosAlert } from 'react-icons/io'
 
 import { ContainerModal } from './styles'
 
-interface IModal {
+interface IModalValidateEmployeeShifts {
   message: Array<string>
   open: boolean
   onHandleClose: () => void
 }
 
-export function Modal(props: IModal) {
+export function ModalValidateEmployeeShifts(
+  props: IModalValidateEmployeeShifts,
+) {
   const { message, open, onHandleClose } = props
-
-  console.log(props)
 
   const handleClose = () => {
     onHandleClose()
@@ -44,7 +44,7 @@ export function Modal(props: IModal) {
         id="customized-dialog-title"
       >
         <IoIosAlert size={20} color="#C60000" />
-        Alerta de folga
+        Alerta de Preenchimento da escala
       </DialogTitle>
       <IconButton
         aria-label="close"
@@ -59,25 +59,6 @@ export function Modal(props: IModal) {
         <CgClose size={17} />
       </IconButton>
       <DialogContent dividers>
-        <Typography gutterBottom sx={{ fontSize: '13px' }}>
-          <p>
-            Colaboradores abaixo{' '}
-            <span style={{ fontSize: '13px', fontWeight: 'bold' }}>
-              excederam{' '}
-              <span
-                style={{
-                  fontSize: '13px',
-                  fontWeight: 'bold',
-                  color: '#C60000',
-                }}
-              >
-                6 dias
-              </span>{' '}
-              de trabalho
-            </span>
-            , favor verificar.
-          </p>
-        </Typography>
         <Typography
           gutterBottom
           sx={{ m: 0, p: 2, fontSize: '13px', fontWeight: 'bold' }}

@@ -12,7 +12,6 @@ import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 
 import { CaptionFlowPeople } from '../CaptionFlowPeople'
-import { ModalValidateEmployeeShifts } from './components/ModalValidateEmployeeShifts'
 import { PaginationPerDay } from './components/PaginationPerDay'
 import { IScale } from './interfaces'
 import {
@@ -35,16 +34,6 @@ export function Scale() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [modalMessage, setModalMessage] = useState<Array<string>>([])
-  const [
-    isModalOpenValidateEmployeeShift,
-    setIsModalOpenValidateEmployeeShift,
-  ] = useState<boolean>(false)
-
-  const [
-    modalMessageValidateEmployeeShift,
-    setModalMessageValidateEmployeeShift,
-  ] = useState<Array<string>>([])
-
   const { handleSubmit } = useForm()
   const arraySumsEmployeesByTime = new Array(30).fill(0).map((_, index) => ({
     id: index,
@@ -214,58 +203,8 @@ export function Scale() {
     updateSetScalesByDate(updatedStatus)
   }
 
-  function validateEmployeeShifts(scales: IScale[]): string[] {
-    const errors: string[] = []
-
-    scales.forEach((scale) => {
-      const filledShifts = scale.options.filter(
-        (option) => option.type !== '',
-      ).length
-
-      const mealBreaks = scale.options.filter(
-        (option) => option.type === 'R',
-      ).length
-
-      const consecutiveMealBreaks = scale.options.some(
-        (option, index, array) =>
-          option.type === 'R' &&
-          array[index + 1] &&
-          array[index + 1].type === 'R',
-      )
-
-      if (filledShifts < 15) {
-        errors.push(
-          `Funcionário/a ${formatName(scale.name)} não tem 7,5h de trabalho preenchidas.`,
-        )
-      }
-
-      if (mealBreaks > 2) {
-        errors.push(
-          `Funcionário/a ${formatName(scale.name)} tem mais de 2 períodos de refeição.`,
-        )
-      }
-
-      if (!consecutiveMealBreaks && mealBreaks > 0) {
-        errors.push(
-          `Funcionário/a ${formatName(scale.name)} não tem 2 períodos consecutivos de refeição.`,
-        )
-      }
-    })
-
-    return errors
-  }
-
   function handleUpdateScale() {
     setIsSubmitting(true)
-
-    const validationErrors = validateEmployeeShifts(scalesByDate)
-
-    if (validationErrors.length > 0) {
-      setIsModalOpenValidateEmployeeShift(true)
-      setModalMessageValidateEmployeeShift(validationErrors)
-      setIsSubmitting(false)
-      return
-    }
 
     const nameEmployees: Array<string> = []
 
@@ -426,8 +365,7 @@ export function Scale() {
         </ContainerTable>
         <Footer>
           <CaptionFlowPeople />
-          {(dataFinishScale[0]?.finished === false ||
-            dataFinishScale.length === 0) &&
+          {dataFinishScale[0]?.finished === false &&
             cookieProfile === 'Gerente Loja' &&
             month === currentMonth &&
             year === currentYear && (
@@ -447,12 +385,6 @@ export function Scale() {
         message={modalMessage}
         open={isModalOpen}
         onHandleClose={() => setIsModalOpen(false)}
-      />
-
-      <ModalValidateEmployeeShifts
-        message={modalMessageValidateEmployeeShift}
-        open={isModalOpenValidateEmployeeShift}
-        onHandleClose={() => setIsModalOpenValidateEmployeeShift(false)}
       />
     </Container>
   )
