@@ -63,7 +63,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   async function fetchInputFlow(date: string) {
     const dateFormatted = format(date, 'yyyy-MM-dd')
     const response = await api.get(
-      `http://localhost:3333/api/scales/get-input-flow?date=${dateFormatted}&codeStore=${store}`,
+      `scales/get-input-flow?date=${dateFormatted}&codeStore=${store}`,
     )
 
     setInputFlow(response.data)
