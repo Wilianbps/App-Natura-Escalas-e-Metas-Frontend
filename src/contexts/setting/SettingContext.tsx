@@ -17,6 +17,7 @@ const SettingsContext = createContext({} as SettingsContextType)
 function SettingsProvider({ children }: SettingProviderProps) {
   const { store } = useProfiles()
   const [employees, setEmployees] = useState<IEmployee[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
 
@@ -37,10 +38,12 @@ function SettingsProvider({ children }: SettingProviderProps) {
   }
 
   async function fetchEmployes() {
-    const response = await api.get(
-      `settings/getAllEmployees?storeCode=${store}`,
-    )
-    setEmployees(response.data)
+    await api
+      .get(`settings/getAllEmployees?storeCode=${store}`)
+      .then((response) => {
+        setEmployees(response.data)
+        setIsLoading(false)
+      })
   }
 
   useEffect(() => {
