@@ -43,6 +43,9 @@ export function PaginationPerDay() {
   const lastDate = lastDayOfMonth(initialDate)
   const [currentDate, setCurrentDate] = useState(initialDate)
 
+  const [isAdvanceDisabled, setIsAdvanceDisabled] = useState(false)
+  const [isBackDisabled, setIsBackDisabled] = useState(false)
+
   function dayOffValidator() {
     const nameEmployees: Array<string> = []
 
@@ -71,19 +74,33 @@ export function PaginationPerDay() {
 
     if (validator) return
 
+    setIsAdvanceDisabled(true) // Desabilita o botão
+
     const newDate = addDays(currentDate, 1)
 
     if (isSameMonth(newDate, currentDate)) {
       setCurrentDate(newDate)
     }
+
+    // Reverte a desabilitação após 3 segundos
+    setTimeout(() => {
+      setIsAdvanceDisabled(false)
+    }, 3000)
   }
 
   function goBackDay() {
+    setIsBackDisabled(true) // Desabilita o botão
+
     const newDate = subDays(currentDate, 1)
 
     if (isSameMonth(newDate, currentDate)) {
       setCurrentDate(newDate)
     }
+
+    // Reverte a desabilitação após 3 segundos
+    setTimeout(() => {
+      setIsBackDisabled(false)
+    }, 3000)
   }
 
   function handleUpdateFinishedScale() {
@@ -110,7 +127,9 @@ export function PaginationPerDay() {
       <section>
         <button
           onClick={goBackDay}
-          disabled={currentDate.getTime() === initialDate.getTime()}
+          disabled={
+            isBackDisabled || currentDate.getTime() === initialDate.getTime()
+          }
         >
           <CgChevronLeft />
         </button>
@@ -118,7 +137,9 @@ export function PaginationPerDay() {
 
         <button
           onClick={advanceDay}
-          disabled={currentDate.getTime() === lastDate.getTime()}
+          disabled={
+            isAdvanceDisabled || currentDate.getTime() === lastDate.getTime()
+          }
         >
           <CgChevronRight />
         </button>

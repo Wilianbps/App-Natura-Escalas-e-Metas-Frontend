@@ -17,7 +17,7 @@ const SettingsContext = createContext({} as SettingsContextType)
 function SettingsProvider({ children }: SettingProviderProps) {
   const { store } = useProfiles()
   const [employees, setEmployees] = useState<IEmployee[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingEmployees, setIsLoadingEmployees] = useState(false)
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
 
@@ -38,11 +38,12 @@ function SettingsProvider({ children }: SettingProviderProps) {
   }
 
   async function fetchEmployes() {
+    setIsLoadingEmployees(true)
     await api
       .get(`settings/getAllEmployees?storeCode=${store}`)
       .then((response) => {
         setEmployees(response.data)
-        setIsLoading(false)
+        setIsLoadingEmployees(false)
       })
   }
 
@@ -147,6 +148,7 @@ function SettingsProvider({ children }: SettingProviderProps) {
         fetchEmployes,
         monthValue,
         updateMonthValue,
+        isLoadingEmployees,
       }}
     >
       {children}
@@ -188,6 +190,11 @@ function useSettings() {
     (context) => context.updateMonthValue,
   )
 
+  const isLoadingEmployees = useContextSelector(
+    SettingsContext,
+    (context) => context.isLoadingEmployees,
+  )
+
   return {
     updateShiftRestSchedule,
     employees,
@@ -197,6 +204,7 @@ function useSettings() {
     fetchEmployes,
     monthValue,
     updateMonthValue,
+    isLoadingEmployees,
   }
 }
 

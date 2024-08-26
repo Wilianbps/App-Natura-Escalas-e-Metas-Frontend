@@ -1,4 +1,4 @@
-import { Divider, Switch } from '@mui/material'
+import { Box, Divider, LinearProgress, Switch } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CgPen } from 'react-icons/cg'
@@ -20,7 +20,7 @@ interface IEmployeStatus {
 
 export function Employees() {
   const { cookieProfile } = useProfiles()
-  const { employees, updateSettings } = useSettings()
+  const { employees, updateSettings, isLoadingEmployees } = useSettings()
   const [openModalEditEmpoyee, setOpenModalEditEmpoyee] = useState(false)
   const [dataEmployee, setDataEmployee] = useState<IEmployee>()
 
@@ -84,132 +84,143 @@ export function Employees() {
 
   return (
     <Container>
-      {employees.length === 0 && (
+      {isLoadingEmployees ? (
         <>
-          <header>
-            <h1>Colaboladores</h1>
-          </header>
-
-          <TextInfo
-            marginTop="20px"
-            text="Não há colaboladores cadastrados para esta Loja"
-          />
+          <TextInfo text="Carregando colaboladores..." />
+          <Box sx={{ width: '100%', marginTop: '10px' }}>
+            <LinearProgress />
+          </Box>
         </>
-      )}
-
-      {employees.length > 0 && (
+      ) : (
         <>
-          <form onSubmit={handleSubmit(handleSaveSttings)}>
-            <header>
-              <h1>Colaboladores</h1>
-            </header>
-
-            <table>
-              <thead>
-                <tr>
-                  <td width={50}>Status</td>
-                  <td width={350}>Nome</td>
-                  <td width={300}>Código do Colaborador</td>
-                  {cookieProfile === 'Gerente Loja' && <td>Editar</td>}
-                </tr>
-              </thead>
-
-              <tbody>
-                {employees?.map((employee) => (
-                  <tr key={employee.idSeler}>
-                    <td>
-                      <Switch
-                        checked={
-                          employeeStatus.find(
-                            (item) => item.idSeler === employee.idSeler,
-                          )?.status || false
-                        }
-                        onChange={() =>
-                          employee.idSeler &&
-                          handleToggleStatus(employee.idSeler)
-                        }
-                      />
-                    </td>
-                    <td>{formatName(employee.name)}</td>
-                    <td>{employee.idSeler}</td>
-                    {cookieProfile === 'Gerente Loja' ? (
-                      <td>
-                        <div
-                          className="circle"
-                          onClick={() => handleOpenModalEditEmployee(employee)}
-                        >
-                          <CgPen />
-                        </div>
-                      </td>
-                    ) : (
-                      <td></td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <Divider component="div" role="presentation" />
-            <ScaleFlowContainer>
+          {employees.length === 0 && !isLoadingEmployees ? (
+            <>
               <header>
-                <h2>Fluxo Médio</h2>
+                <h1>Colaboradores</h1>
               </header>
-              <section>
-                <p>
-                  Selecione o parâmetro de meses para o fluxo médio da sua
-                  escala.
-                </p>
-              </section>
-              <section className="buttons-flow">
-                <section>
-                  <input
-                    type="radio"
-                    name="flow"
-                    id="month3"
-                    checked={selectedFlow === '3M'}
-                    onChange={() => handleChangeFlowScale('3M')}
-                  />
-                  <label htmlFor="month3">3 meses</label>
-                </section>
-                <section>
-                  <input
-                    type="radio"
-                    name="flow"
-                    id="month6"
-                    checked={selectedFlow === '6M'}
-                    onChange={() => handleChangeFlowScale('6M')}
-                  />
-                  <label htmlFor="month6">6 meses</label>
-                </section>
-                <section>
-                  <input
-                    type="radio"
-                    name="flow"
-                    id="year1"
-                    checked={selectedFlow === '1A'}
-                    onChange={() => handleChangeFlowScale('1A')}
-                  />
-                  <label htmlFor="year1">1 ano</label>
-                </section>
-              </section>
-            </ScaleFlowContainer>
-            {cookieProfile === 'Gerente Loja' && (
-              <footer>
-                <Button
-                  type="submit"
-                  text="Salvar Configurações"
-                  color="#000"
-                  bgColor="#ffe2b3"
-                  width="212px"
-                  isSubmitting={isSubmitting}
-                />
-              </footer>
-            )}
-          </form>
-          <ModalEditEmployee
-            open={openModalEditEmpoyee}
-            onHandleClose={handleCloseModalEditEmpoyee}
-            employee={dataEmployee}
-          />
+
+              <TextInfo
+                marginTop="20px"
+                text="Não há colaboradores cadastrados para esta Loja"
+              />
+            </>
+          ) : (
+            <>
+              <form onSubmit={handleSubmit(handleSaveSttings)}>
+                <header>
+                  <h1>Colaboradores</h1>
+                </header>
+
+                <table>
+                  <thead>
+                    <tr>
+                      <td width={50}>Status</td>
+                      <td width={350}>Nome</td>
+                      <td width={300}>Código do Colaborador</td>
+                      {cookieProfile === 'Gerente Loja' && <td>Editar</td>}
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {employees.map((employee) => (
+                      <tr key={employee.idSeler}>
+                        <td>
+                          <Switch
+                            checked={
+                              employeeStatus.find(
+                                (item) => item.idSeler === employee.idSeler,
+                              )?.status || false
+                            }
+                            onChange={() =>
+                              employee.idSeler &&
+                              handleToggleStatus(employee.idSeler)
+                            }
+                          />
+                        </td>
+                        <td>{formatName(employee.name)}</td>
+                        <td>{employee.idSeler}</td>
+                        {cookieProfile === 'Gerente Loja' ? (
+                          <td>
+                            <div
+                              className="circle"
+                              onClick={() =>
+                                handleOpenModalEditEmployee(employee)
+                              }
+                            >
+                              <CgPen />
+                            </div>
+                          </td>
+                        ) : (
+                          <td></td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <Divider component="div" role="presentation" />
+                <ScaleFlowContainer>
+                  <header>
+                    <h2>Fluxo Médio</h2>
+                  </header>
+                  <section>
+                    <p>
+                      Selecione o parâmetro de meses para o fluxo médio da sua
+                      escala.
+                    </p>
+                  </section>
+                  <section className="buttons-flow">
+                    <section>
+                      <input
+                        type="radio"
+                        name="flow"
+                        id="month3"
+                        checked={selectedFlow === '3M'}
+                        onChange={() => handleChangeFlowScale('3M')}
+                      />
+                      <label htmlFor="month3">3 meses</label>
+                    </section>
+                    <section>
+                      <input
+                        type="radio"
+                        name="flow"
+                        id="month6"
+                        checked={selectedFlow === '6M'}
+                        onChange={() => handleChangeFlowScale('6M')}
+                      />
+                      <label htmlFor="month6">6 meses</label>
+                    </section>
+                    <section>
+                      <input
+                        type="radio"
+                        name="flow"
+                        id="year1"
+                        checked={selectedFlow === '1A'}
+                        onChange={() => handleChangeFlowScale('1A')}
+                      />
+                      <label htmlFor="year1">1 ano</label>
+                    </section>
+                  </section>
+                </ScaleFlowContainer>
+                {cookieProfile === 'Gerente Loja' && (
+                  <footer>
+                    <Button
+                      type="submit"
+                      text="Salvar Configurações"
+                      color="#000"
+                      bgColor="#ffe2b3"
+                      width="212px"
+                      isSubmitting={isSubmitting}
+                    />
+                  </footer>
+                )}
+              </form>
+              <ModalEditEmployee
+                open={openModalEditEmpoyee}
+                onHandleClose={handleCloseModalEditEmpoyee}
+                employee={dataEmployee}
+              />
+            </>
+          )}
         </>
       )}
     </Container>

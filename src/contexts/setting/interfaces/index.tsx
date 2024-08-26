@@ -48,5 +48,6 @@ export interface SettingsContextType {
   selectedDate: Date | null
   fetchEmployes: () => void
   monthValue: string
+  isLoadingEmployees: boolean
   updateMonthValue: (month: string) => void
 }
