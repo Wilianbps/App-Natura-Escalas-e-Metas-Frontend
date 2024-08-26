@@ -98,9 +98,8 @@ export const Footer = styled.footer`
     thead {
       tr {
         th {
-          text-align: left;
           height: 3rem;
-          padding: 0 2.5rem;
+          padding: 0 0.5rem;
         }
 
         &:first-of-type {
