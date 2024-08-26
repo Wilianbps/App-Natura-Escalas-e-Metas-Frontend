@@ -1,7 +1,8 @@
 import { format } from 'date-fns/format'
 import { formatInTimeZone } from 'date-fns-tz'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { createContext, useContextSelector } from 'use-context-selector'
 
 import { api } from '@/services/axios'
 
@@ -260,8 +261,84 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
 }
 
 function useScales() {
-  const context = useContext(ScalesContext)
-  return context
+  const scalesByDate = useContextSelector(
+    ScalesContext,
+    (context) => context.scalesByDate,
+  )
+  const updateSetScalesByDate = useContextSelector(
+    ScalesContext,
+    (context) => context.updateSetScalesByDate,
+  )
+  const fetchScaleByDate = useContextSelector(
+    ScalesContext,
+    (context) => context.fetchScaleByDate,
+  )
+  const updateScalesByDate = useContextSelector(
+    ScalesContext,
+    (context) => context.updateScalesByDate,
+  )
+  const updateGetCurrenDate = useContextSelector(
+    ScalesContext,
+    (context) => context.updateGetCurrenDate,
+  )
+  const scaleSummary = useContextSelector(
+    ScalesContext,
+    (context) => context.scaleSummary,
+  )
+  const inputFlow = useContextSelector(
+    ScalesContext,
+    (context) => context.inputFlow,
+  )
+  const fetchInputFlow = useContextSelector(
+    ScalesContext,
+    (context) => context.fetchInputFlow,
+  )
+  const fetchLoadMonthScale = useContextSelector(
+    ScalesContext,
+    (context) => context.fetchLoadMonthScale,
+  )
+  const dataFinishScale = useContextSelector(
+    ScalesContext,
+    (context) => context.dataFinishScale,
+  )
+  const updateFinishedScaleByMonth = useContextSelector(
+    ScalesContext,
+    (context) => context.updateFinishedScaleByMonth,
+  )
+  const postScaleApprovalRequest = useContextSelector(
+    ScalesContext,
+    (context) => context.postScaleApprovalRequest,
+  )
+  const fetchGetScaleApprovalByDate = useContextSelector(
+    ScalesContext,
+    (context) => context.fetchGetScaleApprovalByDate,
+  )
+  const updateScaleApprovalRequest = useContextSelector(
+    ScalesContext,
+    (context) => context.updateScaleApprovalRequest,
+  )
+  const dataScaleApprovalRequest = useContextSelector(
+    ScalesContext,
+    (context) => context.dataScaleApprovalRequest,
+  )
+
+  return {
+    scalesByDate,
+    updateSetScalesByDate,
+    fetchScaleByDate,
+    updateScalesByDate,
+    updateGetCurrenDate,
+    scaleSummary,
+    inputFlow,
+    fetchInputFlow,
+    fetchLoadMonthScale,
+    dataFinishScale,
+    updateFinishedScaleByMonth,
+    postScaleApprovalRequest,
+    fetchGetScaleApprovalByDate,
+    updateScaleApprovalRequest,
+    dataScaleApprovalRequest,
+  }
 }
 
 export { ScalesContext, ScalesProvider, useScales }

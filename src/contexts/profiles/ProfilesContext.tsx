@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createContext, useContextSelector } from 'use-context-selector'
 
 import { api } from '@/services/axios'
 
@@ -69,7 +70,34 @@ function ProfilesProvider({ children }: { children: React.ReactNode }) {
 }
 
 function useProfiles() {
-  const context = useContext(ProfilesContext)
-  return context
+  const cookieStoreCode = useContextSelector(
+    ProfilesContext,
+    (context) => context.cookieStoreCode,
+  )
+  const cookieUserLogin = useContextSelector(
+    ProfilesContext,
+    (context) => context.cookieUserLogin,
+  )
+  const storesByUser = useContextSelector(
+    ProfilesContext,
+    (context) => context.storesByUser,
+  )
+  const updateSetStore = useContextSelector(
+    ProfilesContext,
+    (context) => context.updateSetStore,
+  )
+  const store = useContextSelector(ProfilesContext, (context) => context.store)
+  const cookieProfile = useContextSelector(
+    ProfilesContext,
+    (context) => context.cookieProfile,
+  )
+  return {
+    cookieStoreCode,
+    cookieUserLogin,
+    storesByUser,
+    updateSetStore,
+    store,
+    cookieProfile,
+  }
 }
 export { ProfilesContext, ProfilesProvider, useProfiles }

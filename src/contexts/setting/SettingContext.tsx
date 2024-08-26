@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { createContext, useContextSelector } from 'use-context-selector'
 
 import { api } from '@/services/axios'
 
@@ -151,8 +152,49 @@ function SettingsProvider({ children }: SettingProviderProps) {
 }
 
 function useSettings() {
-  const context = useContext(SettingsContext)
-  return context
+  const updateShiftRestSchedule = useContextSelector(
+    SettingsContext,
+    (context) => context.updateShiftRestSchedule,
+  )
+  const employees = useContextSelector(
+    SettingsContext,
+    (context) => context.employees,
+  )
+  const updateSettings = useContextSelector(
+    SettingsContext,
+    (context) => context.updateSettings,
+  )
+  const updateselectDate = useContextSelector(
+    SettingsContext,
+    (context) => context.updateselectDate,
+  )
+  const selectedDate = useContextSelector(
+    SettingsContext,
+    (context) => context.selectedDate,
+  )
+  const fetchEmployes = useContextSelector(
+    SettingsContext,
+    (context) => context.fetchEmployes,
+  )
+  const monthValue = useContextSelector(
+    SettingsContext,
+    (context) => context.monthValue,
+  )
+  const updateMonthValue = useContextSelector(
+    SettingsContext,
+    (context) => context.updateMonthValue,
+  )
+
+  return {
+    updateShiftRestSchedule,
+    employees,
+    updateSettings,
+    updateselectDate,
+    selectedDate,
+    fetchEmployes,
+    monthValue,
+    updateMonthValue,
+  }
 }
 
 export { SettingsContext, SettingsProvider, useSettings }

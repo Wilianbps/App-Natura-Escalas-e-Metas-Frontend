@@ -18,8 +18,6 @@ interface IModal {
 export function Modal(props: IModal) {
   const { message, open, onHandleClose } = props
 
-  console.log(props)
-
   const handleClose = () => {
     onHandleClose()
   }

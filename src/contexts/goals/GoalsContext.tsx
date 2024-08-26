@@ -1,5 +1,6 @@
 import { format, lastDayOfMonth, parse } from 'date-fns'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createContext, useContextSelector } from 'use-context-selector'
 
 import { api } from '@/services/axios'
 
@@ -124,8 +125,36 @@ function GoalsProvider({ children }: GoalsProviderProps) {
 }
 
 function useGoals() {
-  const context = useContext(GoalsContext)
-  return context
+  const goals = useContextSelector(GoalsContext, (context) => context.goals)
+  const fetchGoalsByFortnight = useContextSelector(
+    GoalsContext,
+    (context) => context.fetchGoalsByFortnight,
+  )
+  const goalsByWeek = useContextSelector(
+    GoalsContext,
+    (context) => context.goalsByWeek,
+  )
+  const goalsByMonth = useContextSelector(
+    GoalsContext,
+    (context) => context.goalsByMonth,
+  )
+  const goalEmployeeByMonth = useContextSelector(
+    GoalsContext,
+    (context) => context.goalEmployeeByMonth,
+  )
+  const rankingGoalsLastTwelveMonths = useContextSelector(
+    GoalsContext,
+    (context) => context.rankingGoalsLastTwelveMonths,
+  )
+
+  return {
+    goals,
+    fetchGoalsByFortnight,
+    goalsByWeek,
+    goalsByMonth,
+    goalEmployeeByMonth,
+    rankingGoalsLastTwelveMonths,
+  }
 }
 
 export { GoalsContext, GoalsProvider, useGoals }

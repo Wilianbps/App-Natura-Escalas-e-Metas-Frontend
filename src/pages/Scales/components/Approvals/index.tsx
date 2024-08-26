@@ -21,8 +21,6 @@ export function Approvals() {
   const [isSubmittingCanceledRequest, setIsSubmittingCanceledRequest] =
     useState(false)
 
-  console.log('dataScaleApprovalRequest', dataScaleApprovalRequest)
-
   function handleUpdateApprovalRequest() {
     setIsSubmittingApprovalRequest(true)
     setTimeout(() => {

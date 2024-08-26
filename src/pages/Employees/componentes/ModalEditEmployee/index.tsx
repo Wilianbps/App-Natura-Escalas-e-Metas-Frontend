@@ -359,31 +359,6 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     }
   }, [employee?.arrayVacation])
 
-  /*   console.log('proximas ferias', dateNextVacation) */
-
-  /*   const originalDateStartVacation =
-    employee?.startVacation &&
-    format(formatOriginalDate(new Date(employee?.startVacation)), 'dd/MM/yyyy') */
-
-  /*   const originalDateStartVacation =
-    employee?.startVacation &&
-    format(formatOriginalDate(new Date(employee?.startVacation)), 'dd/MM/yyyy')
-
-  const startVacation = useMemo(() => {
-    const date: Date | null = employee?.startVacation
-      ? formatOriginalDate(new Date(employee?.startVacation))
-      : null
-
-    return date
-  }, [employee?.startVacation])
-
-  const finishVacation = useMemo(() => {
-    const date: Date | null = employee?.finishVacation
-      ? formatOriginalDate(new Date(employee?.finishVacation))
-      : null
-    return date
-  }, [employee?.finishVacation]) */
-
   const vacations = useMemo(() => {
     const datesFormated = employee?.arrayVacation
       ? employee?.arrayVacation.map((item) => ({

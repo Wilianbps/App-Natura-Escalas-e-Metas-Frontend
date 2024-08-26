@@ -37,8 +37,6 @@ export function GoalsByWeekPDF(props: GoalsSummaryProps) {
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
 
-  console.log(goalsByWeek.employeesByWeeks.length)
-
   return (
     <Document>
       {goalsByWeek.employeesByWeeks.length === 0 && (
