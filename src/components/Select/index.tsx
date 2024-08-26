@@ -8,7 +8,7 @@ import { SelectStyled } from './styles'
 
 export function SelectStores(props: SelectStoresProps) {
   const { minWidth, heightSelect, fontSize } = props
-  const { storesByUser, updateSetStore } = useProfiles()
+  const { storesByUser, updateSetStore, fetchStoresByUser } = useProfiles()
 
   const [selectedStore, setSelectedStore] = useState<string>('')
 
@@ -19,6 +19,12 @@ export function SelectStores(props: SelectStoresProps) {
       updateSetStore(initialStore.storeCode)
     }
   }, [storesByUser])
+
+  useEffect(() => {
+    if (!selectedStore) {
+      fetchStoresByUser()
+    }
+  }, [selectedStore])
 
   const handleChange = (event: SelectChangeEvent<unknown>) => {
     const selectedBranch = event.target.value as string

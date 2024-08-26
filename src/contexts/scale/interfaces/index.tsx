@@ -77,4 +77,5 @@ export interface ScalesContextType {
   inputFlow: DataType[]
   dataFinishScale: IDataFinishScale[]
   dataScaleApprovalRequest: IScaleApprovalRequest[]
+  isLoadingScale: boolean
 }

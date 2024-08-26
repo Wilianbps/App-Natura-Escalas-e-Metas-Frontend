@@ -1,3 +1,6 @@
+import { Box, LinearProgress } from '@mui/material'
+
+import { TextInfo } from '@/components/TextInfo'
 import { useGoals } from '@/contexts/goals/GoalsContext'
 import { useProfiles } from '@/contexts/profiles/ProfilesContext'
 import { formatName } from '@/libs/formatName'
@@ -18,7 +21,12 @@ import {
 
 export function Dashboard() {
   const { cookieUserLogin } = useProfiles()
-  const { goalsByMonth } = useGoals()
+  const {
+    goalsByMonth,
+    isLoadingGoalEmployeeByMonth,
+    isLoadingGoalsLastTwelveMonths,
+    isLoadingGoalsByMonth,
+  } = useGoals()
 
   return (
     <Container>
@@ -31,29 +39,68 @@ export function Dashboard() {
           </InfoText>
 
           <MonthlyGoalChart>
-            <header>Meta mensal - loja</header>
-            <SliderSizes />
-            {goalsByMonth.length === 0 && <footer>R$000.000,00</footer>}
-            {goalsByMonth.length !== 0 && (
-              <footer>{formatNumber(goalsByMonth[0]?.goalValue)}</footer>
+            {isLoadingGoalsByMonth && (
+              <>
+                <TextInfo text="Carregando gráfico Meta mensal - loja..." />
+                <Box sx={{ width: '100%', marginTop: '10px' }}>
+                  <LinearProgress />
+                </Box>
+              </>
+            )}
+
+            {!isLoadingGoalsByMonth && (
+              <>
+                <header>Meta mensal - loja</header>
+                <SliderSizes />
+                {goalsByMonth.length === 0 && <footer>R$000.000,00</footer>}
+                {goalsByMonth.length !== 0 && (
+                  <footer>{formatNumber(goalsByMonth[0]?.goalValue)}</footer>
+                )}
+              </>
             )}
           </MonthlyGoalChart>
         </ContentInfoTextAndMonthlyGoal>
       </ContainerGoals>
+
       <ContainerChartGoalEmployees>
-        <header>Meta de Colaboladores por Mês</header>
-        <section>
-          <GoalEmployeesChart />
-        </section>
+        {isLoadingGoalEmployeeByMonth && (
+          <>
+            <TextInfo text="Carregando gráfico Meta de Colaboladores por Mês..." />
+            <Box sx={{ width: '100%', marginTop: '10px' }}>
+              <LinearProgress />
+            </Box>
+          </>
+        )}
+
+        {!isLoadingGoalEmployeeByMonth && (
+          <>
+            <header>Meta de Colaboladores por Mês</header>
+            <section>
+              <GoalEmployeesChart />
+            </section>
+          </>
+        )}
       </ContainerChartGoalEmployees>
       <ContainerChartAverageSalesMonth>
-        <header>Ranking de Vendas Mês</header>
+        {isLoadingGoalsLastTwelveMonths && (
+          <>
+            <TextInfo text="Carregando gráfico Ranking de Vendas Mês..." />
+            <Box sx={{ width: '100%', marginTop: '10px' }}>
+              <LinearProgress />
+            </Box>
+          </>
+        )}
 
-        <section>
-          <AverageSalesMonthChart />
-        </section>
+        {!isLoadingGoalsLastTwelveMonths && (
+          <>
+            <header>Ranking de Vendas Mês</header>
+
+            <section>
+              <AverageSalesMonthChart />
+            </section>
+          </>
+        )}
       </ContainerChartAverageSalesMonth>
-
       {/*  <ContainerChartAverageSalesDay>
         <header>Média de Vendas por Dia</header>
         <section>

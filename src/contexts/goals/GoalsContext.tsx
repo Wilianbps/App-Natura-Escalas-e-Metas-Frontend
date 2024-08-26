@@ -33,18 +33,31 @@ function GoalsProvider({ children }: GoalsProviderProps) {
   const [rankingGoalsLastTwelveMonths, setRankingGoalsLastTwelveMonths] =
     useState<IRankingGoalsLastTwelveMonths[]>([])
 
+  const [isLoadingGoalsLastTwelveMonths, setIsLoadingGoalsLastTwelveMonths] =
+    useState(false)
+
+  const [isLoadingGoalEmployeeByMonth, setIsLoadingGoalEmployeeByMonth] =
+    useState(false)
+
+  const [isLoadingGoalsByMonth, setIsLoadingGoalsByMonth] = useState(false)
+
+  const [isLoadingGoalsByFortnight, setIsLoadingGoalsByFortnight] =
+    useState(false)
+
   const { monthValue } = useSettings()
 
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
 
   async function fetchGoalsByFortnight() {
+    setIsLoadingGoalsByFortnight(true)
     await api
       .get(
         `goals/get-goals-by-fortnight?storeCode=${store}&month=${month}&year=${year}`,
       )
       .then((response) => {
         setGoals(response.data)
+        setIsLoadingGoalsByFortnight(false)
       })
   }
 
@@ -59,6 +72,7 @@ function GoalsProvider({ children }: GoalsProviderProps) {
   }
 
   async function fetchGoalsByMonth() {
+    setIsLoadingGoalsByMonth(true)
     const initialDate = parse(`01/${month}/${year}`, 'dd/MM/yyyy', new Date())
     const lastDate = lastDayOfMonth(initialDate)
     const formattedInitialDate = format(initialDate, 'yyyyMMdd')
@@ -70,20 +84,24 @@ function GoalsProvider({ children }: GoalsProviderProps) {
       )
       .then((response) => {
         setGoalsByMonth(response.data)
+        setIsLoadingGoalsByMonth(false)
       })
   }
 
   async function fetchGoalEmployeeByMonth() {
+    setIsLoadingGoalEmployeeByMonth(true)
     await api
       .get(
         `goals/get-goals-employees-by-month?storeCode=${store}&month=${month}&year=${year}`,
       )
       .then((response) => {
         setGoalEmployeeByMonth(response.data)
+        setIsLoadingGoalEmployeeByMonth(false)
       })
   }
 
   async function fetchRankingGoalsLastTwelveMonths() {
+    setIsLoadingGoalsLastTwelveMonths(true)
     const initialDate = parse(`01/${month}/${year}`, 'dd/MM/yyyy', new Date())
     const lastDate = lastDayOfMonth(initialDate)
     const formattedInitialDate = format(initialDate, 'yyyyMMdd')
@@ -95,6 +113,7 @@ function GoalsProvider({ children }: GoalsProviderProps) {
       )
       .then((response) => {
         setRankingGoalsLastTwelveMonths(response.data)
+        setIsLoadingGoalsLastTwelveMonths(false)
       })
   }
 
@@ -117,6 +136,10 @@ function GoalsProvider({ children }: GoalsProviderProps) {
         goalsByMonth,
         goalEmployeeByMonth,
         rankingGoalsLastTwelveMonths,
+        isLoadingGoalsLastTwelveMonths,
+        isLoadingGoalEmployeeByMonth,
+        isLoadingGoalsByMonth,
+        isLoadingGoalsByFortnight,
       }}
     >
       {children}
@@ -147,6 +170,26 @@ function useGoals() {
     (context) => context.rankingGoalsLastTwelveMonths,
   )
 
+  const isLoadingGoalsLastTwelveMonths = useContextSelector(
+    GoalsContext,
+    (context) => context.isLoadingGoalsLastTwelveMonths,
+  )
+
+  const isLoadingGoalEmployeeByMonth = useContextSelector(
+    GoalsContext,
+    (context) => context.isLoadingGoalEmployeeByMonth,
+  )
+
+  const isLoadingGoalsByMonth = useContextSelector(
+    GoalsContext,
+    (context) => context.isLoadingGoalsByMonth,
+  )
+
+  const isLoadingGoalsByFortnight = useContextSelector(
+    GoalsContext,
+    (context) => context.isLoadingGoalsByFortnight,
+  )
+
   return {
     goals,
     fetchGoalsByFortnight,
@@ -154,6 +197,10 @@ function useGoals() {
     goalsByMonth,
     goalEmployeeByMonth,
     rankingGoalsLastTwelveMonths,
+    isLoadingGoalsLastTwelveMonths,
+    isLoadingGoalEmployeeByMonth,
+    isLoadingGoalsByMonth,
+    isLoadingGoalsByFortnight,
   }
 }
 

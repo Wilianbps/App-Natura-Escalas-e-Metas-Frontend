@@ -1,6 +1,7 @@
 import TabContext from '@mui/lab/TabContext'
 import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
+import { LinearProgress } from '@mui/material'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
 import { isAfter, setDate, startOfMonth } from 'date-fns'
@@ -25,6 +26,7 @@ export function ScalePage() {
     fetchLoadMonthScale,
     dataFinishScale,
     dataScaleApprovalRequest,
+    isLoadingScale,
   } = useScales()
   const [value, setValue] = useState('setting')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -66,7 +68,16 @@ export function ScalePage() {
   return (
     <Container>
       <header>
-        <h1>Escalas</h1>
+        {isLoadingScale ? (
+          <>
+            <TextInfo text="Carregando escala..." />
+            <Box sx={{ width: '100%', marginTop: '10px' }}>
+              <LinearProgress />
+            </Box>
+          </>
+        ) : (
+          <h1>Escalas</h1>
+        )}
       </header>
 
       {/*    dataScaleApprovalRequest.length === 0  - significa que a escala ainda nao carregou */}

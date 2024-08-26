@@ -30,6 +30,8 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   const [dataScaleApprovalRequest, setDataScaleApprovalRequest] = useState<
     IScaleApprovalRequest[]
   >([])
+  const [isLoadingScale, setIsLoadingScale] = useState(false)
+
   const [getCurrentDate, setGetCurrentDate] = useState('')
 
   const month = monthValue.split('-')[1]
@@ -41,11 +43,16 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
 
   async function fetchScaleByDate(date: string) {
     if (date) {
+      setIsLoadingScale(true)
       const dateFormatted = format(date, 'yyyy-MM-dd')
-      const response = await api.get(
-        `scales/get-scale-by-date?date=${dateFormatted}&storeCode=${store}`,
-      )
-      setScalesByDate(response.data.result)
+      await api
+        .get(
+          `scales/get-scale-by-date?date=${dateFormatted}&storeCode=${store}`,
+        )
+        .then((response) => {
+          setScalesByDate(response.data.result)
+          setIsLoadingScale(false)
+        })
     }
   }
 
@@ -55,7 +62,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
 
   async function fetchScaleSummary() {
     const response = await api.get(
-      `scales/get-scale-summary?month=${month}&year=${year}`,
+      `scales/get-scale-summary?month=${month}&year=${year}&storeCode=${store}`,
     )
 
     setScaleSummary(response.data)
@@ -134,12 +141,12 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         .get(
           `scales/load-scale-of-month?storeCode=${store}&loginUser=${cookieUserLogin}&date=${date}&currentDate=${currentDate}&finished=${0}`,
         )
-        .then(() => {
+        .then(async () => {
           const dateFormatted = `${year}-${month}-01`
-          fetchFinishedScaleByMonth()
-          fetchScaleByDate(dateFormatted)
-          fetchScaleSummary()
-          fetchEmployes()
+          await fetchFinishedScaleByMonth()
+          await fetchScaleByDate(dateFormatted)
+          await fetchScaleSummary()
+          await fetchEmployes()
           toast.success('Escala carregada com sucesso', {
             style: { height: '50px', padding: '15px' },
           })
@@ -253,6 +260,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         fetchGetScaleApprovalByDate,
         updateScaleApprovalRequest,
         dataScaleApprovalRequest,
+        isLoadingScale,
       }}
     >
       {children}
@@ -321,6 +329,10 @@ function useScales() {
     ScalesContext,
     (context) => context.dataScaleApprovalRequest,
   )
+  const isLoadingScale = useContextSelector(
+    ScalesContext,
+    (context) => context.isLoadingScale,
+  )
 
   return {
     scalesByDate,
@@ -338,6 +350,7 @@ function useScales() {
     fetchGetScaleApprovalByDate,
     updateScaleApprovalRequest,
     dataScaleApprovalRequest,
+    isLoadingScale,
   }
 }
 

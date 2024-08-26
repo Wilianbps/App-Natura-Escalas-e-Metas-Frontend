@@ -60,6 +60,7 @@ function ProfilesProvider({ children }: { children: React.ReactNode }) {
         cookieUserLogin,
         storesByUser,
         updateSetStore,
+        fetchStoresByUser,
         store,
         cookieProfile,
       }}
@@ -91,11 +92,17 @@ function useProfiles() {
     ProfilesContext,
     (context) => context.cookieProfile,
   )
+
+  const fetchStoresByUser = useContextSelector(
+    ProfilesContext,
+    (context) => context.fetchStoresByUser,
+  )
   return {
     cookieStoreCode,
     cookieUserLogin,
     storesByUser,
     updateSetStore,
+    fetchStoresByUser,
     store,
     cookieProfile,
   }

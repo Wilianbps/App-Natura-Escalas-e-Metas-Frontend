@@ -63,4 +63,8 @@ export interface GoalsContextType {
   goalsByMonth: IGoalsByMonth[]
   goalEmployeeByMonth: IGoalEmployeeByMonth[]
   rankingGoalsLastTwelveMonths: IRankingGoalsLastTwelveMonths[]
+  isLoadingGoalsLastTwelveMonths: boolean
+  isLoadingGoalEmployeeByMonth: boolean
+  isLoadingGoalsByMonth: boolean
+  isLoadingGoalsByFortnight: boolean
 }

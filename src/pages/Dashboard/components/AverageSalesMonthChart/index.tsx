@@ -10,6 +10,13 @@ import {
 
 import { useGoals } from '@/contexts/goals/GoalsContext'
 
+function formatCurrency(value: number) {
+  return value.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  })
+}
+
 export function AverageSalesMonthChart() {
   const { rankingGoalsLastTwelveMonths } = useGoals()
   return (
@@ -29,7 +36,11 @@ export function AverageSalesMonthChart() {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
         <YAxis />
-        <Tooltip />
+        <Tooltip
+          contentStyle={{ backgroundColor: '#fff', border: '1px solid #ccc' }}
+          itemStyle={{ color: 'black' }}
+          formatter={(value: number) => formatCurrency(value)}
+        />
         <Area
           type="monotone"
           dataKey="hiperMeta"

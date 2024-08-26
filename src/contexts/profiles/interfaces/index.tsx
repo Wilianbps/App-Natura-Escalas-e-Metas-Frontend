@@ -11,6 +11,7 @@ export interface ProfilesContextType {
   cookieUserLogin: string
   storesByUser: IStoresByUser[]
   updateSetStore: (storeCode: string) => void
+  fetchStoresByUser: () => void
   store: string
   cookieProfile: string
 }

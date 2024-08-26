@@ -27,6 +27,7 @@ export function PaginationPerDay() {
     updateGetCurrenDate,
     dataFinishScale,
     updateFinishedScaleByMonth,
+    isLoadingScale,
   } = useScales()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [modalMessage, setModalMessage] = useState<Array<string>>([])
@@ -128,7 +129,10 @@ export function PaginationPerDay() {
         <button
           onClick={goBackDay}
           disabled={
-            isBackDisabled || currentDate.getTime() === initialDate.getTime()
+            isBackDisabled ||
+            isAdvanceDisabled ||
+            isLoadingScale ||
+            currentDate.getTime() === initialDate.getTime()
           }
         >
           <CgChevronLeft />
@@ -138,7 +142,10 @@ export function PaginationPerDay() {
         <button
           onClick={advanceDay}
           disabled={
-            isAdvanceDisabled || currentDate.getTime() === lastDate.getTime()
+            isAdvanceDisabled ||
+            isBackDisabled ||
+            isLoadingScale ||
+            currentDate.getTime() === lastDate.getTime()
           }
         >
           <CgChevronRight />

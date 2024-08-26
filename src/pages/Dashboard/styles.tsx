@@ -50,6 +50,7 @@ export const InfoText = styled.section`
 
 export const MonthlyGoalChart = styled(Card)`
   width: 100%;
+  height: 163px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -57,6 +58,7 @@ export const MonthlyGoalChart = styled(Card)`
 `
 
 export const ContainerChartGoalEmployees = styled(Card)`
+  height: 342px;
   section {
     margin-top: 2rem;
   }
@@ -79,7 +81,6 @@ export const ContainerChartAverageSalesHour = styled(Card)`
 
 export const ContainerChartAverageSalesDay = styled(Card)`
   width: 100%;
-
   section {
     margin-top: 2rem;
   }
@@ -87,7 +88,7 @@ export const ContainerChartAverageSalesDay = styled(Card)`
 
 export const ContainerChartAverageSalesMonth = styled(Card)`
   width: 100%;
-  margin-top: 1rem;
+  height: 342px;
   section {
     margin-top: 2rem;
   }
