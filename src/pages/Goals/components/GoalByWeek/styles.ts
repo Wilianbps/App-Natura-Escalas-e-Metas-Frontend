@@ -20,6 +20,20 @@ export const ContainerTable = styled.main`
         }
 
         &:first-of-type {
+          text-align: left;
+          height: 3rem;
+          padding: 0 2.5rem;
+          border: none;
+        }
+
+        &:nth-of-type(2) {
+          text-align: left;
+          height: 3rem;
+          padding: 0 2.5rem;
+          border: 1px solid #e0e0e0;
+        }
+
+        &:first-of-type {
           color: ${(props) => props.theme.orangeDark};
         }
 
@@ -45,6 +59,7 @@ export const ContainerTable = styled.main`
           width: 220px !important;
           height: 3rem;
           padding: 0 2.5rem;
+          border: 1px solid #e0e0e0;
 
           &:first-of-type {
             width: 220px;
@@ -68,6 +83,7 @@ export const ContainerTable = styled.main`
         td {
           height: 3rem;
           padding: 0 2.5rem;
+          border: 1px solid #e0e0e0;
         }
       }
     }

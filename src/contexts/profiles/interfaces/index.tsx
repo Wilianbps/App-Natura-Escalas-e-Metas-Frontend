@@ -14,4 +14,9 @@ export interface ProfilesContextType {
   fetchStoresByUser: () => void
   store: string
   cookieProfile: string
+  pathBeepInput: { path: string }
+}
+
+export interface IPathBeepInput {
+  path: string
 }

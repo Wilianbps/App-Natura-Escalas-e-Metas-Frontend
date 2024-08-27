@@ -218,37 +218,45 @@ export function Scale() {
     const errors: string[] = []
 
     scales.forEach((scale) => {
-      const filledShifts = scale.options.filter(
-        (option) => option.type !== '',
-      ).length
+      if (scale.status) {
+        const filledShifts = scale.options.filter(
+          (option) => option.type !== '',
+        ).length
 
-      const mealBreaks = scale.options.filter(
-        (option) => option.type === 'R',
-      ).length
+        const mealBreaks = scale.options.filter(
+          (option) => option.type === 'R',
+        ).length
 
-      const consecutiveMealBreaks = scale.options.some(
-        (option, index, array) =>
-          option.type === 'R' &&
-          array[index + 1] &&
-          array[index + 1].type === 'R',
-      )
-
-      if (filledShifts < 15) {
-        errors.push(
-          `Funcionário/a ${formatName(scale.name)} não tem 7,5h de trabalho preenchidas.`,
+        const consecutiveMealBreaks = scale.options.some(
+          (option, index, array) =>
+            option.type === 'R' &&
+            array[index + 1] &&
+            array[index + 1].type === 'R',
         )
-      }
 
-      if (mealBreaks > 2) {
-        errors.push(
-          `Funcionário/a ${formatName(scale.name)} tem mais de 2 períodos de refeição.`,
-        )
-      }
+        if (filledShifts < 15) {
+          errors.push(
+            `Funcionário/a ${formatName(scale.name)} não tem 7,5h de trabalho preenchidas.`,
+          )
+        }
 
-      if (!consecutiveMealBreaks && mealBreaks > 0) {
-        errors.push(
-          `Funcionário/a ${formatName(scale.name)} não tem 2 períodos consecutivos de refeição.`,
-        )
+        if (mealBreaks > 2) {
+          errors.push(
+            `Funcionário/a ${formatName(scale.name)} tem mais de 2 períodos de refeição.`,
+          )
+        }
+
+        if (mealBreaks < 2) {
+          errors.push(
+            `Funcionário/a ${formatName(scale.name)} tem menos de 2 períodos de refeição.`,
+          )
+        }
+
+        if (!consecutiveMealBreaks && mealBreaks > 0) {
+          errors.push(
+            `Funcionário/a ${formatName(scale.name)} não tem 2 períodos consecutivos de refeição.`,
+          )
+        }
       }
     })
 
@@ -257,17 +265,6 @@ export function Scale() {
 
   function handleUpdateScale() {
     setIsSubmitting(true)
-
-    const validationErrors = validateEmployeeShifts(scalesByDate)
-
-    if (validationErrors.length > 0) {
-      setIsModalOpenValidateEmployeeShift(true)
-      setModalMessageValidateEmployeeShift(validationErrors)
-      setIsSubmitting(false)
-      return
-    }
-
-    const nameEmployees: Array<string> = []
 
     const updatedStatus = [...scalesByDate]
 
@@ -279,6 +276,16 @@ export function Scale() {
         item.status = false
       }
     })
+    const validationErrors = validateEmployeeShifts(scalesByDate)
+
+    if (validationErrors.length > 0) {
+      setIsModalOpenValidateEmployeeShift(true)
+      setModalMessageValidateEmployeeShift(validationErrors)
+      setIsSubmitting(false)
+      return
+    }
+
+    const nameEmployees: Array<string> = []
 
     const activeDaysGreaterSeven = updatedStatus.map((item) => {
       let isTrue = false
@@ -337,8 +344,8 @@ export function Scale() {
                 <th>Status</th>
                 {times.map((time) => (
                   <th key={time[0]} className="shifts">
-                    <p>{time[0]}</p>
-                    <p>{time[1]}</p>
+                    <div>{time[0]}</div>
+                    <div>{time[1]}</div>
                   </th>
                 ))}
               </tr>
@@ -363,7 +370,7 @@ export function Scale() {
                       >
                         <select
                           disabled={!scale.status}
-                          value={option.type}
+                          value={option.type || ''}
                           onChange={(event) =>
                             handleChangeToDoTime(event, index, option.id)
                           }

@@ -98,16 +98,16 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
     })
     await api
       .put(`scales/update-scale-by-date`, { data })
-      .then((response) => {
+      .then(async (response) => {
         if (response.status === 200) {
           if (response.data.message) {
             toast.success(response.data.message, {
               style: { height: '50px', padding: '15px' },
             })
           }
-          fetchScaleByDate(getCurrentDate)
-          fetchScaleSummary()
-          fetchEmployes()
+          await fetchScaleByDate(getCurrentDate)
+          await fetchScaleSummary()
+          await fetchEmployes()
           return false
         }
       })
@@ -236,10 +236,12 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
-    fetchGetScaleApprovalByDate()
-    fetchScaleSummary()
-    fetchFinishedScaleByMonth()
-    fetchScaleByDate(getCurrentDate)
+    if (store) {
+      fetchGetScaleApprovalByDate()
+      fetchScaleSummary()
+      fetchFinishedScaleByMonth()
+      fetchScaleByDate(getCurrentDate)
+    }
   }, [monthValue, store])
 
   return (

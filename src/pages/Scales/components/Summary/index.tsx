@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material'
 import { pdf } from '@react-pdf/renderer'
-import { useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { CgPrinter } from 'react-icons/cg'
 
 import { TextInfo } from '@/components/TextInfo'
@@ -26,10 +26,6 @@ export function Summary() {
   const infoScalePeriod = useMemo(() => {
     return scaleSummary.some((item) => item.length > 0)
   }, [scaleSummary])
-
-  /*   const month = selectedDate && selectedDate.getMonth() + 1
-  const year = selectedDate?.getFullYear()
- */
 
   const month = monthValue && monthValue.split('-')[1]
 
@@ -118,7 +114,7 @@ export function Summary() {
                     {week[page] && (
                       <>
                         {days?.map((dayName, index) => (
-                          <th key={index}>
+                          <th key={`day-${index}`}>
                             <p>{dayName}</p>
                             <p>{week[page][index].day}</p>
                           </th>
@@ -128,21 +124,19 @@ export function Summary() {
                   </tr>
                 </thead>
                 <tbody>
-                  {scaleSummary[page]?.map((collaborator) => (
-                    <>
+                  {scaleSummary[page]?.map((collaborator, collIndex) => (
+                    <React.Fragment key={`coll-${collIndex}`}>
                       <TRShiftMorning>
                         <td rowSpan={2} className="td-name">
                           {formatName(collaborator.name)}
                         </td>
-                        {/*     <td rowSpan={2}>27</td>
-                  <td rowSpan={2}></td> */}
 
                         {Array.from({ length: 7 }).map((_, index) => {
                           const day = collaborator.days.find(
                             (day) => day.dayOfWeek === index + 1,
                           )
                           return (
-                            <td key={index} width={140}>
+                            <td key={`shift-${collIndex}-${index}`} width={140}>
                               {day?.status === 1
                                 ? `${day.startTime} - ${day.endTime}`
                                 : ''}
@@ -157,7 +151,7 @@ export function Summary() {
                           )
                           return (
                             <TDShift
-                              key={index}
+                              key={`td-shift-${collIndex}-${index}`}
                               value={
                                 day?.status === 1
                                   ? 'T'
@@ -176,7 +170,7 @@ export function Summary() {
                           )
                         })}
                       </TRShiftMorning>
-                    </>
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>

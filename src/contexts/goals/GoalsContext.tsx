@@ -20,7 +20,7 @@ const GoalsContext = createContext({} as GoalsContextType)
 
 function GoalsProvider({ children }: GoalsProviderProps) {
   const { store } = useProfiles()
-  const { fetchEmployes } = useSettings()
+  const { employees } = useSettings()
   const [goals, setGoals] = useState<Array<IGoals[]>>([])
   const [goalsByWeek, setGoalsByWeek] = useState<IGoalsByWeek>(
     {} as IGoalsByWeek,
@@ -125,7 +125,7 @@ function GoalsProvider({ children }: GoalsProviderProps) {
       fetchGoalEmployeeByMonth()
       fetchRankingGoalsLastTwelveMonths()
     }
-  }, [monthValue, store, fetchEmployes])
+  }, [monthValue, store, employees])
 
   return (
     <GoalsContext.Provider

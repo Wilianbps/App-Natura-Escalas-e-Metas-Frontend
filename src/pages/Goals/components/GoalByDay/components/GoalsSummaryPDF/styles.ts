@@ -59,6 +59,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     backgroundColor: '#FFE9C4',
     width: 68,
+    border: '1px solid #e0e0e0',
   },
 
   tableColHeaderContainer: {
@@ -73,6 +74,7 @@ export const styles = StyleSheet.create({
     color: '#0f0f0f',
     backgroundColor: '#fff3e0',
     padding: 3,
+    border: '1px solid #e0e0e0',
   },
 
   tableColBodyContainer: {
@@ -85,7 +87,8 @@ export const styles = StyleSheet.create({
     fontSize: 6.5,
     color: '#0f0f0f',
     backgroundColor: '#fff',
-    padding: 5,
+    padding: 1,
+    border: '1px solid #e0e0e0',
   },
 
   tableColBodyContainerOdd: {
@@ -97,8 +100,9 @@ export const styles = StyleSheet.create({
     height: 38,
     fontSize: 6.5,
     color: '#0f0f0f',
-    backgroundColor: '#faf9f8',
-    padding: 5,
+    backgroundColor: '#fff',
+    padding: 1,
+    border: '1px solid #e0e0e0',
   },
 
   tableColLeftBody: {
@@ -112,6 +116,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     backgroundColor: '#fff',
     width: 68,
+    border: '1px solid #e0e0e0',
   },
 
   tableColBodyBlue: {
@@ -123,8 +128,9 @@ export const styles = StyleSheet.create({
     color: '#0f0f0f',
     fontSize: 6.5,
     fontWeight: 'bold',
-    backgroundColor: '#daedff',
+    backgroundColor: '#fff',
     width: 68,
+    border: '1px solid #e0e0e0',
   },
 
   tableColBodyContainerBlue: {
@@ -137,7 +143,8 @@ export const styles = StyleSheet.create({
     fontSize: 6.5,
     color: '#0f0f0f',
     backgroundColor: '#daedff',
-    padding: 5,
+    padding: 1,
+    border: '1px solid #e0e0e0',
   },
 
   tableColLeftBodyOdd: {
@@ -149,8 +156,9 @@ export const styles = StyleSheet.create({
     color: '#0f0f0f',
     fontSize: 6.5,
     fontWeight: 'bold',
-    backgroundColor: '#faf9f8',
+    backgroundColor: '#fff',
     width: 68,
+    border: '1px solid #e0e0e0',
   },
 
   tableColLeftFooter: {
@@ -164,6 +172,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     backgroundColor: '#fff',
     width: 68,
+    border: '1px solid #e0e0e0',
   },
 
   tableColFooterContainer: {

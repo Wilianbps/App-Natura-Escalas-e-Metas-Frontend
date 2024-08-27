@@ -13,12 +13,22 @@ export const ContainerTable = styled.main`
 
     thead {
       tr {
-        th {
+        &:first-of-type {
+          th {
+            text-align: left;
+            height: 3rem;
+            padding: 0 0.5rem;
+            text-align: center;
+            border: none;
+          }
+        }
+
+        &:nth-of-type(2) {
           text-align: left;
           height: 3rem;
-          /*         min-width: 50px; */
           padding: 0 0.5rem;
           text-align: center;
+          border: 1px solid #e0e0e0;
         }
 
         &:first-of-type {
@@ -48,16 +58,7 @@ export const ContainerTable = styled.main`
           height: 3rem;
           padding: 0 0.2rem;
           text-align: center;
-
-          &:first-of-type {
-            width: 220px;
-          }
-
-          &:nth-of-type(2) {
-            font-weight: bold;
-          }
-          &:nth-of-type(-n + 2) {
-          }
+          border: 1px solid #e0e0e0;
         }
       }
     }
@@ -72,6 +73,7 @@ export const ContainerTable = styled.main`
           height: 3rem;
           padding: 0 0.2rem;
           text-align: center;
+          border: 1px solid #e0e0e0;
         }
       }
     }
@@ -97,9 +99,16 @@ export const Footer = styled.footer`
 
     thead {
       tr {
-        th {
+        &:first-of-type {
           height: 3rem;
           padding: 0 0.5rem;
+          border: none;
+        }
+
+        &:nth-of-type(2) {
+          height: 3rem;
+          padding: 0 0.5rem;
+          border: 1px solid #e0e0e0;
         }
 
         &:first-of-type {
@@ -127,6 +136,7 @@ export const Footer = styled.footer`
           height: 3rem;
           padding: 0 0.2rem;
           text-align: center;
+          border: 1px solid #e0e0e0;
 
           &:first-of-type {
             width: 220px;

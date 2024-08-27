@@ -7,6 +7,8 @@ import {
 } from 'react-icons/cg'
 import { useLocation } from 'react-router-dom'
 
+import { useProfiles } from '@/contexts/profiles/ProfilesContext'
+
 import { NavMenu, StyledLink } from './styles'
 
 interface MainNavigationProps {
@@ -14,8 +16,13 @@ interface MainNavigationProps {
 }
 
 export function MainNavigation(props: MainNavigationProps) {
+  const { pathBeepInput } = useProfiles()
   const { pathname } = useLocation()
   const { isSidebarOpen } = props
+
+  function handleRedirectToBeepInput() {
+    window.location.href = pathBeepInput.path
+  }
 
   return (
     <NavMenu>
@@ -47,16 +54,10 @@ export function MainNavigation(props: MainNavigationProps) {
           </div>
           {!isSidebarOpen && <span>Configurações</span>}
         </StyledLink>
-        {/*  <StyledLink to="/simulador" data-current={pathname === '/simulador'}>
-          <div className="background-icon">
-            <CgOptions />
-          </div>
-          {!isSidebarOpen && <span>Simulador</span>}
-        </StyledLink> */}
       </section>
 
       <footer>
-        <StyledLink to="#">
+        <StyledLink to="#" onClick={handleRedirectToBeepInput}>
           <div className="background-icon">
             <CgCornerDownLeft />
           </div>

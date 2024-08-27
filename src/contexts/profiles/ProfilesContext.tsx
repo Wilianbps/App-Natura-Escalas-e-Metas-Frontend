@@ -4,7 +4,11 @@ import { createContext, useContextSelector } from 'use-context-selector'
 
 import { api } from '@/services/axios'
 
-import { IStoresByUser, ProfilesContextType } from './interfaces'
+import {
+  IPathBeepInput,
+  IStoresByUser,
+  ProfilesContextType,
+} from './interfaces'
 
 const ProfilesContext = createContext({} as ProfilesContextType)
 
@@ -15,20 +19,28 @@ function ProfilesProvider({ children }: { children: React.ReactNode }) {
 
   const [storesByUser, setStoresByUser] = useState<IStoresByUser[]>([])
   const [store, setStore] = useState<string>('')
+  const [isCookiesLoaded, setIsCookiesLoaded] = useState(false) // Novo estado
+  const [pathBeepInput, setPathBeepInput] = useState({} as IPathBeepInput)
 
   function updateSetStore(storeCode: string) {
     setStore(storeCode)
   }
 
   async function fetchStoresByUser() {
-    const response = await api.get(
-      `profiles/get-stores-by-user?user=${cookieUserLogin}`,
-    )
-
-    setStoresByUser(response.data)
+    if (!cookieUserLogin) {
+      return // Não faz a chamada se cookieUserLogin não estiver carregado
+    }
+    try {
+      const response = await api.get(
+        `profiles/get-stores-by-user?user=${cookieUserLogin}`,
+      )
+      setStoresByUser(response.data)
+    } catch (error) {
+      console.error('Error fetching stores by user:', error)
+    }
   }
 
-  useEffect(() => {
+  function updateCookies() {
     const cookieCode = Cookies.get('codigo_loja')
     setCokkieStoreCode(cookieCode || '')
 
@@ -45,13 +57,25 @@ function ProfilesProvider({ children }: { children: React.ReactNode }) {
         setCokkieProfile('')
       }
     }
+
+    setIsCookiesLoaded(true) // Atualiza o estado quando os cookies são carregados
+  }
+
+  async function fetchPathBeepInput() {
+    const response = await api.get(`profiles/get-path-beep-input`)
+    setPathBeepInput(response.data[0])
+  }
+
+  useEffect(() => {
+    updateCookies()
+    fetchPathBeepInput()
   }, [])
 
   useEffect(() => {
-    if (cookieUserLogin) {
+    if (isCookiesLoaded && cookieUserLogin) {
       fetchStoresByUser()
     }
-  }, [cookieUserLogin])
+  }, [isCookiesLoaded, cookieUserLogin])
 
   return (
     <ProfilesContext.Provider
@@ -63,6 +87,7 @@ function ProfilesProvider({ children }: { children: React.ReactNode }) {
         fetchStoresByUser,
         store,
         cookieProfile,
+        pathBeepInput,
       }}
     >
       {children}
@@ -97,6 +122,12 @@ function useProfiles() {
     ProfilesContext,
     (context) => context.fetchStoresByUser,
   )
+
+  const pathBeepInput = useContextSelector(
+    ProfilesContext,
+    (context) => context.pathBeepInput,
+  )
+
   return {
     cookieStoreCode,
     cookieUserLogin,
@@ -105,6 +136,8 @@ function useProfiles() {
     fetchStoresByUser,
     store,
     cookieProfile,
+    pathBeepInput,
   }
 }
+
 export { ProfilesContext, ProfilesProvider, useProfiles }

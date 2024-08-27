@@ -6,6 +6,7 @@ import { CgArrowRight, CgClose } from 'react-icons/cg'
 import { TextInfo } from '@/components/TextInfo'
 import { useScales } from '@/contexts/scale/ScalesContext'
 
+import { ModalCancelScale } from '../ModalScaleApprovalRequest copy'
 import {
   ButtonApproval,
   ButtonCanceled,
@@ -18,8 +19,8 @@ export function Approvals() {
   const { dataScaleApprovalRequest, updateScaleApprovalRequest } = useScales()
   const [isSubmittingApprovalRequest, setIsSubmittingApprovalRequest] =
     useState(false)
-  const [isSubmittingCanceledRequest, setIsSubmittingCanceledRequest] =
-    useState(false)
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   function handleUpdateApprovalRequest() {
     setIsSubmittingApprovalRequest(true)
@@ -29,12 +30,8 @@ export function Approvals() {
     }, 3000)
   }
 
-  function handleUpdateCanceledRequest() {
-    setIsSubmittingCanceledRequest(true)
-    setTimeout(() => {
-      updateScaleApprovalRequest(2)
-      setIsSubmittingCanceledRequest(false)
-    }, 3000)
+  function handleOpenModalToCancelScale() {
+    setIsModalOpen(true)
   }
 
   return (
@@ -94,15 +91,11 @@ export function Approvals() {
               </td>
               <td width={150}>
                 {dataScaleApprovalRequest[0]?.status === 0 && (
-                  <ButtonCanceled onClick={handleUpdateCanceledRequest}>
-                    {isSubmittingCanceledRequest === true ? (
-                      <CircularProgress size={15} style={{ color: 'red' }} />
-                    ) : (
-                      <>
-                        <CgClose />
-                        <span>cancelar</span>
-                      </>
-                    )}
+                  <ButtonCanceled onClick={handleOpenModalToCancelScale}>
+                    <>
+                      <CgClose />
+                      <span>cancelar</span>
+                    </>
                   </ButtonCanceled>
                 )}
 
@@ -114,6 +107,10 @@ export function Approvals() {
           ))}
         </tbody>
       </Table>
+      <ModalCancelScale
+        open={isModalOpen}
+        onHandleClose={() => setIsModalOpen(false)}
+      />
     </Container>
   )
 }

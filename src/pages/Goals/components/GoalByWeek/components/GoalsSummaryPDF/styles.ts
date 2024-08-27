@@ -59,6 +59,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     backgroundColor: '#FFE9C4',
     width: 100,
+    border: '1px solid #e0e0e0',
   },
 
   tableColHeaderContainer: {
@@ -72,6 +73,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     backgroundColor: '#fff3e0',
     padding: 5,
+    border: '1px solid #e0e0e0',
   },
 
   tableColBodyContainer: {
@@ -85,6 +87,7 @@ export const styles = StyleSheet.create({
     color: '#0f0f0f',
     backgroundColor: '#fff',
     padding: 5,
+    border: '1px solid #e0e0e0',
   },
 
   tableColBodyContainerOdd: {
@@ -98,6 +101,7 @@ export const styles = StyleSheet.create({
     color: '#0f0f0f',
     backgroundColor: '#faf9f8',
     padding: 5,
+    border: '1px solid #e0e0e0',
   },
 
   tableColLeftBody: {
@@ -112,6 +116,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: 100,
     height: 38,
+    border: '1px solid #e0e0e0',
   },
 
   tableColLeftBodyOdd: {
@@ -126,6 +131,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#faf9f8',
     width: 100,
     height: 38,
+    border: '1px solid #e0e0e0',
   },
 
   tableColLeftFooter: {

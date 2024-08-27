@@ -9,7 +9,7 @@ import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 import { formatNumber } from '@/libs/formatNumber'
 
-import { GoalsByWeekPDF } from '../GoalByDay/components/GoalsSummaryPDF copy'
+import { GoalsByWeekPDF } from './components/GoalsSummaryPDF'
 import {
   Container,
   ContainerGoalsByWeekPdf,
