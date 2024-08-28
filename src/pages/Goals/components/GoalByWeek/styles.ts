@@ -14,7 +14,7 @@ export const ContainerTable = styled.main`
     thead {
       tr {
         th {
-          text-align: left;
+          text-align: center;
           height: 3rem;
           padding: 0 2.5rem;
         }
@@ -56,6 +56,7 @@ export const ContainerTable = styled.main`
         }
 
         td {
+          text-align: center;
           width: 220px !important;
           height: 3rem;
           padding: 0 2.5rem;
@@ -81,6 +82,7 @@ export const ContainerTable = styled.main`
           background-color: #fff3e0;
         }
         td {
+          text-align: center;
           height: 3rem;
           padding: 0 2.5rem;
           border: 1px solid #e0e0e0;
