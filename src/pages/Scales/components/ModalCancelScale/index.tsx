@@ -76,8 +76,8 @@ export function ModalCancelScale(props: IModal) {
             fontWeight: 'bold',
           }}
         >
-          Caso seja reprovado, não será possível a loja criar a escala e será
-          necessário uma nova solicitação.
+          Caso a escala seja reprovada, a loja não poderá carregá-la, e será
+          necessário obter uma nova aprovação.
         </Typography>
         <Typography
           gutterBottom
