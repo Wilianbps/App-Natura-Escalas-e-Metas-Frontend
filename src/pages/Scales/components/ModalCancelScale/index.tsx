@@ -38,7 +38,7 @@ export function ModalCancelScale(props: IModal) {
       onClose={handleClose}
       aria-labelledby="customized-dialog-title"
       open={open}
-      sx={{ borderRadius: '20px' }} // Definindo o border-radius como 20px
+      sx={{ borderRadius: '20px' }}
     >
       <DialogTitle
         sx={{
@@ -70,13 +70,26 @@ export function ModalCancelScale(props: IModal) {
           gutterBottom
           sx={{
             marginTop: '20px',
-            marginBottom: '20px',
-            fontSize: '13px',
+            marginBottom: '10px',
+            fontSize: '15px',
             textAlign: 'center',
             fontWeight: 'bold',
           }}
         >
-          Deseja realmente cancelar a escala?
+          Caso seja reprovado, não será possível a loja criar a escala e será
+          necessário uma nova solicitação.
+        </Typography>
+        <Typography
+          gutterBottom
+          sx={{
+            marginTop: '10px',
+            marginBottom: '20px',
+            fontSize: '15px',
+            textAlign: 'center',
+            fontWeight: 'bold',
+          }}
+        >
+          Deseja realmente reprovar a solicitação?
         </Typography>
         <Buttons>
           <Button

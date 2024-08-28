@@ -6,7 +6,7 @@ import { CgArrowRight, CgClose } from 'react-icons/cg'
 import { TextInfo } from '@/components/TextInfo'
 import { useScales } from '@/contexts/scale/ScalesContext'
 
-import { ModalCancelScale } from '../ModalScaleApprovalRequest copy'
+import { ModalCancelScale } from '../ModalCancelScale'
 import {
   ButtonApproval,
   ButtonCanceled,
@@ -41,7 +41,7 @@ export function Approvals() {
           <tr>
             <th>descrição</th>
             <th>responsável</th>
-            <th>loja</th>
+            <th>cod. loja</th>
             <th>data solicitação</th>
             <th>data aprovação</th>
             <th>status</th>
@@ -94,7 +94,7 @@ export function Approvals() {
                   <ButtonCanceled onClick={handleOpenModalToCancelScale}>
                     <>
                       <CgClose />
-                      <span>cancelar</span>
+                      <span>reprovar</span>
                     </>
                   </ButtonCanceled>
                 )}
