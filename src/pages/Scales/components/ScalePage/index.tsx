@@ -220,7 +220,7 @@ export function Scale() {
     scales.forEach((scale) => {
       if (scale.status) {
         const filledShifts = scale.options.filter(
-          (option) => option.type !== '',
+          (option) => option.type !== '' && option.type !== null,
         ).length
 
         const mealBreaks = scale.options.filter(
@@ -237,6 +237,12 @@ export function Scale() {
         if (filledShifts < 15) {
           errors.push(
             `Funcionário/a ${formatName(scale.name)} não tem 7,5h de trabalho preenchidas.`,
+          )
+        }
+
+        if (filledShifts > 15) {
+          errors.push(
+            `Funcionário/a ${formatName(scale.name)} tem mais de 7,5h de trabalho preenchidas.`,
           )
         }
 
@@ -268,6 +274,8 @@ export function Scale() {
 
     const updatedStatus = [...scalesByDate]
 
+    const validationErrors = validateEmployeeShifts(updatedStatus)
+
     updatedStatus.forEach((item) => {
       const hasNonNullType = item.options.some(
         (option) => option.type === 'T' || option.type === 'R',
@@ -276,7 +284,6 @@ export function Scale() {
         item.status = false
       }
     })
-    const validationErrors = validateEmployeeShifts(scalesByDate)
 
     if (validationErrors.length > 0) {
       setIsModalOpenValidateEmployeeShift(true)
