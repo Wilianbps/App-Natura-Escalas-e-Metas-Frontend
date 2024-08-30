@@ -45,6 +45,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
     if (date) {
       setIsLoadingScale(true)
       const dateFormatted = format(date, 'yyyy-MM-dd')
+
       await api
         .get(
           `scales/get-scale-by-date?date=${dateFormatted}&storeCode=${store}`,

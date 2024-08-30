@@ -7,6 +7,7 @@ import {
   subDays,
 } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import { CgChevronLeft, CgChevronRight } from 'react-icons/cg'
 
@@ -42,7 +43,15 @@ export function PaginationPerDay() {
   const year = monthValue.split('-')[0]
   const initialDate = parse(`01/${month}/${year}`, 'dd/MM/yyyy', new Date())
   const lastDate = lastDayOfMonth(initialDate)
-  const [currentDate, setCurrentDate] = useState(initialDate)
+
+  const [currentDate, setCurrentDate] = useState<Date>(() => {
+    // Tentativa de recuperar a data salva do cookie
+    const savedDate = Cookies.get('currentDateScale')
+    if (savedDate) {
+      return new Date(savedDate)
+    }
+    return initialDate
+  })
 
   const [isAdvanceDisabled, setIsAdvanceDisabled] = useState(false)
   const [isBackDisabled, setIsBackDisabled] = useState(false)
@@ -81,12 +90,13 @@ export function PaginationPerDay() {
 
     if (isSameMonth(newDate, currentDate)) {
       setCurrentDate(newDate)
+      Cookies.set('currentDateScale', newDate.toISOString())
     }
 
-    // Reverte a desabilitação após 3 segundos
+    // Reverte a desabilitação após 0,5 segundos
     setTimeout(() => {
       setIsAdvanceDisabled(false)
-    }, 3000)
+    }, 500)
   }
 
   function goBackDay() {
@@ -96,12 +106,13 @@ export function PaginationPerDay() {
 
     if (isSameMonth(newDate, currentDate)) {
       setCurrentDate(newDate)
+      Cookies.set('currentDateScale', newDate.toISOString())
     }
 
-    // Reverte a desabilitação após 3 segundos
+    // Reverte a desabilitação após 0,5 segundos
     setTimeout(() => {
       setIsBackDisabled(false)
-    }, 3000)
+    }, 500)
   }
 
   function handleUpdateFinishedScale() {
@@ -109,19 +120,31 @@ export function PaginationPerDay() {
     setTimeout(() => {
       updateFinishedScaleByMonth()
       setIsSubmitting(false)
-    }, 3000)
+    }, 500)
   }
-
-  useEffect(() => {
-    const newDate = parse(`01/${month}/${year}`, 'dd/MM/yyyy', new Date())
-    setCurrentDate(newDate)
-  }, [month, year])
 
   useEffect(() => {
     updateGetCurrenDate(currentDate.toString())
     fetchScaleByDate(currentDate.toString())
     fetchInputFlow(currentDate.toString())
   }, [currentDate])
+
+  // Atualiza a data inicial quando month ou year mudarem e limpa o cookie
+  useEffect(() => {
+    const newInitialDate = parse(
+      `01/${month}/${year}`,
+      'dd/MM/yyyy',
+      new Date(),
+    )
+    setCurrentDate((prevDate) => {
+      if (!isSameMonth(newInitialDate, prevDate)) {
+        Cookies.remove('currentDateScale')
+        Cookies.set('currentDateScale', newInitialDate.toISOString())
+        return newInitialDate
+      }
+      return prevDate
+    })
+  }, [month, year])
 
   return (
     <Container>
