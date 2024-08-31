@@ -44,11 +44,32 @@ export function PaginationPerDay() {
   const initialDate = parse(`01/${month}/${year}`, 'dd/MM/yyyy', new Date())
   const lastDate = lastDayOfMonth(initialDate)
 
+  // Remover o cookie quando o navegador for fechado
+  useEffect(() => {
+    const handleUnload = () => {
+      Cookies.remove('currentDateScale')
+    }
+
+    window.addEventListener('beforeunload', handleUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload)
+    }
+  }, [])
+
   const [currentDate, setCurrentDate] = useState<Date>(() => {
-    // Tentativa de recuperar a data salva do cookie
     const savedDate = Cookies.get('currentDateScale')
     if (savedDate) {
-      return new Date(savedDate)
+      const parsedSavedDate = new Date(savedDate)
+      const savedMonth = (parsedSavedDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')
+      const savedYear = parsedSavedDate.getFullYear().toString()
+
+      // Verifica se o mês e o ano do cookie correspondem ao mês e ano atuais
+      if (savedMonth === month && savedYear === year) {
+        return parsedSavedDate
+      }
     }
     return initialDate
   })
@@ -90,7 +111,7 @@ export function PaginationPerDay() {
 
     if (isSameMonth(newDate, currentDate)) {
       setCurrentDate(newDate)
-      Cookies.set('currentDateScale', newDate.toISOString())
+      Cookies.set('currentDateScale', newDate.toISOString()) // Define como cookie de sessão
     }
 
     // Reverte a desabilitação após 0,5 segundos
@@ -106,7 +127,7 @@ export function PaginationPerDay() {
 
     if (isSameMonth(newDate, currentDate)) {
       setCurrentDate(newDate)
-      Cookies.set('currentDateScale', newDate.toISOString())
+      Cookies.set('currentDateScale', newDate.toISOString()) // Define como cookie de sessão
     }
 
     // Reverte a desabilitação após 0,5 segundos
@@ -139,7 +160,7 @@ export function PaginationPerDay() {
     setCurrentDate((prevDate) => {
       if (!isSameMonth(newInitialDate, prevDate)) {
         Cookies.remove('currentDateScale')
-        Cookies.set('currentDateScale', newInitialDate.toISOString())
+        Cookies.set('currentDateScale', newInitialDate.toISOString()) // Define como cookie de sessão
         return newInitialDate
       }
       return prevDate
