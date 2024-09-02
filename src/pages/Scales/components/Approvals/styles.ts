@@ -46,7 +46,12 @@ export const TDStatus = styled.td<ITDStatus>`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.3rem;
+
+    p {
+      margin-left: ${(props) => props.status === 0 && '10px'};
+    }
+
     span {
       margin-top: 3px;
       display: block;

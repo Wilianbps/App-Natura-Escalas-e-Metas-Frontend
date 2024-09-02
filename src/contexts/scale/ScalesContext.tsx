@@ -214,13 +214,13 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
       })
   }
 
-  async function updateScaleApprovalRequest(status: number) {
+  async function updateScaleApprovalRequest(id: string, status: number) {
     const newDate = new Date()
     const day = newDate.getDate().toString().padStart(2, '0')
     const currentDate = `${year}${month}${day}`
     await api
       .put(
-        `scales/put-scales-approval-request?month=${month}&year=${year}&storeCode=${store}&approvalDate=${currentDate}&status=${status}`,
+        `scales/put-scales-approval-request?id=${id}&month=${month}&year=${year}&storeCode=${store}&approvalDate=${currentDate}&status=${status}`,
       )
       .then(async () => {
         await fetchGetScaleApprovalByDate()

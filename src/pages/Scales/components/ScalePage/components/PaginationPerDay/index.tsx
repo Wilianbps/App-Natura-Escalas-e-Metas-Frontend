@@ -44,19 +44,6 @@ export function PaginationPerDay() {
   const initialDate = parse(`01/${month}/${year}`, 'dd/MM/yyyy', new Date())
   const lastDate = lastDayOfMonth(initialDate)
 
-  // Remover o cookie quando o navegador for fechado
-  useEffect(() => {
-    const handleUnload = () => {
-      Cookies.remove('currentDateScale')
-    }
-
-    window.addEventListener('beforeunload', handleUnload)
-
-    return () => {
-      window.removeEventListener('beforeunload', handleUnload)
-    }
-  }, [])
-
   const [currentDate, setCurrentDate] = useState<Date>(() => {
     const savedDate = Cookies.get('currentDateScale')
     if (savedDate) {
@@ -166,6 +153,19 @@ export function PaginationPerDay() {
       return prevDate
     })
   }, [month, year])
+
+  // Remover o cookie quando o navegador for fechado
+  useEffect(() => {
+    const handleUnload = () => {
+      Cookies.remove('currentDateScale')
+    }
+
+    window.addEventListener('beforeunload', handleUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload)
+    }
+  }, [])
 
   return (
     <Container>

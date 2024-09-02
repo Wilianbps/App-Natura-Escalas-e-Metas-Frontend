@@ -6,7 +6,12 @@ import { useScales } from '@/contexts/scale/ScalesContext'
 import { ModalScaleApprovalRequest } from '../ModalScaleApprovalRequest'
 import { Container } from './styles'
 
-export function InfoTextScaleDeadline() {
+interface InfoTextScaleDeadlineProps {
+  text: string
+}
+
+export function InfoTextScaleDeadline(props: InfoTextScaleDeadlineProps) {
+  const { text } = props
   const { dataScaleApprovalRequest } = useScales()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [hasLoaded, setHasLoaded] = useState<boolean>(false)
@@ -21,13 +26,14 @@ export function InfoTextScaleDeadline() {
 
   return (
     <Container>
-      {dataScaleApprovalRequest.length === 0 ? (
+      {dataScaleApprovalRequest.length === 0 ||
+      dataScaleApprovalRequest[dataScaleApprovalRequest?.length - 1]?.status !==
+        0 ? (
         <>
           <IoIosAlert size={40} color="#fff" fill="#FF6C13" />
           <p>
-            Prazo encerrado!{' '}
-            <span onClick={() => setIsModalOpen(true)}>Clique aqui</span> para
-            solicitar um novo prazo.
+            {text} <span onClick={() => setIsModalOpen(true)}>Clique aqui</span>{' '}
+            para solicitar um novo prazo.
           </p>
 
           <ModalScaleApprovalRequest

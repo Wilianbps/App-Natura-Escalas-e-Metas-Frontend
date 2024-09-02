@@ -55,7 +55,7 @@ export function ScalePage() {
 
   const isCurrentDateAfterFifth = useMemo(() => {
     const currentDate = new Date() // Obtém a data atual
-    const fifthDayOfMonth = setDate(startOfMonth(currentDate), 6) // Define o quinto dia do mês
+    const fifthDayOfMonth = setDate(startOfMonth(currentDate), 1) // Define o quinto dia do mês
 
     // Verifica se a data atual é depois do quinto dia do mês
     return isAfter(currentDate, fifthDayOfMonth)
@@ -80,27 +80,23 @@ export function ScalePage() {
         )}
       </header>
 
-      {/*    dataScaleApprovalRequest.length === 0  - significa que a escala ainda nao carregou */}
-
-      {/* dataScaleApprovalRequest[0]?.status === 0 - significa que a escala carregou, mas ainda nao finalizou a escala */}
-
-      {dataScaleApprovalRequest.length !== 0 &&
-      dataScaleApprovalRequest[0]?.status === 2 &&
+      {!isLoadingScale &&
+      dataScaleApprovalRequest.length !== 0 &&
+      dataScaleApprovalRequest[dataScaleApprovalRequest?.length - 1]?.status ===
+        2 &&
       cookieProfile === 'Gerente Loja' ? (
-        <TextInfo
-          text="Supervior não aprovou liberação da escala."
-          color="red"
-          marginTop="20px"
-        />
-      ) : isCurrentDateAfterFifth &&
+        <InfoTextScaleDeadline text="Supervisor reprovou a solicitação!" />
+      ) : !isLoadingScale &&
+        isCurrentDateAfterFifth &&
         (dataScaleApprovalRequest.length === 0 ||
-          dataScaleApprovalRequest[0]?.status === 0) &&
+          dataScaleApprovalRequest[dataScaleApprovalRequest?.length - 1]
+            ?.status === 0) &&
         (dataFinishScale.length === 0 ||
           dataFinishScale[0]?.finished === false) &&
         month === currentMonth &&
         year === currentYear &&
         cookieProfile === 'Gerente Loja' ? (
-        <InfoTextScaleDeadline />
+        <InfoTextScaleDeadline text="Prazo encerrado!" />
       ) : (
         <Box sx={{ width: '100%', marginTop: '10px' }}>
           <TabContext value={value}>

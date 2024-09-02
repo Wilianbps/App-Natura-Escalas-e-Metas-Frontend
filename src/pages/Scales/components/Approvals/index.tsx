@@ -22,10 +22,10 @@ export function Approvals() {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
-  function handleUpdateApprovalRequest() {
+  function handleUpdateApprovalRequest(id: string) {
     setIsSubmittingApprovalRequest(true)
     setTimeout(() => {
-      updateScaleApprovalRequest(1)
+      updateScaleApprovalRequest(id, 1)
       setIsSubmittingApprovalRequest(false)
     }, 3000)
   }
@@ -67,12 +67,14 @@ export function Approvals() {
                   <span></span>
                   <p>{item.status === 0 && 'pendente'}</p>
                   <p>{item.status === 1 && 'aprovado'}</p>
-                  <p>{item.status === 2 && 'cancelado'}</p>
+                  <p>{item.status === 2 && 'reprovado'}</p>
                 </section>
               </TDStatus>
               <td width={150}>
-                {dataScaleApprovalRequest[0]?.status === 0 && (
-                  <ButtonApproval onClick={handleUpdateApprovalRequest}>
+                {item.status === 0 && (
+                  <ButtonApproval
+                    onClick={() => handleUpdateApprovalRequest(item?.id)}
+                  >
                     {isSubmittingApprovalRequest === true ? (
                       <CircularProgress
                         size={15}
@@ -85,12 +87,12 @@ export function Approvals() {
                     )}
                   </ButtonApproval>
                 )}
-                {dataScaleApprovalRequest[0]?.status === 1 && (
+                {item?.status === 1 && (
                   <TextInfo text="aprovado" color="#449428" />
                 )}
               </td>
               <td width={150}>
-                {dataScaleApprovalRequest[0]?.status === 0 && (
+                {item?.status === 0 && (
                   <ButtonCanceled onClick={handleOpenModalToCancelScale}>
                     <>
                       <CgClose />
@@ -99,18 +101,19 @@ export function Approvals() {
                   </ButtonCanceled>
                 )}
 
-                {dataScaleApprovalRequest[0]?.status === 2 && (
-                  <TextInfo text="cancelado" color="red" />
+                {item?.status === 2 && (
+                  <TextInfo text="reprovado" color="red" />
                 )}
               </td>
+              <ModalCancelScale
+                id={item?.id}
+                open={isModalOpen}
+                onHandleClose={() => setIsModalOpen(false)}
+              />
             </tr>
           ))}
         </tbody>
       </Table>
-      <ModalCancelScale
-        open={isModalOpen}
-        onHandleClose={() => setIsModalOpen(false)}
-      />
     </Container>
   )
 }

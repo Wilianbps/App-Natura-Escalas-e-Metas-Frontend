@@ -1,6 +1,6 @@
 import DialogTitle from '@mui/material/DialogTitle'
 import IconButton from '@mui/material/IconButton'
-import { compareAsc, format, isAfter, min } from 'date-fns'
+import { compareAsc, isAfter, min } from 'date-fns'
 import { formatInTimeZone } from 'date-fns-tz'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -98,12 +98,6 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     if (validate) return
 
     const id = uuidv4()
-
-    /*  if (dayOff < currentDate) {
-      return toast.error('Selecione uma data válida.', {
-        style: { height: '50px', padding: '15px' },
-      })
-    } */
 
     if (dayOff) {
       setArrayDaysOff((prevArrayDaysOff) =>
@@ -351,7 +345,7 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     const nextVacation = min(dates)
 
     if (!isNaN(nextVacation.getTime())) {
-      const dateFormated = format(nextVacation, 'dd/MM/yyyy')
+      const dateFormated = formatInTimeZone(nextVacation, 'UTC', 'dd/MM/yyyy')
 
       return dateFormated
     } else {
