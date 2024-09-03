@@ -57,8 +57,18 @@ export function Employees() {
         status: employee.status || false,
       }))
       setEmployeeStatus(initialStatus)
+
+      if (
+        dataEmployee &&
+        employees.find((e) => e.idSeler === dataEmployee.idSeler)
+      ) {
+        const updatedEmployee = employees.find(
+          (e) => e.idSeler === dataEmployee.idSeler,
+        )
+        setDataEmployee(updatedEmployee)
+      }
     }
-  }, [employees])
+  }, [employees, dataEmployee])
 
   function handleChangeFlowScale(flow: string) {
     setSelectedFlow(flow)

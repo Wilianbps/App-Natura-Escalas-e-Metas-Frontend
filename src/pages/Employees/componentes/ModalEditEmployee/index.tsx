@@ -45,7 +45,7 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
   const { updateShiftRestSchedule } = useSettings()
   const { open, onHandleClose, employee } = props
 
-  const { register, handleSubmit, reset } = useForm<infoEmployeeProps>()
+  const { handleSubmit, reset } = useForm<infoEmployeeProps>()
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [selectedStartVacation, setSelectedStartVacation] =
@@ -68,6 +68,16 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
   >([])
 
   const [selectTypeRest, setSelectTypeRest] = useState('')
+  const [selectedShift, setSelectedShift] = useState<string | null>(
+    employee?.shift || null,
+  )
+
+  function handleShiftChange(shift: string | null) {
+    if (employee) {
+      employee.shift = shift
+    }
+    setSelectedShift(shift) // Atualiza o estado local do shift
+  }
 
   function handleSelectTypeRest(type: string) {
     setSelectTypeRest(type)
@@ -156,6 +166,7 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     if (errorValidate) {
       return
     }
+
     const id = uuidv4()
 
     if (selectedStartVacation && selectedFinishVacation) {
@@ -259,10 +270,10 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     setSelectedFinishVacation(null)
   }
 
-  function handleSaveForm(register: infoEmployeeProps) {
+  function handleSaveForm() {
     setIsSubmitting(true)
     if (employee?.idShift) {
-      switch (register.selectedShift) {
+      switch (selectedShift) {
         case 'Matutino':
           employee.idShift = 1
           break
@@ -274,14 +285,13 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
           break
       }
     }
-
     const updateEmployee: IEmployee = {
       idSeler: employee?.idSeler,
       idDayOff: employee?.idDayOff,
       storeCode: store,
       userLogin: cookieUserLogin,
       idShift: employee?.idShift,
-      shift: register.selectedShift,
+      shift: selectedShift,
       startVacation: formatDate(selectedStartVacation),
       finishVacation: formatDate(selectedFinishVacation),
       arrayDaysOff: copyArrayDaysOff?.map((item) => ({
@@ -307,12 +317,10 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
     setTimeout(() => {
       updateShiftRestSchedule(updateEmployee)
       setIsSubmitting(false)
-      reset()
       setDayOff(null)
       setSelectedStartVacation(null)
       setSelectedFinishVacation(null)
       setSelectTypeRest('')
-      /*    onHandleClose() */
     }, 2000)
   }
 
@@ -543,7 +551,10 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
             )}
             <DividerVertical />
             <ContainerWorkShift>
-              <WorkShift register={register} shift={employee?.shift} />
+              <WorkShift
+                initialShift={employee?.shift || null}
+                onShiftChange={handleShiftChange}
+              />
             </ContainerWorkShift>
           </InfoEmployeeContainer>
           <section className="buttons-clear-save">

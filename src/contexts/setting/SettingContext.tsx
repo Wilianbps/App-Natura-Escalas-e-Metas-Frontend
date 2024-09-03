@@ -47,12 +47,6 @@ function SettingsProvider({ children }: SettingProviderProps) {
       })
   }
 
-  useEffect(() => {
-    if (store) {
-      fetchEmployes()
-    }
-  }, [store])
-
   async function updateShiftRestSchedule(employee: IEmployee) {
     const {
       idSeler,
@@ -82,13 +76,13 @@ function SettingsProvider({ children }: SettingProviderProps) {
       })
       .then((response) => {
         if (response.status === 200) {
+          setEmployees(response.data.employees)
           if (response.data.message) {
             toast.success(response.data.message, {
               style: { height: '50px', padding: '15px' },
             })
           }
         }
-        fetchEmployes()
       })
       .catch((error) => {
         if (error.response) {
@@ -136,6 +130,12 @@ function SettingsProvider({ children }: SettingProviderProps) {
       }
     }
   }
+
+  useEffect(() => {
+    if (store) {
+      fetchEmployes()
+    }
+  }, [store])
 
   return (
     <SettingsContext.Provider
