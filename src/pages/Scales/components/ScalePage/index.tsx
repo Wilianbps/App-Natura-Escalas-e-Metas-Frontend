@@ -217,10 +217,15 @@ export function Scale() {
   function validateEmployeeShifts(scales: IScale[]): string[] {
     const errors: string[] = []
 
+    console.log(scales)
+
     scales.forEach((scale) => {
       if (scale.status) {
         const filledShifts = scale.options.filter(
-          (option) => option.type !== '' && option.type !== null,
+          (option) =>
+            option.type !== '' &&
+            option.type !== null &&
+            option.type !== 'null',
         ).length
 
         const mealBreaks = scale.options.filter(
