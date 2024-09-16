@@ -71,11 +71,11 @@ export function GoalByWeek() {
               <tr>
                 <th>Colaboladores</th>
                 <th>Total Mês</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                {Array.from({ length: goalsByWeek?.weeksSums?.length }).map(
+                  (_, index) => (
+                    <th key={index}></th>
+                  ),
+                )}
               </tr>
             </thead>
 
