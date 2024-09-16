@@ -388,6 +388,10 @@ export default function ModalEditEmployee(props: ModalEditEmployeeProps) {
   }, [employee?.arrayDaysOff])
 
   useEffect(() => {
+    if (employee) setSelectedShift(employee.shift)
+  }, [employee])
+
+  useEffect(() => {
     setArrayVacations(vacations)
     setCopyArrayVacations(vacations)
     setArrayDaysOff(daysOff)
