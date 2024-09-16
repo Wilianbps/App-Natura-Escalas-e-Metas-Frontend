@@ -239,15 +239,15 @@ export function Scale() {
             array[index + 1].type === 'R',
         )
 
-        if (filledShifts < 15) {
+        if (filledShifts < 17) {
           errors.push(
-            `Funcionário/a ${formatName(scale.name)} não tem 7,5h de trabalho preenchidas.`,
+            `Funcionário/a ${formatName(scale.name)} não tem 8,5h de trabalho preenchidas.`,
           )
         }
 
-        if (filledShifts > 15) {
+        if (filledShifts > 17) {
           errors.push(
-            `Funcionário/a ${formatName(scale.name)} tem mais de 7,5h de trabalho preenchidas.`,
+            `Funcionário/a ${formatName(scale.name)} tem mais de 8,5h de trabalho preenchidas.`,
           )
         }
 
