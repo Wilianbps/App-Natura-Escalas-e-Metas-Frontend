@@ -22,10 +22,10 @@ export function Approvals() {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
-  function handleUpdateApprovalRequest(id: string) {
+  function handleUpdateApprovalRequest(id: string, storeCode: string) {
     setIsSubmittingApprovalRequest(true)
     setTimeout(() => {
-      updateScaleApprovalRequest(id, 1)
+      updateScaleApprovalRequest(id, 1, storeCode)
       setIsSubmittingApprovalRequest(false)
     }, 3000)
   }
@@ -73,7 +73,9 @@ export function Approvals() {
               <td width={150}>
                 {item.status === 0 && (
                   <ButtonApproval
-                    onClick={() => handleUpdateApprovalRequest(item?.id)}
+                    onClick={() =>
+                      handleUpdateApprovalRequest(item?.id, item?.branch)
+                    }
                   >
                     {isSubmittingApprovalRequest === true ? (
                       <CircularProgress
@@ -107,6 +109,7 @@ export function Approvals() {
               </td>
               <ModalCancelScale
                 id={item?.id}
+                storeCode={item?.branch}
                 open={isModalOpen}
                 onHandleClose={() => setIsModalOpen(false)}
               />

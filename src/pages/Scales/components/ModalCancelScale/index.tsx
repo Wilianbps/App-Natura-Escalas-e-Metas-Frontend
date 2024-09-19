@@ -10,6 +10,7 @@ import { Buttons, ContainerModal, Content } from './styles'
 
 interface IModal {
   id: string
+  storeCode: string
   open: boolean
   onHandleClose: () => void
 }
@@ -17,7 +18,7 @@ interface IModal {
 export function ModalCancelScale(props: IModal) {
   const { updateScaleApprovalRequest } = useScales()
 
-  const { id, open, onHandleClose } = props
+  const { id, storeCode, open, onHandleClose } = props
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
@@ -28,7 +29,7 @@ export function ModalCancelScale(props: IModal) {
   function handleUpdateCanceledRequest() {
     setIsSubmitting(true)
     setTimeout(() => {
-      updateScaleApprovalRequest(id, 2)
+      updateScaleApprovalRequest(id, 2, storeCode)
       setIsSubmitting(false)
       handleClose()
     }, 3000)
