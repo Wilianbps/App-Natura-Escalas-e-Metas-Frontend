@@ -55,7 +55,7 @@ export function ScalePage() {
 
   const isCurrentDateAfterFifth = useMemo(() => {
     const currentDate = new Date() // Obtém a data atual
-    const fifthDayOfMonth = setDate(startOfMonth(currentDate), 1) // Define o quinto dia do mês
+    const fifthDayOfMonth = setDate(startOfMonth(currentDate), 6) // Define o quinto dia do mês
 
     // Verifica se a data atual é depois do quinto dia do mês
     return isAfter(currentDate, fifthDayOfMonth)
