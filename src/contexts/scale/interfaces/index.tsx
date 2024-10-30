@@ -79,6 +79,7 @@ export interface ScalesContextType {
   ) => void
   scalesByDate: IScale[]
   scaleSummary: Array<IScaleSummary[]>
+  scaleSummaryByFortnight: Array<IScaleSummary[]>
   inputFlow: DataType[]
   dataFinishScale: IDataFinishScale[]
   dataScaleApprovalRequest: IScaleApprovalRequest[]

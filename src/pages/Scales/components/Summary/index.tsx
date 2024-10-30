@@ -9,7 +9,7 @@ import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 
 import { PaginationByWeek } from './components/PaginationByWeek'
-import { ScaleSummaryPDF } from './components/ScaleSummaryPDF'
+import { ScaleSummaryByFortnightPDF } from './components/ScaleSummaryByFortnightPDF'
 import {
   Container,
   ContainerScaleSummaryPdf,
@@ -21,7 +21,7 @@ import { daysOfWeek } from './utils/daysOfWeek'
 
 export function Summary() {
   const { monthValue } = useSettings()
-  const { scaleSummary } = useScales()
+  const { scaleSummary, scaleSummaryByFortnight } = useScales()
 
   const infoScalePeriod = useMemo(() => {
     return scaleSummary.some((item) => item.length > 0)
@@ -52,7 +52,10 @@ export function Summary() {
 
     setTimeout(async () => {
       const doc = (
-        <ScaleSummaryPDF scaleSummary={scaleSummary} monthValue={monthValue} />
+        <ScaleSummaryByFortnightPDF
+          scaleSummary={scaleSummaryByFortnight}
+          monthValue={monthValue}
+        />
       )
 
       const asPdf = pdf()

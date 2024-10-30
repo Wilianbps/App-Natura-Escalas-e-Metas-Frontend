@@ -26,6 +26,9 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
   const [dataFinishScale, setDataFinishScale] = useState<IDataFinishScale[]>([])
   const [scaleSummary, setScaleSummary] = useState<Array<IScaleSummary[]>>([])
+  const [scaleSummaryByFortnight, setScaleSummaryByFortnight] = useState<
+    Array<IScaleSummary[]>
+  >([])
   const [inputFlow, setInputFlow] = useState<DataType[]>([])
   const [dataScaleApprovalRequest, setDataScaleApprovalRequest] = useState<
     IScaleApprovalRequest[]
@@ -69,6 +72,14 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
     setScaleSummary(response.data)
   }
 
+  async function fetchScaleSummaryByFortnight() {
+    const response = await api.get(
+      `scales/get-scale-summary-by-fortnight?month=${month}&year=${year}&storeCode=${store}`,
+    )
+
+    setScaleSummaryByFortnight(response.data)
+  }
+
   async function fetchInputFlow(date: string) {
     const dateFormatted = format(date, 'yyyy-MM-dd')
     const response = await api.get(
@@ -108,6 +119,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
           }
           await fetchScaleByDate(getCurrentDate)
           await fetchScaleSummary()
+          await fetchScaleSummaryByFortnight()
           await fetchEmployes()
           return false
         }
@@ -244,6 +256,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
     if (store) {
       fetchGetScaleApprovalByDate()
       fetchScaleSummary()
+      fetchScaleSummaryByFortnight()
       fetchFinishedScaleByMonth()
       fetchScaleByDate(getCurrentDate)
     }
@@ -258,6 +271,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         scalesByDate,
         updateGetCurrenDate,
         scaleSummary,
+        scaleSummaryByFortnight,
         inputFlow,
         fetchInputFlow,
         fetchLoadMonthScale,
@@ -300,6 +314,12 @@ function useScales() {
     ScalesContext,
     (context) => context.scaleSummary,
   )
+
+  const scaleSummaryByFortnight = useContextSelector(
+    ScalesContext,
+    (context) => context.scaleSummaryByFortnight,
+  )
+
   const inputFlow = useContextSelector(
     ScalesContext,
     (context) => context.inputFlow,
@@ -348,6 +368,7 @@ function useScales() {
     updateScalesByDate,
     updateGetCurrenDate,
     scaleSummary,
+    scaleSummaryByFortnight,
     inputFlow,
     fetchInputFlow,
     fetchLoadMonthScale,
