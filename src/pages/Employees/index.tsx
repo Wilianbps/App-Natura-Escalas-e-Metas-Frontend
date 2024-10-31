@@ -9,6 +9,7 @@ import { useProfiles } from '@/contexts/profiles/ProfilesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 
+import { ModalAddEmployee } from './componentes/ModalAddEmployee'
 import ModalEditEmployee from './componentes/ModalEditEmployee'
 import { IEmployee } from './interfaces'
 import { Container, ScaleFlowContainer } from './styles'
@@ -22,6 +23,7 @@ export function Employees() {
   const { cookieProfile } = useProfiles()
   const { employees, updateSettings, isLoadingEmployees } = useSettings()
   const [openModalEditEmpoyee, setOpenModalEditEmpoyee] = useState(false)
+  const [openModalAddEmpoyee, setOpenModalAddEmpoyee] = useState(false)
   const [dataEmployee, setDataEmployee] = useState<IEmployee>()
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -37,6 +39,14 @@ export function Employees() {
 
   function handleCloseModalEditEmpoyee() {
     setOpenModalEditEmpoyee(false)
+  }
+
+  const handleOpenModalAddEmplopyee = () => {
+    setOpenModalAddEmpoyee(true)
+  }
+
+  function handleCloseModalAddEmpoyee() {
+    setOpenModalAddEmpoyee(false)
   }
 
   const handleToggleStatus = (employeeId: number) => {
@@ -119,6 +129,9 @@ export function Employees() {
               <form onSubmit={handleSubmit(handleSaveSttings)}>
                 <header>
                   <h1>Colaboradores</h1>
+                  <button type="button" onClick={handleOpenModalAddEmplopyee}>
+                    Cadastrar Colaborador
+                  </button>
                 </header>
 
                 <table>
@@ -228,6 +241,10 @@ export function Employees() {
                 open={openModalEditEmpoyee}
                 onHandleClose={handleCloseModalEditEmpoyee}
                 employee={dataEmployee}
+              />
+              <ModalAddEmployee
+                open={openModalAddEmpoyee}
+                onHandleClose={handleCloseModalAddEmpoyee}
               />
             </>
           )}

@@ -7,6 +7,23 @@ export const Container = styled.section`
   h1 {
     font-size: 1.875rem;
     font-weight: 300;
+    margin-bottom: 2rem;
+  }
+
+  button {
+    padding: 9px 26px 9px 26px;
+    width: 240px;
+    color: #000;
+    background-color: #ffe2b3;
+    font-weight: 500;
+    cursor: pointer;
+    border: 0;
+    border-radius: 30px;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 
   table {
