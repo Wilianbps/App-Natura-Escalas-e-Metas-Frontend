@@ -39,46 +39,35 @@ export const Container = styled.section`
         text-align: center;
         font-weight: 600;
         color: orange;
-
-        &:last-child {
-          text-align: end;
-        }
       }
     }
 
-    tbody {
-      td {
-        padding: 0.5rem 2rem;
-        background-color: ${(props) => props.theme.grayLight};
-        text-align: center;
-        &:first-of-type {
-          border-top-left-radius: 6px;
-          border-bottom-left-radius: 6px;
-        }
+    tbody tr td {
+      padding: 0.5rem 2rem;
+      background-color: ${(props) => props.theme.grayLight};
+      text-align: center;
+    }
 
-        &:last-child {
-          border-top-right-radius: 6px;
-          border-bottom-right-radius: 6px;
-          text-align: end;
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          height: 3.4rem;
-        }
+    tbody tr td.has-circle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .circle {
-          cursor: pointer;
-          background-color: #f9f9f9;
-          display: flex;
-          padding: 8px;
-          border-radius: 50%;
-          margin-right: 10px;
+    .circle {
+      margin: 0 auto;
+      cursor: pointer;
+      background-color: #f9f9f9;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 44px;
+      height: 44px;
 
-          > svg {
-            font-size: 1.3rem;
-            color: ${(props) => props.theme.orangeDark};
-          }
-        }
+      > svg {
+        font-size: 1.3rem;
+        color: ${(props) => props.theme.orangeDark};
       }
     }
   }

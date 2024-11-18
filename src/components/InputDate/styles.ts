@@ -7,6 +7,8 @@ export const StyledInputDate = styled.input`
   color: #6d6d6d;
   font-size: 13px;
   height: 40px;
+  width: 100%;
+  max-width: 190px;
   font-weight: 600;
   padding: 13px;
 

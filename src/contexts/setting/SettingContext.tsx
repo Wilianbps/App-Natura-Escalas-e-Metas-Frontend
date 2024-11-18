@@ -7,6 +7,7 @@ import { api } from '@/services/axios'
 import { useProfiles } from '../profiles/ProfilesContext'
 import {
   IEmployee,
+  type IInfoEmployee,
   ISettings,
   SettingProviderProps,
   SettingsContextType,
@@ -15,7 +16,7 @@ import {
 const SettingsContext = createContext({} as SettingsContextType)
 
 function SettingsProvider({ children }: SettingProviderProps) {
-  const { store } = useProfiles()
+  const { store, storesByUser } = useProfiles()
   const [employees, setEmployees] = useState<IEmployee[]>([])
   const [isLoadingEmployees, setIsLoadingEmployees] = useState(false)
 
@@ -131,6 +132,44 @@ function SettingsProvider({ children }: SettingProviderProps) {
     }
   }
 
+  async function addEmployee(employee: IInfoEmployee) {
+    const branchName = storesByUser[0]?.branch
+
+    const data = {
+      ...employee,
+      store,
+      branchName,
+    }
+
+    const response = await api.post('settings/addEmployee', data)
+
+    if (response.status === 200) {
+      await fetchEmployes()
+
+      if (response.data.message) {
+        toast.success(response.data.message, {
+          style: { height: '50px', padding: '15px' },
+        })
+      }
+    }
+  }
+
+  async function deleteEmployee(id: number | undefined) {
+    if (id) {
+      const response = await api.delete(`settings/delete-employee/${id}`)
+
+      if (response.status === 200) {
+        await fetchEmployes()
+
+        if (response.data.message) {
+          toast.success(response.data.message, {
+            style: { height: '50px', padding: '15px' },
+          })
+        }
+      }
+    }
+  }
+
   useEffect(() => {
     if (store) {
       fetchEmployes()
@@ -149,6 +188,8 @@ function SettingsProvider({ children }: SettingProviderProps) {
         monthValue,
         updateMonthValue,
         isLoadingEmployees,
+        addEmployee,
+        deleteEmployee,
       }}
     >
       {children}
@@ -165,10 +206,22 @@ function useSettings() {
     SettingsContext,
     (context) => context.employees,
   )
+
   const updateSettings = useContextSelector(
     SettingsContext,
     (context) => context.updateSettings,
   )
+
+  const addEmployee = useContextSelector(
+    SettingsContext,
+    (context) => context.addEmployee,
+  )
+
+  const deleteEmployee = useContextSelector(
+    SettingsContext,
+    (context) => context.deleteEmployee,
+  )
+
   const updateselectDate = useContextSelector(
     SettingsContext,
     (context) => context.updateselectDate,
@@ -205,6 +258,8 @@ function useSettings() {
     monthValue,
     updateMonthValue,
     isLoadingEmployees,
+    addEmployee,
+    deleteEmployee,
   }
 }
 

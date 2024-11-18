@@ -2,6 +2,8 @@ import { Box, Divider, LinearProgress, Switch } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CgPen } from 'react-icons/cg'
+import { FaUserGear } from 'react-icons/fa6'
+import { MdDeleteForever } from 'react-icons/md'
 
 import { Button } from '@/components/Button'
 import { TextInfo } from '@/components/TextInfo'
@@ -10,6 +12,7 @@ import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 
 import { ModalAddEmployee } from './componentes/ModalAddEmployee'
+import { ModalDeleteEmployee } from './componentes/ModalDeleteEmployee'
 import ModalEditEmployee from './componentes/ModalEditEmployee'
 import { IEmployee } from './interfaces'
 import { Container, ScaleFlowContainer } from './styles'
@@ -24,6 +27,8 @@ export function Employees() {
   const { employees, updateSettings, isLoadingEmployees } = useSettings()
   const [openModalEditEmpoyee, setOpenModalEditEmpoyee] = useState(false)
   const [openModalAddEmpoyee, setOpenModalAddEmpoyee] = useState(false)
+  const [openModalDeleteEmpoyee, setOpenModalDeleteEmpoyee] = useState(false)
+  const [idEmployee, setIdEmplyee] = useState<number>()
   const [dataEmployee, setDataEmployee] = useState<IEmployee>()
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -47,6 +52,15 @@ export function Employees() {
 
   function handleCloseModalAddEmpoyee() {
     setOpenModalAddEmpoyee(false)
+  }
+
+  const handleOpenModalDeleteEmplopyee = (id: number | undefined) => {
+    setIdEmplyee(id)
+    setOpenModalDeleteEmpoyee(true)
+  }
+
+  function handleCloseModalDeleteEmpoyee() {
+    setOpenModalDeleteEmpoyee(false)
   }
 
   const handleToggleStatus = (employeeId: number) => {
@@ -140,7 +154,13 @@ export function Employees() {
                       <td width={50}>Status</td>
                       <td width={350}>Nome</td>
                       <td width={300}>Código do Colaborador</td>
-                      {cookieProfile === 'Gerente Loja' && <td>Editar</td>}
+                      {cookieProfile === 'Gerente Loja' && <td>Configurar</td>}
+                      {cookieProfile === 'Gerente Loja' && (
+                        <td width={300}>Editar</td>
+                      )}
+                      {cookieProfile === 'Gerente Loja' && (
+                        <td width={300}>Excluir</td>
+                      )}
                     </tr>
                   </thead>
 
@@ -162,6 +182,7 @@ export function Employees() {
                         </td>
                         <td>{formatName(employee.name)}</td>
                         <td>{employee.idSeler}</td>
+
                         {cookieProfile === 'Gerente Loja' ? (
                           <td>
                             <div
@@ -170,7 +191,33 @@ export function Employees() {
                                 handleOpenModalEditEmployee(employee)
                               }
                             >
+                              <FaUserGear />
+                            </div>
+                          </td>
+                        ) : (
+                          <td></td>
+                        )}
+
+                        {cookieProfile === 'Gerente Loja' &&
+                        employee.newUser === true ? (
+                          <td>
+                            <div className="circle">
                               <CgPen />
+                            </div>
+                          </td>
+                        ) : (
+                          <td></td>
+                        )}
+                        {cookieProfile === 'Gerente Loja' &&
+                        employee.newUser === true ? (
+                          <td>
+                            <div
+                              className="circle"
+                              onClick={() =>
+                                handleOpenModalDeleteEmplopyee(employee.idSeler)
+                              }
+                            >
+                              <MdDeleteForever fill="#FF5520" size={22} />
                             </div>
                           </td>
                         ) : (
@@ -245,6 +292,11 @@ export function Employees() {
               <ModalAddEmployee
                 open={openModalAddEmpoyee}
                 onHandleClose={handleCloseModalAddEmpoyee}
+              />
+              <ModalDeleteEmployee
+                open={openModalDeleteEmpoyee}
+                onHandleClose={handleCloseModalDeleteEmpoyee}
+                employeeId={idEmployee}
               />
             </>
           )}

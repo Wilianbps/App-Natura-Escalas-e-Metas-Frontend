@@ -29,11 +29,33 @@ export const InputContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  .position-cpf-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .position-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cpf-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .error-message {
+    min-height: 20px; /* Ajuste conforme necessário */
+  }
 `
 
 export const ButtonsContainer = styled.footer`
   display: flex;
   justify-content: space-between;
-
   margin-top: 3rem;
 `

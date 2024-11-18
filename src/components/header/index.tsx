@@ -14,10 +14,6 @@ export function Header() {
   return (
     <ContainerHeader>
       <SelectStores minWidth={120} heightSelect="40px" fontSize="13px" />
-      {/*  <DatePickerMUI
-        selectDate={selectedDate}
-        onSelectDate={handleSelectDate}
-      /> */}
       <InputDate selectMonth={monthValue} onSelectMonth={handleSelectDate} />
     </ContainerHeader>
   )

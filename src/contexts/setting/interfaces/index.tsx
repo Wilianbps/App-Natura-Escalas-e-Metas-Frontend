@@ -8,6 +8,8 @@ export interface IEmployee {
   storeCode?: string
   userLogin?: string
   name?: string
+  cpf: string | null
+  newUser: boolean | null
   status?: boolean
   office?: string
   idShift?: number
@@ -28,6 +30,12 @@ export interface IEmployee {
     type?: string
   }[]
   flowScale?: string
+}
+export interface IInfoEmployee {
+  name: string
+  position: string
+  cpf?: string
+  selectedShift: number | false
 }
 
 interface IEmployeStatus {
@@ -50,4 +58,6 @@ export interface SettingsContextType {
   monthValue: string
   isLoadingEmployees: boolean
   updateMonthValue: (month: string) => void
+  addEmployee: (employee: IInfoEmployee) => void
+  deleteEmployee: (id: number | undefined) => void
 }
