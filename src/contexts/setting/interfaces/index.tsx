@@ -8,8 +8,8 @@ export interface IEmployee {
   storeCode?: string
   userLogin?: string
   name?: string
-  cpf: string | null
-  newUser: boolean | null
+  cpf?: string | null
+  newUser?: boolean | null
   status?: boolean
   office?: string
   idShift?: number
