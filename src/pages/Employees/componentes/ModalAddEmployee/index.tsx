@@ -32,7 +32,7 @@ import {
 
 const schemaForm = z.object({
   name: z.string().min(1, 'Por favor, informe o nome do colaborador'),
-  position: z.enum([...positions, ''], {
+  position: z.enum(positions, {
     errorMap: () => ({ message: 'Por favor, selecione um cargo válido' }),
   }),
   cpf: z
@@ -48,7 +48,12 @@ const schemaForm = z.object({
   selectedShift: z.string().min(1, 'Por favor, selecione um turno'),
 })
 
-type FormProps = z.infer<typeof schemaForm>
+type FormProps = {
+  name: string
+  position: '' | (typeof positions)[number] // Adiciona "" ou os cargos válidos
+  cpf: string
+  selectedShift: string
+}
 
 export function ModalAddEmployee(props: ModalAddEmployeeProps) {
   const { addEmployee } = useSettings()

@@ -13,7 +13,8 @@ import { formatName } from '@/libs/formatName'
 
 import { ModalAddEmployee } from './componentes/ModalAddEmployee'
 import { ModalDeleteEmployee } from './componentes/ModalDeleteEmployee'
-import ModalEditEmployee from './componentes/ModalEditEmployee'
+import { ModalEditEmployee } from './componentes/ModalEditEmployee'
+import ModalEditSettingsEmployee from './componentes/ModalEditSettingsEmployee'
 import { IEmployee } from './interfaces'
 import { Container, ScaleFlowContainer } from './styles'
 
@@ -25,6 +26,8 @@ interface IEmployeStatus {
 export function Employees() {
   const { cookieProfile } = useProfiles()
   const { employees, updateSettings, isLoadingEmployees } = useSettings()
+  const [openModalEditSettingsEmpoyee, setOpenModalEditSettingsEmpoyee] =
+    useState(false)
   const [openModalEditEmpoyee, setOpenModalEditEmpoyee] = useState(false)
   const [openModalAddEmpoyee, setOpenModalAddEmpoyee] = useState(false)
   const [openModalDeleteEmpoyee, setOpenModalDeleteEmpoyee] = useState(false)
@@ -37,12 +40,21 @@ export function Employees() {
 
   const { handleSubmit } = useForm()
 
-  const handleOpenModalEditEmployee = (employee: IEmployee) => {
+  const handleOpenModalEditSettingsEmployee = (employee: IEmployee) => {
+    setOpenModalEditSettingsEmpoyee(true)
+    setDataEmployee(employee)
+  }
+
+  function handleCloseModalEditSettingsEmployee() {
+    setOpenModalEditSettingsEmpoyee(false)
+  }
+
+  function handleOpenModalEditEmployee(employee: IEmployee) {
     setOpenModalEditEmpoyee(true)
     setDataEmployee(employee)
   }
 
-  function handleCloseModalEditEmpoyee() {
+  function handleCloseModalEditEmployee() {
     setOpenModalEditEmpoyee(false)
   }
 
@@ -50,7 +62,7 @@ export function Employees() {
     setOpenModalAddEmpoyee(true)
   }
 
-  function handleCloseModalAddEmpoyee() {
+  function handleCloseModalAddEmployee() {
     setOpenModalAddEmpoyee(false)
   }
 
@@ -59,7 +71,7 @@ export function Employees() {
     setOpenModalDeleteEmpoyee(true)
   }
 
-  function handleCloseModalDeleteEmpoyee() {
+  function handleCloseModalDeleteEmployee() {
     setOpenModalDeleteEmpoyee(false)
   }
 
@@ -188,7 +200,7 @@ export function Employees() {
                             <div
                               className="circle"
                               onClick={() =>
-                                handleOpenModalEditEmployee(employee)
+                                handleOpenModalEditSettingsEmployee(employee)
                               }
                             >
                               <FaUserGear />
@@ -201,7 +213,12 @@ export function Employees() {
                         {cookieProfile === 'Gerente Loja' &&
                         employee.newUser === true ? (
                           <td>
-                            <div className="circle">
+                            <div
+                              className="circle"
+                              onClick={() =>
+                                handleOpenModalEditEmployee(employee)
+                              }
+                            >
                               <CgPen />
                             </div>
                           </td>
@@ -284,18 +301,23 @@ export function Employees() {
                   </footer>
                 )}
               </form>
+              <ModalEditSettingsEmployee
+                open={openModalEditSettingsEmpoyee}
+                onHandleClose={handleCloseModalEditSettingsEmployee}
+                employee={dataEmployee}
+              />
               <ModalEditEmployee
                 open={openModalEditEmpoyee}
-                onHandleClose={handleCloseModalEditEmpoyee}
+                onHandleClose={handleCloseModalEditEmployee}
                 employee={dataEmployee}
               />
               <ModalAddEmployee
                 open={openModalAddEmpoyee}
-                onHandleClose={handleCloseModalAddEmpoyee}
+                onHandleClose={handleCloseModalAddEmployee}
               />
               <ModalDeleteEmployee
                 open={openModalDeleteEmpoyee}
-                onHandleClose={handleCloseModalDeleteEmpoyee}
+                onHandleClose={handleCloseModalDeleteEmployee}
                 employeeId={idEmployee}
               />
             </>

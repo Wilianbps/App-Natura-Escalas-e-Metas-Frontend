@@ -141,7 +141,7 @@ function SettingsProvider({ children }: SettingProviderProps) {
       branchName,
     }
 
-    const response = await api.post('settings/addEmployee', data)
+    const response = await api.post('settings/add-employee', data)
 
     if (response.status === 200) {
       await fetchEmployes()
@@ -152,6 +152,37 @@ function SettingsProvider({ children }: SettingProviderProps) {
         })
       }
     }
+  }
+
+  async function updateEmployee(
+    id: number | undefined,
+    employee: IInfoEmployee,
+  ) {
+    const data = {
+      ...employee,
+      storeCode: store,
+    }
+
+    await api
+      .put(`settings/update-employee/${id}`, data)
+      .then((response) => {
+        if (response.status === 200) {
+          setEmployees(response.data.employees)
+          if (response.data.message) {
+            toast.success(response.data.message, {
+              style: { height: '50px', padding: '15px' },
+            })
+          }
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          const err = error.response.data.message
+          toast.error(err, {
+            style: { height: '50px', padding: '15px' },
+          })
+        }
+      })
   }
 
   async function deleteEmployee(id: number | undefined) {
@@ -189,6 +220,7 @@ function SettingsProvider({ children }: SettingProviderProps) {
         updateMonthValue,
         isLoadingEmployees,
         addEmployee,
+        updateEmployee,
         deleteEmployee,
       }}
     >
@@ -215,6 +247,11 @@ function useSettings() {
   const addEmployee = useContextSelector(
     SettingsContext,
     (context) => context.addEmployee,
+  )
+
+  const updateEmployee = useContextSelector(
+    SettingsContext,
+    (context) => context.updateEmployee,
   )
 
   const deleteEmployee = useContextSelector(
@@ -259,6 +296,7 @@ function useSettings() {
     updateMonthValue,
     isLoadingEmployees,
     addEmployee,
+    updateEmployee,
     deleteEmployee,
   }
 }

@@ -4,8 +4,6 @@ export interface IEmployee {
   storeCode?: string
   userLogin?: string
   name?: string
-  cpf?: string | null
-  newUser?: boolean | null
   status?: boolean
   office?: string
   idShift?: number
@@ -28,8 +26,29 @@ export interface IEmployee {
   flowScale?: string
 }
 
-export interface ModalEditEmployeeProps {
+export interface IArrayDayOff {
+  id?: number | string
+  date: Date | null
+  type?: string
+}
+
+export interface IArrayVacation {
+  id?: number | string
+  startVacation: Date | null
+  finishVacation: Date | null
+  type?: string
+}
+
+export interface ModalEditSettingsEmployeeProps {
   open: boolean
   onHandleClose: () => void
   employee: IEmployee | undefined
+}
+
+export interface IModalEmployee {
+  workShift: string
+}
+
+export interface infoEmployeeProps {
+  selectedShift: string | null
 }

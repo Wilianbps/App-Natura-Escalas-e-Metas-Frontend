@@ -31,6 +31,7 @@ export interface IEmployee {
   }[]
   flowScale?: string
 }
+
 export interface IInfoEmployee {
   name: string
   position: string
@@ -59,5 +60,6 @@ export interface SettingsContextType {
   isLoadingEmployees: boolean
   updateMonthValue: (month: string) => void
   addEmployee: (employee: IInfoEmployee) => void
+  updateEmployee: (id: number | undefined, employee: IInfoEmployee) => void
   deleteEmployee: (id: number | undefined) => void
 }
