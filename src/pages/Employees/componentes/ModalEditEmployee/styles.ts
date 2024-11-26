@@ -53,7 +53,6 @@ export const InputContainer = styled.section`
     min-height: 20px; /* Ajuste conforme necessário */
   }
 `
-
 export const ButtonsContainer = styled.footer`
   display: flex;
   justify-content: space-between;

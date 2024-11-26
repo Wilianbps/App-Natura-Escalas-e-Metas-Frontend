@@ -1,5 +1,5 @@
 import { format, lastDayOfMonth, parse } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { createContext, useContextSelector } from 'use-context-selector'
 
 import { api } from '@/services/axios'
@@ -49,17 +49,24 @@ function GoalsProvider({ children }: GoalsProviderProps) {
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
 
-  async function fetchGoalsByFortnight() {
-    setIsLoadingGoalsByFortnight(true)
-    await api
-      .get(
-        `goals/get-goals-by-fortnight?storeCode=${store}&month=${month}&year=${year}`,
-      )
-      .then((response) => {
+  const fetchGoalsByFortnight = useCallback(
+    async (goalType?: string) => {
+      setIsLoadingGoalsByFortnight(true)
+      const goalTypeValue = goalType === undefined ? 'goal' : goalType
+
+      try {
+        const response = await api.get(
+          `goals/get-goals-by-fortnight?storeCode=${store}&month=${month}&year=${year}&goalType=${goalTypeValue}`,
+        )
         setGoals(response.data)
+      } catch (error) {
+        console.error('Failed to fetch goals by fortnight:', error)
+      } finally {
         setIsLoadingGoalsByFortnight(false)
-      })
-  }
+      }
+    },
+    [store, month, year, setGoals, setIsLoadingGoalsByFortnight], // Declare as dependências necessárias
+  )
 
   async function fetchGoalsByWeek() {
     await api

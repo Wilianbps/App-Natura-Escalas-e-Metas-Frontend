@@ -1,39 +1,65 @@
+import { useState } from 'react'
+
 import { useGoals } from '@/contexts/goals/GoalsContext'
 import { formatNumber } from '@/libs/formatNumber'
 
 import { Card, Container } from './styles'
 
 export function GoalCards() {
-  const { goalsByMonth } = useGoals()
+  const { goalsByMonth, fetchGoalsByFortnight } = useGoals()
+  const [activeCard, setActiveCard] = useState('goal')
+
+  const handleCardClick = (cardType: string) => {
+    setActiveCard(cardType)
+    fetchGoalsByFortnight(cardType)
+  }
 
   return (
     <Container>
-      <Card colorCard="goal">
+      <Card
+        type="button"
+        colorCard="goal"
+        isActive={activeCard === 'goal'}
+        onClick={() => handleCardClick('goal')}
+      >
         <header>
           <p>Meta Loja</p>
         </header>
-        {goalsByMonth.length === 0 && <p>R$000,000,00</p>}
-        {goalsByMonth.length !== 0 && (
-          <p>{formatNumber(goalsByMonth[1]?.goalValue)}</p>
-        )}
+        <p>
+          {goalsByMonth.length === 0
+            ? 'R$000,000,00'
+            : formatNumber(goalsByMonth[1]?.goalValue)}
+        </p>
       </Card>
-      <Card colorCard="super-goal">
+      <Card
+        type="button"
+        colorCard="super-goal"
+        isActive={activeCard === 'super-goal'}
+        onClick={() => handleCardClick('super-goal')}
+      >
         <header>
           <p>Super Meta</p>
         </header>
-        {goalsByMonth.length === 0 && <p>R$000,000,00</p>}
-        {goalsByMonth.length !== 0 && (
-          <p>{formatNumber(goalsByMonth[2]?.goalValue)}</p>
-        )}
+        <p>
+          {goalsByMonth.length === 0
+            ? 'R$000,000,00'
+            : formatNumber(goalsByMonth[2]?.goalValue)}
+        </p>
       </Card>
-      <Card colorCard="hiper-goal">
+      <Card
+        type="button"
+        colorCard="hiper-goal"
+        isActive={activeCard === 'hiper-goal'}
+        onClick={() => handleCardClick('hiper-goal')}
+      >
         <header>
           <p>Hiper Meta</p>
         </header>
-        {goalsByMonth.length === 0 && <p>R$000,000,00</p>}
-        {goalsByMonth.length !== 0 && (
-          <p>{formatNumber(goalsByMonth[0]?.goalValue)}</p>
-        )}
+        <p>
+          {goalsByMonth.length === 0
+            ? 'R$000,000,00'
+            : formatNumber(goalsByMonth[0]?.goalValue)}
+        </p>
       </Card>
     </Container>
   )
