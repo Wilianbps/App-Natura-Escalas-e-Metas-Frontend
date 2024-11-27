@@ -15,6 +15,7 @@ import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatDate } from '@/libs/formatDate'
 import { formatName } from '@/libs/formatName'
 
+import { ModalConfirmAddDayOff } from '../ModalConfirmAddDayOff'
 import { DatePickerEmployeeModal } from './components/DatePicker'
 import { SelectOptions } from './components/Select'
 import { WorkShift } from './components/WorkShift'
@@ -37,6 +38,7 @@ import {
   SelectDayoffContainer,
   SelectVacationContainer,
 } from './styles'
+import { getEmployeesWithSameDayOff } from './utils/getEmployeesWithSameDayOff'
 import { validateDayOff } from './utils/validateDayOff'
 import { validateVacations } from './utils/validateVacations'
 
@@ -44,7 +46,7 @@ export default function ModalEditSettingsEmployee(
   props: ModalEditSettingsEmployeeProps,
 ) {
   const { store, cookieUserLogin } = useProfiles()
-  const { updateShiftRestSchedule } = useSettings()
+  const { updateShiftRestSchedule, employees } = useSettings()
   const { open, onHandleClose, employee } = props
 
   const { handleSubmit, reset } = useForm<infoEmployeeProps>()
@@ -74,6 +76,14 @@ export default function ModalEditSettingsEmployee(
     employee?.shift || null,
   )
 
+  const [
+    isModalEmployeesWithSameDayOffOpen,
+    setIsModalEmployeesWithSameDayOffOpen,
+  ] = useState(false)
+  const [employeesWithSameDayOff, setEmployeesWithSameDayOff] = useState<
+    IEmployee[]
+  >([])
+
   function handleShiftChange(shift: string | null) {
     if (employee) {
       employee.shift = shift
@@ -97,20 +107,8 @@ export default function ModalEditSettingsEmployee(
     setDayOff(date)
   }
 
-  function handleAddDayOffInArray() {
-    // E você quer extrair os períodos de férias de `employee`
-    const arrayVacation = employee?.arrayVacation ?? []
-
-    const validate = validateDayOff(
-      dayOff as Date,
-      arrayVacation,
-      copyArrayDaysOff as [],
-    )
-
-    if (validate) return
-
+  function addDayOff() {
     const id = uuidv4()
-
     if (dayOff) {
       setArrayDaysOff((prevArrayDaysOff) =>
         prevArrayDaysOff
@@ -126,6 +124,27 @@ export default function ModalEditSettingsEmployee(
     }
 
     setDayOff(null)
+  }
+
+  function handleAddDayOffInArray() {
+    const arrayVacation = employee?.arrayVacation ?? []
+
+    const validate = validateDayOff(
+      dayOff as Date,
+      arrayVacation,
+      copyArrayDaysOff as [],
+    )
+
+    if (validate) return
+
+    const employeesWithDayOff = getEmployeesWithSameDayOff(employees, dayOff)
+
+    if (employeesWithDayOff.length > 0) {
+      setEmployeesWithSameDayOff(employeesWithDayOff)
+      setIsModalEmployeesWithSameDayOffOpen(true)
+      return
+    }
+    addDayOff()
   }
 
   function handleRemoveDayOffInArray(id: string | undefined) {
@@ -581,6 +600,13 @@ export default function ModalEditSettingsEmployee(
           </section>
         </FormModal>
       </ContainerModal>
+      <ModalConfirmAddDayOff
+        open={isModalEmployeesWithSameDayOffOpen}
+        onHandleClose={() => setIsModalEmployeesWithSameDayOffOpen(false)}
+        employees={employeesWithSameDayOff}
+        onConfirm={addDayOff}
+        dayOff={dayOff}
+      />
     </React.Fragment>
   )
 }

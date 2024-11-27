@@ -65,7 +65,7 @@ function GoalsProvider({ children }: GoalsProviderProps) {
         setIsLoadingGoalsByFortnight(false)
       }
     },
-    [store, month, year, setGoals, setIsLoadingGoalsByFortnight], // Declare as dependências necessárias
+    [store, month, year, setGoals, setIsLoadingGoalsByFortnight],
   )
 
   async function fetchGoalsByWeek() {

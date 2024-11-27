@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useGoals } from '@/contexts/goals/GoalsContext'
+import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatNumber } from '@/libs/formatNumber'
 
 import { Card, Container } from './styles'
 
 export function GoalCards() {
+  const { monthValue } = useSettings()
   const { goalsByMonth, fetchGoalsByFortnight } = useGoals()
   const [activeCard, setActiveCard] = useState('goal')
 
@@ -13,6 +15,10 @@ export function GoalCards() {
     setActiveCard(cardType)
     fetchGoalsByFortnight(cardType)
   }
+
+  useEffect(() => {
+    setActiveCard('goal')
+  }, [monthValue])
 
   return (
     <Container>
