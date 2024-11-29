@@ -12,10 +12,30 @@ export const styles = StyleSheet.create({
   },
 
   header: {
-    fontSize: '18px',
+    fontSize: '16px',
     fontWeight: 'bold',
-    marginBottom: '20px',
+    marginBottom: '10px',
+    width: '100%',
   },
+
+  logoHeader: {
+    position: 'absolute',
+    top: 10,
+    paddingRight: 20,
+    width: '100%',
+    marginBottom: '10px',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: '20px',
+  },
+
+  logoDG: { width: '70px' },
+
+  logoNatura: { width: '40px' },
+
+  textHeader: { textAlign: 'center', fontSize: '14px' },
 
   tableRow: {
     flexDirection: 'row',

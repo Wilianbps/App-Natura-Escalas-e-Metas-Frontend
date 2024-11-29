@@ -1,8 +1,10 @@
-import { Document, Page, Text, View } from '@react-pdf/renderer' // Componente do documento PDF
+import { Document, Image, Page, Text, View } from '@react-pdf/renderer' // Componente do documento PDF
 
 import { formatName } from '@/libs/formatName'
 import { formatNumber } from '@/libs/formatNumber'
 
+import logoDG from '../../../../../../../public/assets/consultdg_logo.png'
+import logoNatura from '../../../../../../../public/assets/natura_logo.png'
 import { styles } from './styles'
 
 interface IGoalsByWeek {
@@ -41,6 +43,10 @@ export function GoalsByWeekPDF(props: GoalsSummaryProps) {
     <Document>
       {goalsByWeek.employeesByWeeks.length === 0 && (
         <Page size="A4" orientation="landscape" style={styles.page}>
+          <View style={styles.logoHeader}>
+            <Image source={logoNatura} style={styles.logoNatura} />
+            <Image source={logoDG} style={styles.logoDG} />
+          </View>
           <View style={styles.header}>
             <Text>Não há Relatório no Período</Text>
           </View>
@@ -49,8 +55,12 @@ export function GoalsByWeekPDF(props: GoalsSummaryProps) {
 
       {goalsByWeek.employeesByWeeks.length > 0 && (
         <Page size="A4" orientation="landscape" style={styles.page}>
+          <View style={styles.logoHeader}>
+            <Image source={logoNatura} style={styles.logoNatura} />
+            <Image source={logoDG} style={styles.logoDG} />
+          </View>
           <View style={styles.header}>
-            <Text>
+            <Text style={styles.textHeader}>
               Resumo Meta Por Semana {month}/{year}
             </Text>
           </View>

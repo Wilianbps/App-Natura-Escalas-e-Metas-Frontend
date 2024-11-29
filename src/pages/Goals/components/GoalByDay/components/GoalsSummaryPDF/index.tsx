@@ -1,8 +1,10 @@
-import { Document, Page, Text, View } from '@react-pdf/renderer'
+import { Document, Image, Page, Text, View } from '@react-pdf/renderer'
 
 import { formatName } from '@/libs/formatName'
 import { formatNumber } from '@/libs/formatNumber'
 
+import logoDG from '../../../../../../../public/assets/consultdg_logo.png'
+import logoNatura from '../../../../../../../public/assets/natura_logo.png'
 import { splitDaysOfMonthIntoTwoParts } from '../../utils/splitDaysOfMonthIntoTwoParts'
 import { styles } from './styles'
 
@@ -66,6 +68,10 @@ export function GoalsSummaryPDF(props: GoalsSummaryProps) {
     <Document>
       {goals[0].length === 0 && (
         <Page size="A4" orientation="landscape" style={styles.page}>
+          <View style={styles.logoHeader}>
+            <Image source={logoNatura} style={styles.logoNatura} />
+            <Image source={logoDG} style={styles.logoDG} />
+          </View>
           <View style={styles.header}>
             <Text>Não há Relatório no Período</Text>
           </View>
@@ -81,9 +87,13 @@ export function GoalsSummaryPDF(props: GoalsSummaryProps) {
               key={pageIndex}
               style={styles.page}
             >
+              <View style={styles.logoHeader}>
+                <Image source={logoNatura} style={styles.logoNatura} />
+                <Image source={logoDG} style={styles.logoDG} />
+              </View>
               <View style={styles.header}>
-                <Text>
-                  Resumo Escala {month}/{year} - Quinzena {pageIndex + 1}
+                <Text style={styles.textHeader}>
+                  Resumo Meta {month}/{year} - Quinzena {pageIndex + 1}
                 </Text>
               </View>
 
@@ -181,7 +191,7 @@ export function GoalsSummaryPDF(props: GoalsSummaryProps) {
               {goals[pageIndex]?.some((item) => item.activeSeller) && (
                 <>
                   <View style={styles.headerFootter}>
-                    <Text>Colabolador Extra</Text>
+                    <Text style={styles.textHeader}>Colabolador Extra</Text>
                   </View>
 
                   {goals[pageIndex]?.map((item, index) => (
@@ -213,38 +223,6 @@ export function GoalsSummaryPDF(props: GoalsSummaryProps) {
                   ))}
                 </>
               )}
-
-              {/*  <View style={styles.headerFootter}>
-                <Text>Colabolador Extra</Text>
-              </View>
-
-              {goals[pageIndex]?.map((item, index) => (
-                <View style={styles.tableRow} key={`${item.id}-${index}`}>
-                  {item.activeSeller && (
-                    <>
-                      <View style={styles.tableColBodyBlue}>
-                        <Text>{formatName(item?.name)}</Text>
-                      </View>
-
-                      <View style={styles.tableColBodyBlue}>
-                        <Text>{calculateMonthTotal(item.id)}</Text>
-                      </View>
-                      {item?.days?.map((day, indexDay) => (
-                        <View
-                          style={styles.tableColBodyContainerBlue}
-                          key={`${item.id}-${indexDay}`}
-                        >
-                          <Text>
-                            {!isNaN(Number(day.goalDayByEmployee))
-                              ? formatNumber(Number(day.goalDayByEmployee))
-                              : '-'}
-                          </Text>
-                        </View>
-                      ))}
-                    </>
-                  )}
-                </View>
-              ))} */}
             </Page>
           ))}
         </>

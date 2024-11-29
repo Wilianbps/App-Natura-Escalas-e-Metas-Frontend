@@ -1,7 +1,9 @@
-import { Document, Page, Text, View } from '@react-pdf/renderer'
+import { Document, Image, Page, Text, View } from '@react-pdf/renderer'
 
 import { formatName } from '@/libs/formatName'
 
+import logoDG from '../../../../../../../public/assets/consultdg_logo.png'
+import logoNatura from '../../../../../../../public/assets/natura_logo.png'
 import { splitDaysOfMonthIntoTwoParts } from '../../utils/splitDaysOfMonthIntoTwoParts'
 import { styles } from './styles'
 
@@ -51,6 +53,10 @@ export function ScaleSummaryByFortnightPDF(props: ScaleSummaryProps) {
     <Document>
       {scaleSummary[0].length === 0 && (
         <Page size="A4" orientation="landscape" style={styles.page}>
+          <View style={styles.logoHeader}>
+            <Image source={logoNatura} style={styles.logoNatura} />
+            <Image source={logoDG} style={styles.logoDG} />
+          </View>
           <View style={styles.header}>
             <Text>Não há Relatório no Período</Text>
           </View>
@@ -66,8 +72,12 @@ export function ScaleSummaryByFortnightPDF(props: ScaleSummaryProps) {
               key={pageIndex}
               style={styles.page}
             >
+              <View style={styles.logoHeader}>
+                <Image source={logoNatura} style={styles.logoNatura} />
+                <Image source={logoDG} style={styles.logoDG} />
+              </View>
               <View style={styles.header}>
-                <Text>
+                <Text style={styles.textHeader}>
                   Resumo Escala {month}/{year} - Quinzena {pageIndex + 1}
                 </Text>
               </View>
