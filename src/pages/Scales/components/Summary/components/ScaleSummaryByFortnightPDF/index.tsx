@@ -108,7 +108,7 @@ export function ScaleSummaryByFortnightPDF(props: ScaleSummaryProps) {
                     <Text>{formatName(collaborator.name)}</Text>
                   </View>
 
-                  {fortnight.map((dayFortnight, index) => (
+                  {fortnight.map((_, index) => (
                     <View style={styles.tableColBodyContainer} key={index}>
                       {/* Exibe o horário de início e término, se estiver disponível */}
                       <Text key={index}>
