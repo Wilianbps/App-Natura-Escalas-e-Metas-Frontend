@@ -11,6 +11,8 @@ export function GoalCards() {
   const { goalsByMonth, fetchGoalsByFortnight } = useGoals()
   const [activeCard, setActiveCard] = useState('goal')
 
+  console.log(goalsByMonth)
+
   const handleCardClick = (cardType: string) => {
     setActiveCard(cardType)
     fetchGoalsByFortnight(cardType)
@@ -34,7 +36,7 @@ export function GoalCards() {
         <p>
           {goalsByMonth.length === 0
             ? 'R$000,000,00'
-            : formatNumber(goalsByMonth[1]?.goalValue)}
+            : formatNumber(goalsByMonth[0]?.goalValue)}
         </p>
       </Card>
       <Card
@@ -49,7 +51,7 @@ export function GoalCards() {
         <p>
           {goalsByMonth.length === 0
             ? 'R$000,000,00'
-            : formatNumber(goalsByMonth[2]?.goalValue)}
+            : formatNumber(goalsByMonth[1]?.goalValue)}
         </p>
       </Card>
       <Card
@@ -64,7 +66,7 @@ export function GoalCards() {
         <p>
           {goalsByMonth.length === 0
             ? 'R$000,000,00'
-            : formatNumber(goalsByMonth[0]?.goalValue)}
+            : formatNumber(goalsByMonth[2]?.goalValue)}
         </p>
       </Card>
     </Container>
