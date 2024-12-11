@@ -11,8 +11,6 @@ export function GoalCards() {
   const { goalsByMonth, fetchGoalsByFortnight } = useGoals()
   const [activeCard, setActiveCard] = useState('goal')
 
-  console.log(goalsByMonth)
-
   const handleCardClick = (cardType: string) => {
     setActiveCard(cardType)
     fetchGoalsByFortnight(cardType)

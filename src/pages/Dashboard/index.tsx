@@ -54,7 +54,7 @@ export function Dashboard() {
                 <SliderSizes />
                 {goalsByMonth.length === 0 && <footer>R$000.000,00</footer>}
                 {goalsByMonth.length !== 0 && (
-                  <footer>{formatNumber(goalsByMonth[1]?.goalValue)}</footer>
+                  <footer>{formatNumber(goalsByMonth[0]?.goalValue)}</footer>
                 )}
               </>
             )}
