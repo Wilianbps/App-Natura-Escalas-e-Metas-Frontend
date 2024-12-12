@@ -232,6 +232,10 @@ export function Scale() {
           (option) => option.type === 'R',
         ).length
 
+        const workingHour = scale.options.filter(
+          (option) => option.type === 'T',
+        ).length
+
         const consecutiveMealBreaks = scale.options.some(
           (option, index, array) =>
             option.type === 'R' &&
@@ -239,9 +243,9 @@ export function Scale() {
             array[index + 1].type === 'R',
         )
 
-        if (filledShifts < 17) {
+        if (workingHour < 12) {
           errors.push(
-            `Funcionário/a ${formatName(scale.name)} não tem 8,5h de trabalho preenchidas.`,
+            `Funcionário/a ${formatName(scale.name)} não tem 6h de trabalho preenchidas.`,
           )
         }
 
@@ -251,15 +255,15 @@ export function Scale() {
           )
         }
 
-        if (mealBreaks > 2) {
+        if (filledShifts > 12 && mealBreaks < 2) {
           errors.push(
-            `Funcionário/a ${formatName(scale.name)} tem mais de 2 períodos de refeição.`,
+            `Funcionário/a ${formatName(scale.name)} tem menos de 2 períodos de refeição.`,
           )
         }
 
-        if (mealBreaks < 2) {
+        if (mealBreaks > 2) {
           errors.push(
-            `Funcionário/a ${formatName(scale.name)} tem menos de 2 períodos de refeição.`,
+            `Funcionário/a ${formatName(scale.name)} tem mais de 2 períodos de refeição.`,
           )
         }
 

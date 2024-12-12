@@ -84,7 +84,7 @@ export function Dashboard() {
       <ContainerChartAverageSalesMonth>
         {isLoadingGoalsLastTwelveMonths && (
           <>
-            <TextInfo text="Carregando gráfico Ranking de Vendas Mês..." />
+            <TextInfo text="Carregando gráfico Ranking Metas..." />
             <Box sx={{ width: '100%', marginTop: '10px' }}>
               <LinearProgress />
             </Box>
@@ -93,7 +93,7 @@ export function Dashboard() {
 
         {!isLoadingGoalsLastTwelveMonths && (
           <>
-            <header>Ranking de Vendas Mês</header>
+            <header>Ranking Metas</header>
 
             <section>
               <AverageSalesMonthChart />
