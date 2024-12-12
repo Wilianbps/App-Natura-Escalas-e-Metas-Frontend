@@ -59,6 +59,7 @@ export interface IRankingGoalsLastTwelveMonths {
 export interface GoalsContextType {
   goals: Array<IGoals[]>
   fetchGoalsByFortnight: (goalType?: string) => void
+  fetchGoalsByWeek: (goalType?: string) => void
   goalsByWeek: IGoalsByWeek
   goalsByMonth: IGoalsByMonth[]
   goalEmployeeByMonth: IGoalEmployeeByMonth[]

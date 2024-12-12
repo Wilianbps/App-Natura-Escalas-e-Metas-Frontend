@@ -217,8 +217,6 @@ export function Scale() {
   function validateEmployeeShifts(scales: IScale[]): string[] {
     const errors: string[] = []
 
-    console.log(scales)
-
     scales.forEach((scale) => {
       if (scale.status) {
         const filledShifts = scale.options.filter(

@@ -68,15 +68,21 @@ function GoalsProvider({ children }: GoalsProviderProps) {
     [store, month, year, setGoals, setIsLoadingGoalsByFortnight],
   )
 
-  async function fetchGoalsByWeek() {
-    await api
-      .get(
-        `goals/get-goals-by-week?storeCode=${store}&month=${month}&year=${year}`,
-      )
-      .then((response) => {
+  const fetchGoalsByWeek = useCallback(
+    async (goalType?: string) => {
+      const goalTypeValue = goalType === undefined ? 'goal' : goalType
+
+      try {
+        const response = await api.get(
+          `goals/get-goals-by-week?storeCode=${store}&month=${month}&year=${year}&goalType=${goalTypeValue}`,
+        )
         setGoalsByWeek(response.data)
-      })
-  }
+      } catch (error) {
+        console.error('Failed to fetch goals by week:', error)
+      }
+    },
+    [month, store, year, setGoalsByWeek],
+  )
 
   async function fetchGoalsByMonth() {
     setIsLoadingGoalsByMonth(true)
@@ -139,6 +145,7 @@ function GoalsProvider({ children }: GoalsProviderProps) {
       value={{
         goals,
         fetchGoalsByFortnight,
+        fetchGoalsByWeek,
         goalsByWeek,
         goalsByMonth,
         goalEmployeeByMonth,
@@ -159,6 +166,10 @@ function useGoals() {
   const fetchGoalsByFortnight = useContextSelector(
     GoalsContext,
     (context) => context.fetchGoalsByFortnight,
+  )
+  const fetchGoalsByWeek = useContextSelector(
+    GoalsContext,
+    (context) => context.fetchGoalsByWeek,
   )
   const goalsByWeek = useContextSelector(
     GoalsContext,
@@ -200,6 +211,7 @@ function useGoals() {
   return {
     goals,
     fetchGoalsByFortnight,
+    fetchGoalsByWeek,
     goalsByWeek,
     goalsByMonth,
     goalEmployeeByMonth,

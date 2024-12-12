@@ -8,12 +8,13 @@ import { Card, Container } from './styles'
 
 export function GoalCards() {
   const { monthValue } = useSettings()
-  const { goalsByMonth, fetchGoalsByFortnight } = useGoals()
+  const { goalsByMonth, fetchGoalsByFortnight, fetchGoalsByWeek } = useGoals()
   const [activeCard, setActiveCard] = useState('goal')
 
   const handleCardClick = (cardType: string) => {
     setActiveCard(cardType)
     fetchGoalsByFortnight(cardType)
+    fetchGoalsByWeek(cardType)
   }
 
   useEffect(() => {
