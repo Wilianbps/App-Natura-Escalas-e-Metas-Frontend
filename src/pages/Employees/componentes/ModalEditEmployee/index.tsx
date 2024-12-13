@@ -12,6 +12,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import { toZonedTime } from 'date-fns-tz'
 import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { CgCloseO } from 'react-icons/cg'
@@ -22,6 +23,7 @@ import { useSettings } from '@/contexts/setting/SettingContext'
 import { insertMaskInCpf } from '@/libs/cpf'
 import { formatName } from '@/libs/formatName'
 
+import { DatePickerRegisterEmployee } from '../DatePickerRegisterEmployee'
 import { ModalEditEmployeeProps } from './interfaces'
 import { positions } from './positions'
 import {
@@ -53,15 +55,18 @@ const schemaForm = z.object({
       },
       { message: 'CPF inválido' },
     ),
+  date: z
+    .date()
+    .nullable()
+    .refine((date) => date !== null, 'Por favor, selecione uma data válida'),
   selectedShift: z.string().min(1, 'Por favor, selecione um turno'),
 })
-
-/* type FormProps = z.infer<typeof schemaForm> */
 
 type FormProps = {
   name: string
   position: '' | (typeof positions)[number] // Adiciona "" ou os cargos válidos
   cpf: string
+  date: Date | null
   selectedShift: string
 }
 
@@ -86,6 +91,7 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
       name: '',
       position: '',
       cpf: '',
+      date: null,
       selectedShift: '',
     },
   })
@@ -94,10 +100,15 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
     if (open && employee) {
       const validPosition = positions.find((pos) => pos === employee.office)
 
+      const startDate = employee.startDate
+        ? toZonedTime(employee.startDate, '')
+        : null
+
       reset({
         name: formatName(employee.name) || '',
         position: validPosition,
         cpf: insertMaskInCpf(employee.cpf || ''),
+        date: startDate,
         selectedShift:
           employee.idShift === 1
             ? 'Matutino'
@@ -124,6 +135,7 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
       name: infoEmployee.name.toUpperCase(),
       position: infoEmployee.position,
       cpf: infoEmployee.cpf,
+      startDate: infoEmployee.date,
       selectedShift:
         infoEmployee.selectedShift === 'Matutino'
           ? 1
@@ -143,6 +155,7 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
       name: '',
       position: '',
       cpf: '',
+      date: null,
       selectedShift: '',
     })
     clearErrors()
@@ -239,6 +252,20 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
                     )}
                   </div>
                 </section>
+              </section>
+
+              <section className="date-content">
+                <DatePickerRegisterEmployee
+                  control={control}
+                  label="Selecione a Data"
+                  defaultValue={null}
+                />
+
+                {errors.date?.message && (
+                  <Typography sx={{ color: 'red' }}>
+                    {errors.date?.message}
+                  </Typography>
+                )}
               </section>
 
               <Box sx={{ mb: 2 }}>

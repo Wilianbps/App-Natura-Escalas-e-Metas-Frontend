@@ -36,6 +36,7 @@ export interface IInfoEmployee {
   name: string
   position: string
   cpf?: string
+  startDate: Date | null
   selectedShift: number | false
 }
 

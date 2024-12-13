@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { DatePicker } from '@mui/x-date-pickers/'
 
 export const StyledDatePicker = styled(DatePicker)`
-  width: 200px;
+  width: 280px;
   input {
     font-size: 13px;
     font-weight: 600;

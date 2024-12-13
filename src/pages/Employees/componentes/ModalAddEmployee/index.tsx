@@ -21,6 +21,7 @@ import { Button } from '@/components/Button'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { insertMaskInCpf } from '@/libs/cpf'
 
+import { DatePickerRegisterEmployee } from '../DatePickerRegisterEmployee'
 import { ModalAddEmployeeProps } from './interfaces'
 import { positions } from './positions'
 import {
@@ -45,6 +46,10 @@ const schemaForm = z.object({
       },
       { message: 'CPF inválido' },
     ),
+  date: z
+    .date()
+    .nullable()
+    .refine((date) => date !== null, 'Por favor, selecione uma data válida'),
   selectedShift: z.string().min(1, 'Por favor, selecione um turno'),
 })
 
@@ -52,6 +57,7 @@ type FormProps = {
   name: string
   position: '' | (typeof positions)[number] // Adiciona "" ou os cargos válidos
   cpf: string
+  date: Date | null
   selectedShift: string
 }
 
@@ -76,6 +82,7 @@ export function ModalAddEmployee(props: ModalAddEmployeeProps) {
       name: '',
       position: '',
       cpf: '',
+      date: null,
       selectedShift: '',
     },
   })
@@ -92,6 +99,7 @@ export function ModalAddEmployee(props: ModalAddEmployeeProps) {
       name: infoEmployee.name,
       position: infoEmployee.position,
       cpf: infoEmployee.cpf,
+      startDate: infoEmployee.date,
       selectedShift:
         infoEmployee.selectedShift === 'Matutino'
           ? 1
@@ -124,14 +132,16 @@ export function ModalAddEmployee(props: ModalAddEmployeeProps) {
 
         <main>
           <Form onSubmit={handleSubmit(handleForm)}>
-            <InputContainer>
+            <InputContainer error={!!errors.cpf || !!errors.position}>
               <TextField
+                sx={{ minWidth: 280 }}
                 id="outlined-basic"
                 label="Nome"
                 variant="outlined"
                 error={!!errors.name}
                 {...register('name')}
               />
+
               {errors.name?.message && (
                 <Typography sx={{ color: 'red' }}>
                   {errors.name?.message}
@@ -147,10 +157,7 @@ export function ModalAddEmployee(props: ModalAddEmployeeProps) {
                         <MenuItem value="" disabled>
                           Selecione um cargo
                         </MenuItem>
-                        {/*  <MenuItem value="Apoio">Apoio</MenuItem>
-                        <MenuItem value="VR">VR</MenuItem>
-                        <MenuItem value="Estoquista">Estoquista</MenuItem>
-                        <MenuItem value="Vendedor">Vendedor</MenuItem> */}
+
                         {positions.map((position) => (
                           <MenuItem key={position} value={position}>
                             {position}
@@ -200,9 +207,22 @@ export function ModalAddEmployee(props: ModalAddEmployeeProps) {
                 </section>
               </section>
 
+              <section className="date-content">
+                <DatePickerRegisterEmployee
+                  control={control}
+                  label="Selecione a Data"
+                  defaultValue={null}
+                />
+
+                {errors.date?.message && (
+                  <Typography sx={{ color: 'red' }}>
+                    {errors.date?.message}
+                  </Typography>
+                )}
+              </section>
+
               <Box sx={{ mb: 2 }}>
                 <h4>Turnos</h4>
-                {/* Controlador para o RadioGroup */}
                 <Controller
                   name="selectedShift"
                   control={control}

@@ -5,6 +5,7 @@ export interface IEmployee {
   userLogin?: string
   name?: string
   cpf?: string | null
+  startDate?: Date | null
   newUser?: boolean | null
   status?: boolean
   office?: string

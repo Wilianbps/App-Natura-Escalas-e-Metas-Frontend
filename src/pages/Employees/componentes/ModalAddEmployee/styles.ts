@@ -25,7 +25,11 @@ export const Form = styled.form`
   margin-top: 1rem;
 `
 
-export const InputContainer = styled.section`
+interface InputContainerProps {
+  error?: boolean
+}
+
+export const InputContainer = styled.section<InputContainerProps>`
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -34,23 +38,30 @@ export const InputContainer = styled.section`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     gap: 1rem;
   }
 
   .position-content {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: ${(props) => props.error && '1rem'};
   }
 
   .cpf-content {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: ${(props) => props.error && '1rem'};
+  }
+
+  .date-content {
+    display: flex;
+    flex-direction: column;
+    gap: ${(props) => props.error && '1rem'};
   }
 
   .error-message {
-    min-height: 20px; /* Ajuste conforme necessário */
+    height: ${(props) => props.error && '20px'};
   }
 `
 
