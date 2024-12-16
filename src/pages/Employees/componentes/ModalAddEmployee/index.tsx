@@ -210,7 +210,7 @@ export function ModalAddEmployee(props: ModalAddEmployeeProps) {
               <section className="date-content">
                 <DatePickerRegisterEmployee
                   control={control}
-                  label="Selecione a Data"
+                  label="Data de Início"
                   defaultValue={null}
                 />
 

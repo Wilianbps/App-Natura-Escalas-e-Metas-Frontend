@@ -165,7 +165,7 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
     <React.Fragment>
       <ContainerModal open={open} onClose={handleCloseModal}>
         <header>
-          <h3>Cadastrar Usuário</h3>
+          <h3>Editar Usuário</h3>
           <IconButton aria-label="close" onClick={handleCloseModal}>
             <CgCloseO />
           </IconButton>
@@ -257,7 +257,7 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
               <section className="date-content">
                 <DatePickerRegisterEmployee
                   control={control}
-                  label="Selecione a Data"
+                  label="Data de Início"
                   defaultValue={null}
                 />
 

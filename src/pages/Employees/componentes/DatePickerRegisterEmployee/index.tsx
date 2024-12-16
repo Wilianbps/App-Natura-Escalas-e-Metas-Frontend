@@ -2,6 +2,7 @@
 import { TextField } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
+import { ptBR } from 'date-fns/locale'
 import { Controller } from 'react-hook-form'
 
 import { StyledDatePicker } from './styles'
@@ -17,10 +18,8 @@ export function DatePickerRegisterEmployee({
   label,
   defaultValue,
 }: DatePickerEmployeeModalProps) {
-  const today = new Date()
-
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
       <Controller
         name="date"
         control={control}
@@ -30,7 +29,6 @@ export function DatePickerRegisterEmployee({
             <StyledDatePicker
               {...field}
               format="dd/MM/yyyy"
-              minDate={today}
               label={label}
               value={field.value || null}
               slotProps={{

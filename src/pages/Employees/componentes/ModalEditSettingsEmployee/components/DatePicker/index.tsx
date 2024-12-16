@@ -1,5 +1,6 @@
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
+import { ptBR } from 'date-fns/locale'
 
 import { StyledDatePicker } from './styles'
 
@@ -27,7 +28,7 @@ export function DatePickerEmployeeModal({
   )
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
       <StyledDatePicker
         label={label}
         format="dd/MM/yyyy"

@@ -19,7 +19,7 @@ export function DatePickerMUI({
   const year = selectDate?.getFullYear()
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
       <StyledDatePicker
         /*   disableOpenPicker */
         format={`${monthName} ${year}`}
