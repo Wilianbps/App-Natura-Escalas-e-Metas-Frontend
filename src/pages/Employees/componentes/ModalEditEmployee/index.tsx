@@ -173,7 +173,7 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
 
         <main>
           <Form onSubmit={handleSubmit(handleForm)}>
-            <InputContainer>
+            <InputContainer error={!!errors.cpf || !!errors.position}>
               <TextField
                 id="outlined-basic"
                 label="Nome"
