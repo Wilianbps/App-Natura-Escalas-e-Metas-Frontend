@@ -20,10 +20,6 @@ export function MainNavigation(props: MainNavigationProps) {
   const { pathname } = useLocation()
   const { isSidebarOpen } = props
 
-  function handleRedirectToBeepInput() {
-    window.location.href = pathBeepInput.path
-  }
-
   return (
     <NavMenu>
       <section>
@@ -57,7 +53,7 @@ export function MainNavigation(props: MainNavigationProps) {
       </section>
 
       <footer>
-        <StyledLink to="#" onClick={handleRedirectToBeepInput}>
+        <StyledLink to={pathBeepInput.path}>
           <div className="background-icon">
             <CgCornerDownLeft />
           </div>
