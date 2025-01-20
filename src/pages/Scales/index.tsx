@@ -125,16 +125,16 @@ export function ScalePage() {
                   value="summary"
                   sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
                 />
-                {cookieProfile === 'Supervisão Loja' ||
-                  (cookieProfile === 'Master' && (
-                    <Tab
-                      label="Aprovações"
-                      icon={<CgCheck size={26} />}
-                      iconPosition="end"
-                      value="approvals"
-                      sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
-                    />
-                  ))}
+                {(cookieProfile === 'Supervisão Loja' ||
+                  cookieProfile === 'Master') && (
+                  <Tab
+                    label="Aprovações"
+                    icon={<CgCheck size={26} />}
+                    iconPosition="end"
+                    value="approvals"
+                    sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
+                  />
+                )}
               </TabList>
             </Box>
             <TabPanel value="setting" sx={{ padding: 0 }}>
