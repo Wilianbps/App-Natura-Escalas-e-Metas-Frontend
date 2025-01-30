@@ -194,7 +194,9 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
 
   async function fetchGetScaleApprovalByDate() {
     await api
-      .get(`scales/get-scales-approval-request?month=${month}&year=${year}`)
+      .get(
+        `scales/get-scales-approval-request?userLogin=${cookieUserLogin}?month=${month}&year=${year}`,
+      )
       .then((response) => {
         setDataScaleApprovalRequest(response.data)
       })
