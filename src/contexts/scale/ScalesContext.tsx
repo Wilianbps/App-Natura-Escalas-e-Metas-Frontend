@@ -172,30 +172,32 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function updateFinishedScaleByMonth() {
+    await new Promise((resolve) => setTimeout(resolve, 500))
     const newDate = new Date()
     const day = newDate.getDate().toString().padStart(2, '0')
     const currentDate = `${year}${month}${day}`
-    await api
+    return await api
       .put(
-        `scales/update-finished-scale?storeCode=${store}&month=${month}&year=${year}&endScaleDate=${currentDate}`,
+        `scales/update-finished-scale?userLogin=${cookieUserLogin}&storeCode=${store}&month=${month}&year=${year}&endScaleDate=${currentDate}`,
       )
-      .then(() => {
-        if (dataFinishScale) {
-          setDataFinishScale((prevState) =>
-            prevState.map((item) => ({
-              ...item,
-              endDate: currentDate,
-              finished: true,
-            })),
-          )
-        }
+      .then(async () => {
+        await fetchFinishedScaleByMonth()
+
+        toast.success('Escala finalizada com sucesso', {
+          style: { height: '50px', padding: '15px' },
+        })
+      })
+      .catch(() => {
+        toast.error('Erro ao finalizar a escala', {
+          style: { height: '50px', padding: '15px' },
+        })
       })
   }
 
   async function fetchGetScaleApprovalByDate() {
     await api
       .get(
-        `scales/get-scales-approval-request?userLogin=${cookieUserLogin}?month=${month}&year=${year}`,
+        `scales/get-scales-approval-request?userLogin=${cookieUserLogin}&month=${month}&year=${year}`,
       )
       .then((response) => {
         setDataScaleApprovalRequest(response.data)

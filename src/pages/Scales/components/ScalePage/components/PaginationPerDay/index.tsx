@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material'
 import {
   addDays,
   format,
@@ -7,6 +8,7 @@ import {
   subDays,
 } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { formatInTimeZone } from 'date-fns-tz'
 import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import { CgChevronLeft, CgChevronRight } from 'react-icons/cg'
@@ -18,6 +20,7 @@ import { useScales } from '@/contexts/scale/ScalesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 
+import { ModalFinishScale } from '../ModalFinishScale.tsx'
 import { Container } from './styles'
 
 export function PaginationPerDay() {
@@ -27,13 +30,12 @@ export function PaginationPerDay() {
     scalesByDate,
     updateGetCurrenDate,
     dataFinishScale,
-    updateFinishedScaleByMonth,
     isLoadingScale,
   } = useScales()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isModalOpenFinishScale, setIsModalOpenFinishScale] =
+    useState<boolean>(false)
   const [modalMessage, setModalMessage] = useState<Array<string>>([])
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-
   const { cookieProfile } = useProfiles()
   const { monthValue } = useSettings()
   const date = new Date()
@@ -43,6 +45,11 @@ export function PaginationPerDay() {
   const year = monthValue.split('-')[0]
   const initialDate = parse(`01/${month}/${year}`, 'dd/MM/yyyy', new Date())
   const lastDate = lastDayOfMonth(initialDate)
+  const nameFormatted = formatName(dataFinishScale[0]?.loginUser)
+
+  const scaleEndDate = dataFinishScale[0]?.endDate
+    ? formatInTimeZone(dataFinishScale[0]?.endDate, 'UTC', 'dd/MM/yyyy')
+    : ''
 
   const [currentDate, setCurrentDate] = useState<Date>(() => {
     const savedDate = Cookies.get('currentDateScale')
@@ -123,12 +130,13 @@ export function PaginationPerDay() {
     }, 500)
   }
 
-  function handleUpdateFinishedScale() {
-    setIsSubmitting(true)
+  function handleOpenModalFinishedScale() {
+    setIsModalOpenFinishScale(true)
+    /* setIsSubmitting(true)
     setTimeout(() => {
       updateFinishedScaleByMonth()
       setIsSubmitting(false)
-    }, 500)
+    }, 500) */
   }
 
   useEffect(() => {
@@ -207,15 +215,28 @@ export function PaginationPerDay() {
             color="#000"
             bgColor="#7EC864"
             width="170px"
-            isSubmitting={isSubmitting}
-            onClick={handleUpdateFinishedScale}
+            onClick={handleOpenModalFinishedScale}
           />
+        )}
+
+      {dataFinishScale[0]?.finished === true &&
+        cookieProfile === 'Gerente Loja' &&
+        month === currentMonth &&
+        year === currentYear && (
+          <Typography style={{ color: '#449428', fontWeight: 'bold' }}>
+            Escala finalizada dia {scaleEndDate} por {nameFormatted}
+          </Typography>
         )}
 
       <Modal
         message={modalMessage}
         open={isModalOpen}
         onHandleClose={() => setIsModalOpen(false)}
+      />
+
+      <ModalFinishScale
+        open={isModalOpenFinishScale}
+        onHandleClose={() => setIsModalOpenFinishScale(false)}
       />
     </Container>
   )
