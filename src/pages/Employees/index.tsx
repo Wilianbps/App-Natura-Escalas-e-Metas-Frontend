@@ -212,8 +212,7 @@ export function Employees() {
                           <td></td>
                         )}
 
-                        {cookieProfile === 'Gerente Loja' &&
-                        employee.newUser === true ? (
+                        {cookieProfile === 'Gerente Loja' ? (
                           <td>
                             <div
                               className="circle"

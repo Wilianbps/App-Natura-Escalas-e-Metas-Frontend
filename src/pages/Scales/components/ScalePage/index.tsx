@@ -1,5 +1,5 @@
 import { Switch } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { GiForkKnifeSpoon } from 'react-icons/gi'
 import { IoPersonCircleOutline } from 'react-icons/io5'
@@ -23,6 +23,13 @@ import {
   TableDataInfo,
 } from './styles'
 import { times } from './times'
+
+interface Period {
+  id: number
+  type: string | null
+}
+
+type EmployeeOptionsSelect = Period[]
 
 export function Scale() {
   const {
@@ -325,6 +332,61 @@ export function Scale() {
     }, 2000)
   }
 
+  const workedHours = useMemo(
+    () =>
+      (
+        employeeOptionsSelect: EmployeeOptionsSelect,
+        status?: boolean,
+      ): { time: string; color?: string } => {
+        if (!employeeOptionsSelect) return { time: '00:00' }
+
+        const totalPeriods = employeeOptionsSelect.filter(
+          (period) => period.type === 'R' || period.type === 'T',
+        ).length
+
+        const filledShifts = employeeOptionsSelect.filter(
+          (option) =>
+            option.type !== '' &&
+            option.type !== null &&
+            option.type !== 'null',
+        ).length
+
+        const workingHour = employeeOptionsSelect.filter(
+          (option) => option.type === 'T',
+        ).length
+
+        const mealBreaks = employeeOptionsSelect.filter(
+          (option) => option.type === 'R',
+        ).length
+
+        const consecutiveMealBreaks = employeeOptionsSelect.some(
+          (option, index, array) =>
+            option.type === 'R' &&
+            array[index + 1] &&
+            array[index + 1].type === 'R',
+        )
+
+        const totalMinutes = totalPeriods * 30
+        const hours = String(Math.floor(totalMinutes / 60)).padStart(2, '0')
+        const minutes = String(totalMinutes % 60).padStart(2, '0')
+
+        const color =
+          status &&
+          (workingHour < 12 ||
+            filledShifts > 17 ||
+            (filledShifts > 12 && mealBreaks < 2) ||
+            mealBreaks > 2 ||
+            (!consecutiveMealBreaks && mealBreaks > 0))
+            ? 'red'
+            : 'green'
+
+        return { time: `${hours}:${minutes}`, color }
+      },
+    [],
+  )
+
+  console.log(scalesByDate)
+
   return (
     <Container>
       <PaginationPerDay />
@@ -333,6 +395,7 @@ export function Scale() {
           <table>
             <thead>
               <tr>
+                <th rowSpan={3}></th>
                 <th rowSpan={3}></th>
                 <th rowSpan={3}></th>
               </tr>
@@ -348,7 +411,7 @@ export function Scale() {
                 </th>
               </tr>
               <tr>
-                <th colSpan={17}></th>
+                <th colSpan={18}></th>
                 <th colSpan={15} style={{ backgroundColor: '#D58400' }}>
                   Noturno
                 </th>
@@ -356,6 +419,7 @@ export function Scale() {
               <tr>
                 <th>Nome</th>
                 <th>Status</th>
+                <th>Qtd Horas</th>
                 {times.map((time) => (
                   <th key={time[0]} className="shifts">
                     <div>{time[0]}</div>
@@ -374,6 +438,16 @@ export function Scale() {
                       checked={scale.status}
                       onChange={(event) => handleChangeStatus(event, index)}
                     />
+                  </td>
+                  <td
+                    style={{
+                      color: workedHours(
+                        scalesByDate[index].options,
+                        scalesByDate[index].status,
+                      ).color,
+                    }}
+                  >
+                    {workedHours(scalesByDate[index].options).time}
                   </td>
                   {scale?.options?.map((option) => (
                     <td key={option.id}>
@@ -408,7 +482,7 @@ export function Scale() {
                 </tr>
               ))}
               <tr>
-                {Array(32)
+                {Array(33)
                   .fill(null)
                   .map((_item, index) => (
                     <td key={index}></td>
@@ -418,6 +492,7 @@ export function Scale() {
               <tr>
                 <td className="title-info-scale">Qnt Colab. Ativos</td>
                 <td></td>
+                <td></td>
                 {arraySumsEmployeesByTime.map((item) => (
                   <td key={item.id}>{item.value}</td>
                 ))}
@@ -425,6 +500,7 @@ export function Scale() {
 
               <tr>
                 <td className="title-info-scale">Atendimento Médio</td>
+                <td></td>
                 <td></td>
                 {inputFlow?.map((obj, index) => (
                   <React.Fragment key={index}>

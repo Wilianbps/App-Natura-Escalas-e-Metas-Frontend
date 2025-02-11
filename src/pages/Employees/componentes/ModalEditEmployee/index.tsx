@@ -198,6 +198,7 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
                         render={({ field }) => (
                           <Select
                             {...field} // Controla o valor com react-hook-form
+                            value={field.value ?? ''}
                             label="Cargo"
                           >
                             <MenuItem value="" disabled>
