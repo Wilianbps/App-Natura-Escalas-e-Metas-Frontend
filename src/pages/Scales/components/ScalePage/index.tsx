@@ -338,7 +338,8 @@ export function Scale() {
         employeeOptionsSelect: EmployeeOptionsSelect,
         status?: boolean,
       ): { time: string; color?: string } => {
-        if (!employeeOptionsSelect) return { time: '00:00' }
+        if (!employeeOptionsSelect || !status)
+          return { time: '00:00', color: 'green' }
 
         const totalPeriods = employeeOptionsSelect.filter(
           (period) => period.type === 'R' || period.type === 'T',
@@ -384,8 +385,6 @@ export function Scale() {
       },
     [],
   )
-
-  console.log(scalesByDate)
 
   return (
     <Container>
@@ -447,7 +446,12 @@ export function Scale() {
                       ).color,
                     }}
                   >
-                    {workedHours(scalesByDate[index].options).time}
+                    {
+                      workedHours(
+                        scalesByDate[index].options,
+                        scalesByDate[index].status,
+                      ).time
+                    }
                   </td>
                   {scale?.options?.map((option) => (
                     <td key={option.id}>

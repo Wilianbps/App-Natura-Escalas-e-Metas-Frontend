@@ -132,11 +132,6 @@ export function PaginationPerDay() {
 
   function handleOpenModalFinishedScale() {
     setIsModalOpenFinishScale(true)
-    /* setIsSubmitting(true)
-    setTimeout(() => {
-      updateFinishedScaleByMonth()
-      setIsSubmitting(false)
-    }, 500) */
   }
 
   useEffect(() => {

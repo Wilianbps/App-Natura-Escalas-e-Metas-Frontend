@@ -15,7 +15,7 @@ export function SelectStores(props: SelectStoresProps) {
   useEffect(() => {
     if (storesByUser.length > 0) {
       const initialStore = storesByUser[0]
-      setSelectedStore(initialStore.branch)
+      setSelectedStore(initialStore.storeBranch)
       updateSetStore(initialStore.storeCode)
     }
   }, [storesByUser])
@@ -31,7 +31,7 @@ export function SelectStores(props: SelectStoresProps) {
     setSelectedStore(selectedBranch)
 
     const selectedStoreCode = storesByUser.find(
-      (store) => store.branch === selectedBranch,
+      (store) => store.storeBranch === selectedBranch,
     )?.storeCode
     if (selectedStoreCode) {
       updateSetStore(selectedStoreCode)
@@ -52,10 +52,10 @@ export function SelectStores(props: SelectStoresProps) {
           {storesByUser?.map((item) => (
             <MenuItem
               sx={{ fontSize }}
-              value={item.branch}
+              value={item.storeBranch}
               key={item.storeCode}
             >
-              {item.branch}
+              {item.storeBranch}
             </MenuItem>
           ))}
         </SelectStyled>
