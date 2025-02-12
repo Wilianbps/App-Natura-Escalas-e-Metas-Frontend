@@ -155,11 +155,19 @@ export function Employees() {
               <form onSubmit={handleSubmit(handleSaveSttings)}>
                 <header>
                   <h1>Colaboradores</h1>
-                  {cookieProfile === 'Gerente Loja' && (
-                    <button type="button" onClick={handleOpenModalAddEmplopyee}>
-                      Cadastrar Colaborador
-                    </button>
-                  )}
+                  <div>
+                    {cookieProfile === 'Gerente Loja' && (
+                      <button
+                        type="button"
+                        onClick={handleOpenModalAddEmplopyee}
+                      >
+                        Cadastrar Colaborador
+                      </button>
+                    )}
+                    {cookieProfile === 'Gerente Loja' && (
+                      <button type="button">Configurar Turnos</button>
+                    )}
+                  </div>
                 </header>
 
                 <table>
