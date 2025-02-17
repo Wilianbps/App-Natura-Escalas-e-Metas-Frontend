@@ -23,11 +23,11 @@ export function ModalFinishScale(props: ModalFinishScaleProps) {
     onHandleClose()
   }
 
-  function handleUpdateFinishedScale() {
+  async function handleUpdateFinishedScale() {
     setIsSubmitting(true)
     updateFinishedScaleByMonth()
     setIsSubmitting(false)
-    onHandleClose()
+    handleClose()
   }
 
   return (

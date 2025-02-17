@@ -62,7 +62,7 @@ type FormProps = {
 }
 
 export function ModalAddEmployee(props: ModalAddEmployeeProps) {
-  const { addEmployee } = useSettings()
+  const { addEmployee, shifts } = useSettings()
   const { open, onHandleClose } = props
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -241,17 +241,17 @@ export function ModalAddEmployee(props: ModalAddEmployeeProps) {
                       <FormControlLabel
                         value="Matutino"
                         control={<Radio size="small" />}
-                        label="Matutino (07:00 - 14:30)"
+                        label={`Matutino (${shifts.morning?.startTime} - ${shifts.morning?.endTime})`}
                       />
                       <FormControlLabel
                         value="Vespertino"
                         control={<Radio size="small" />}
-                        label="Vespertino (11:00 - 18:30)"
+                        label={`Vespertino (${shifts.afternoon?.startTime} - ${shifts.afternoon?.endTime})`}
                       />
                       <FormControlLabel
                         value="Noturno"
                         control={<Radio size="small" />}
-                        label="Noturno (14:30 - 22:00)"
+                        label={`Noturno (${shifts.nocturnal?.startTime} - ${shifts.nocturnal?.endTime})`}
                       />
                     </RadioGroup>
                   )}

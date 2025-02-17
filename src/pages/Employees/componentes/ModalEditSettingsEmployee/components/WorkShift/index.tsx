@@ -5,12 +5,15 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import { useState } from 'react'
 
+import { useSettings } from '@/contexts/setting/SettingContext'
+
 interface WorkShiftProps {
   initialShift?: string | null
   onShiftChange?: (shift: string | null) => void
 }
 
 export function WorkShift(props: WorkShiftProps) {
+  const { shifts } = useSettings()
   const { initialShift = null, onShiftChange } = props
   const [selectedShift, setSelectedShift] = useState<string | null>(
     initialShift,
@@ -46,17 +49,17 @@ export function WorkShift(props: WorkShiftProps) {
         <FormControlLabel
           value="Matutino"
           control={<Radio size="small" />}
-          label="Matutino (07:00 - 14:30)"
+          label={`Matutino (${shifts.morning?.startTime} - ${shifts.morning?.endTime})`}
         />
         <FormControlLabel
           value="Vespertino"
           control={<Radio size="small" />}
-          label="Vespertino (11:00 - 18:30)"
+          label={`Vespertino (${shifts.afternoon?.startTime} - ${shifts.afternoon?.endTime})`}
         />
         <FormControlLabel
           value="Noturno"
           control={<Radio size="small" />}
-          label="Noturno (14:30 - 22:00)"
+          label={`Noturno (${shifts.nocturnal?.startTime} - ${shifts.nocturnal?.endTime})`}
           sx={{ fontSize: '13px' }}
         />
       </RadioGroup>

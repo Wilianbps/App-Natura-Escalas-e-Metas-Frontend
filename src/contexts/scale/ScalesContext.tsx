@@ -21,7 +21,7 @@ import {
 const ScalesContext = createContext({} as ScalesContextType)
 
 function ScalesProvider({ children }: { children: React.ReactNode }) {
-  const { store, cookieUserLogin } = useProfiles()
+  const { store, cookieUserLogin, cookieProfile } = useProfiles()
   const { fetchEmployes, monthValue } = useSettings()
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
   const [dataFinishScale, setDataFinishScale] = useState<IDataFinishScale[]>([])
@@ -197,7 +197,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   async function fetchGetScaleApprovalByDate() {
     await api
       .get(
-        `scales/get-scales-approval-request?userLogin=${cookieUserLogin}&month=${month}&year=${year}`,
+        `scales/get-scales-approval-request?userLogin=${cookieUserLogin}&profileLogin=${cookieProfile}&month=${month}&year=${year}`,
       )
       .then((response) => {
         setDataScaleApprovalRequest(response.data)

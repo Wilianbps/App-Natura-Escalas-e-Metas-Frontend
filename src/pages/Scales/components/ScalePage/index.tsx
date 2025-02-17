@@ -399,19 +399,19 @@ export function Scale() {
                 <th rowSpan={3}></th>
               </tr>
               <tr>
-                <th colSpan={15} style={{ backgroundColor: '#F8E32B' }}>
+                <th colSpan={17} style={{ backgroundColor: '#F8E32B' }}>
                   Matutino
                 </th>
               </tr>
               <tr>
-                <th colSpan={8}></th>
-                <th colSpan={15} style={{ backgroundColor: '#FFB84D' }}>
+                <th colSpan={7}></th>
+                <th colSpan={17} style={{ backgroundColor: '#FFB84D' }}>
                   Vespertino
                 </th>
               </tr>
               <tr>
-                <th colSpan={18}></th>
-                <th colSpan={15} style={{ backgroundColor: '#D58400' }}>
+                <th colSpan={16}></th>
+                <th colSpan={17} style={{ backgroundColor: '#D58400' }}>
                   Noturno
                 </th>
               </tr>
