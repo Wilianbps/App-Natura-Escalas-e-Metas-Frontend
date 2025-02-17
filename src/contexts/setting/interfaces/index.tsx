@@ -15,6 +15,7 @@ export interface IEmployee {
   idShift?: number
   shift: string | null
   startTime?: string
+  lunchTime?: string
   finishTime?: string
   startVacation: string | null
   finishVacation: string | null

@@ -141,7 +141,7 @@ export function Summary() {
                           return (
                             <td key={`shift-${collIndex}-${index}`} width={140}>
                               {day?.status === 1
-                                ? `${day.startTime} - ${day.endTime}`
+                                ? `${day.startTime} - ${day.lunchTime} - ${day.endTime}`
                                 : ''}
                             </td>
                           )
