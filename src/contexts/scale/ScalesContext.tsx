@@ -40,8 +40,6 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
 
-  console.log(scaleSummary)
-
   function updateGetCurrenDate(date: string) {
     setGetCurrentDate(date)
   }
