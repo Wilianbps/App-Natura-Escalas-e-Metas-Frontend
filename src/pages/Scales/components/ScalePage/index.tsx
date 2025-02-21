@@ -254,6 +254,12 @@ export function Scale() {
           )
         }
 
+        if (workingHour < 15 && mealBreaks > 0) {
+          errors.push(
+            `Funcionário/a ${formatName(scale.name)} não tem 6h de trabalho preenchidas.`,
+          )
+        }
+
         if (filledShifts > 17) {
           errors.push(
             `Funcionário/a ${formatName(scale.name)} tem mais de 8,5h de trabalho preenchidas.`,
@@ -374,6 +380,7 @@ export function Scale() {
         const color =
           status &&
           (workingHour < 12 ||
+            (workingHour < 15 && mealBreaks > 0) ||
             filledShifts > 17 ||
             (filledShifts > 12 && mealBreaks < 2) ||
             mealBreaks > 2 ||
