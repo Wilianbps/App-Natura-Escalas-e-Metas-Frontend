@@ -15,6 +15,7 @@ export interface IEmployee {
   idShift?: number
   shift: string | null
   startTime?: string
+  lunchTime?: string
   finishTime?: string
   startVacation: string | null
   finishVacation: string | null
@@ -30,6 +31,17 @@ export interface IEmployee {
     type?: string
   }[]
   flowScale?: string
+}
+
+interface ShiftProps {
+  startTime: string
+  endTime: string
+}
+
+export interface IShifts {
+  morning: ShiftProps
+  afternoon: ShiftProps
+  nocturnal: ShiftProps
 }
 
 export interface IInfoEmployee {
@@ -53,6 +65,8 @@ export interface ISettings {
 export interface SettingsContextType {
   updateShiftRestSchedule: (employee: IEmployee) => void
   employees: IEmployee[]
+  shifts: IShifts
+  updateSettingShifts: (shifts: IShifts) => void
   updateSettings: (settings: ISettings) => void
   updateselectDate: (date: Date | null) => void
   selectedDate: Date | null

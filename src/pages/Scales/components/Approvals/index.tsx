@@ -50,71 +50,72 @@ export function Approvals() {
           </tr>
         </thead>
         <tbody>
-          {dataScaleApprovalRequest?.map((item, index) => (
-            <tr key={item.approvalDate + index.toString()}>
-              <td width={250}>{item.description}</td>
-              <td width={200}>{item.responsible}</td>
-              <td width={150}>{item.branch}</td>
-              <td width={180}>
-                {formatInTimeZone(item.requestDate, 'UTC', 'dd/MM/yyyy')}
-              </td>
-              <td width={180}>
-                {item.approvalDate &&
-                  formatInTimeZone(item.approvalDate, 'UTC', 'dd/MM/yyyy')}
-              </td>
-              <TDStatus status={item.status} width={150}>
-                <section>
-                  <span></span>
-                  <p>{item.status === 0 && 'pendente'}</p>
-                  <p>{item.status === 1 && 'aprovado'}</p>
-                  <p>{item.status === 2 && 'reprovado'}</p>
-                </section>
-              </TDStatus>
-              <td width={150}>
-                {item.status === 0 && (
-                  <ButtonApproval
-                    onClick={() =>
-                      handleUpdateApprovalRequest(item?.id, item?.branch)
-                    }
-                  >
-                    {isSubmittingApprovalRequest === true ? (
-                      <CircularProgress
-                        size={15}
-                        style={{ color: '#449428' }}
-                      />
-                    ) : (
+          {dataScaleApprovalRequest &&
+            dataScaleApprovalRequest?.map((item, index) => (
+              <tr key={item.approvalDate + index.toString()}>
+                <td width={250}>{item.description}</td>
+                <td width={200}>{item.responsible}</td>
+                <td width={150}>{item.branch}</td>
+                <td width={180}>
+                  {formatInTimeZone(item.requestDate, 'UTC', 'dd/MM/yyyy')}
+                </td>
+                <td width={180}>
+                  {item.approvalDate &&
+                    formatInTimeZone(item.approvalDate, 'UTC', 'dd/MM/yyyy')}
+                </td>
+                <TDStatus status={item.status} width={150}>
+                  <section>
+                    <span></span>
+                    <p>{item.status === 0 && 'pendente'}</p>
+                    <p>{item.status === 1 && 'aprovado'}</p>
+                    <p>{item.status === 2 && 'reprovado'}</p>
+                  </section>
+                </TDStatus>
+                <td width={150}>
+                  {item.status === 0 && (
+                    <ButtonApproval
+                      onClick={() =>
+                        handleUpdateApprovalRequest(item?.id, item?.branch)
+                      }
+                    >
+                      {isSubmittingApprovalRequest === true ? (
+                        <CircularProgress
+                          size={15}
+                          style={{ color: '#449428' }}
+                        />
+                      ) : (
+                        <>
+                          <CgArrowRight size={20} /> <span>Aprovar</span>
+                        </>
+                      )}
+                    </ButtonApproval>
+                  )}
+                  {item?.status === 1 && (
+                    <TextInfo text="aprovado" color="#449428" />
+                  )}
+                </td>
+                <td width={150}>
+                  {item?.status === 0 && (
+                    <ButtonCanceled onClick={handleOpenModalToCancelScale}>
                       <>
-                        <CgArrowRight size={20} /> <span>Aprovar</span>
+                        <CgClose />
+                        <span>reprovar</span>
                       </>
-                    )}
-                  </ButtonApproval>
-                )}
-                {item?.status === 1 && (
-                  <TextInfo text="aprovado" color="#449428" />
-                )}
-              </td>
-              <td width={150}>
-                {item?.status === 0 && (
-                  <ButtonCanceled onClick={handleOpenModalToCancelScale}>
-                    <>
-                      <CgClose />
-                      <span>reprovar</span>
-                    </>
-                  </ButtonCanceled>
-                )}
+                    </ButtonCanceled>
+                  )}
 
-                {item?.status === 2 && (
-                  <TextInfo text="reprovado" color="red" />
-                )}
-              </td>
-              <ModalCancelScale
-                id={item?.id}
-                storeCode={item?.branch}
-                open={isModalOpen}
-                onHandleClose={() => setIsModalOpen(false)}
-              />
-            </tr>
-          ))}
+                  {item?.status === 2 && (
+                    <TextInfo text="reprovado" color="red" />
+                  )}
+                </td>
+                <ModalCancelScale
+                  id={item?.id}
+                  storeCode={item?.branch}
+                  open={isModalOpen}
+                  onHandleClose={() => setIsModalOpen(false)}
+                />
+              </tr>
+            ))}
         </tbody>
       </Table>
     </Container>

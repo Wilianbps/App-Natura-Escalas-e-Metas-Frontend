@@ -33,6 +33,11 @@ export const ContainerTable = styled.main`
             color: ${(props) => props.theme.orangeDark};
             text-align: left;
           }
+          th:nth-of-type(3) {
+            color: ${(props) => props.theme.orangeDark};
+            text-align: left;
+            min-width: 100px;
+          }
         }
 
         th.shifts {
@@ -51,9 +56,6 @@ export const ContainerTable = styled.main`
         }
         &:nth-last-of-type(3) {
           font-weight: bold;
-        }
-        &:nth-last-of-type(3) {
-          color: ${(props) => props.theme.greenMedium};
           font-weight: bold;
         }
         td {
@@ -76,6 +78,14 @@ export const ContainerTable = styled.main`
 
           &:nth-of-type(2) {
             text-align: left;
+            border: 0;
+            min-width: 60px;
+            font-weight: 600;
+          }
+
+          &:nth-of-type(3) {
+            padding-right: 30px;
+            text-align: center;
             border: 0;
             min-width: 60px;
             font-weight: 600;

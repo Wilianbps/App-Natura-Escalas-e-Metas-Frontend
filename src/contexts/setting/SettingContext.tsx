@@ -9,6 +9,7 @@ import {
   IEmployee,
   type IInfoEmployee,
   ISettings,
+  type IShifts,
   SettingProviderProps,
   SettingsContextType,
 } from './interfaces'
@@ -18,6 +19,7 @@ const SettingsContext = createContext({} as SettingsContextType)
 function SettingsProvider({ children }: SettingProviderProps) {
   const { store, storesByUser } = useProfiles()
   const [employees, setEmployees] = useState<IEmployee[]>([])
+  const [shifts, setShifts] = useState<IShifts>({} as IShifts)
   const [isLoadingEmployees, setIsLoadingEmployees] = useState(false)
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
@@ -36,6 +38,14 @@ function SettingsProvider({ children }: SettingProviderProps) {
 
   function updateselectDate(date: Date | null) {
     setSelectedDate(date)
+  }
+
+  async function fetchShifts() {
+    await api
+      .get(`settings/get-shift-hours?storeCode=${store}`)
+      .then((response) => {
+        setShifts(response.data)
+      })
   }
 
   async function fetchEmployes() {
@@ -201,9 +211,27 @@ function SettingsProvider({ children }: SettingProviderProps) {
     }
   }
 
+  async function updateSettingShifts(shifts: IShifts) {
+    await api
+      .put(`settings/update-shift-hours`, { shifts, storeCode: store })
+      .then(() => {
+        fetchEmployes()
+        fetchShifts()
+        toast.success('Turnos salvos com sucesso', {
+          style: { height: '50px', padding: '15px' },
+        })
+      })
+      .catch(() => {
+        toast.error('Erro ao salvar os turnos', {
+          style: { height: '50px', padding: '15px' },
+        })
+      })
+  }
+
   useEffect(() => {
     if (store) {
       fetchEmployes()
+      fetchShifts()
     }
   }, [store])
 
@@ -212,6 +240,8 @@ function SettingsProvider({ children }: SettingProviderProps) {
       value={{
         updateShiftRestSchedule,
         employees,
+        shifts,
+        updateSettingShifts,
         updateSettings,
         updateselectDate,
         selectedDate,
@@ -237,6 +267,16 @@ function useSettings() {
   const employees = useContextSelector(
     SettingsContext,
     (context) => context.employees,
+  )
+
+  const shifts = useContextSelector(
+    SettingsContext,
+    (context) => context.shifts,
+  )
+
+  const updateSettingShifts = useContextSelector(
+    SettingsContext,
+    (context) => context.updateSettingShifts,
   )
 
   const updateSettings = useContextSelector(
@@ -288,6 +328,8 @@ function useSettings() {
   return {
     updateShiftRestSchedule,
     employees,
+    shifts,
+    updateSettingShifts,
     updateSettings,
     updateselectDate,
     selectedDate,

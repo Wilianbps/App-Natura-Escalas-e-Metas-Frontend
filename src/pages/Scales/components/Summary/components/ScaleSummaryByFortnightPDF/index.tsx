@@ -19,6 +19,7 @@ interface IScaleSummary {
     turnId: number
     status: number
     startTime: string
+    lunchTime: string
     endTime: string
     dayOfWeek: number
     turn: string
@@ -104,7 +105,7 @@ export function ScaleSummaryByFortnightPDF(props: ScaleSummaryProps) {
 
               {scaleSummary[pageIndex].map((collaborator, indexScale) => (
                 <View style={styles.tableRow} key={indexScale}>
-                  <View style={styles.tableColBodyContainer}>
+                  <View style={styles.tableColNameEmployee}>
                     <Text>{formatName(collaborator.name)}</Text>
                   </View>
 
@@ -113,7 +114,7 @@ export function ScaleSummaryByFortnightPDF(props: ScaleSummaryProps) {
                       {/* Exibe o horário de início e término, se estiver disponível */}
                       <Text key={index}>
                         {collaborator.days[index]?.status === 1
-                          ? `${collaborator.days[index].startTime} - ${collaborator.days[index].endTime}`
+                          ? `${collaborator.days[index].startTime} - ${collaborator.days[index].lunchTime} - ${collaborator.days[index].endTime}`
                           : ''}
                       </Text>
 

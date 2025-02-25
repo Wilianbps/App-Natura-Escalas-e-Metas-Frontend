@@ -3,6 +3,7 @@ export interface IStoresByUser {
   profile: string
   storeCode: string
   branch: string
+  storeBranch: string
   status: boolean
 }
 

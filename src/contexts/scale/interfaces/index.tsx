@@ -33,6 +33,7 @@ export interface IScaleSummary {
     turnId: number
     status: number
     startTime: string
+    lunchTime: string
     endTime: string
     dayOfWeek: number
     turn: string

@@ -15,6 +15,7 @@ import { ModalAddEmployee } from './componentes/ModalAddEmployee'
 import { ModalDeleteEmployee } from './componentes/ModalDeleteEmployee'
 import { ModalEditEmployee } from './componentes/ModalEditEmployee'
 import ModalEditSettingsEmployee from './componentes/ModalEditSettingsEmployee'
+import { ModalSettingShifts } from './componentes/ModalSettingShifts'
 import { IEmployee } from './interfaces'
 import { Container, ScaleFlowContainer } from './styles'
 
@@ -31,6 +32,7 @@ export function Employees() {
   const [openModalEditEmpoyee, setOpenModalEditEmpoyee] = useState(false)
   const [openModalAddEmpoyee, setOpenModalAddEmpoyee] = useState(false)
   const [openModalDeleteEmpoyee, setOpenModalDeleteEmpoyee] = useState(false)
+  const [openModalSettingShifts, setOpenModalSettingShifts] = useState(false)
   const [idEmployee, setIdEmplyee] = useState<number>()
   const [dataEmployee, setDataEmployee] = useState<IEmployee>()
 
@@ -73,6 +75,14 @@ export function Employees() {
 
   function handleCloseModalDeleteEmployee() {
     setOpenModalDeleteEmpoyee(false)
+  }
+
+  function handleOpenModalSettingShifts() {
+    setOpenModalSettingShifts(true)
+  }
+
+  function handleCloseModalSettingShifts() {
+    setOpenModalSettingShifts(false)
   }
 
   const handleToggleStatus = (employeeId: number) => {
@@ -155,11 +165,24 @@ export function Employees() {
               <form onSubmit={handleSubmit(handleSaveSttings)}>
                 <header>
                   <h1>Colaboradores</h1>
-                  {cookieProfile === 'Gerente Loja' && (
-                    <button type="button" onClick={handleOpenModalAddEmplopyee}>
-                      Cadastrar Colaborador
-                    </button>
-                  )}
+                  <div>
+                    {cookieProfile === 'Gerente Loja' && (
+                      <button
+                        type="button"
+                        onClick={handleOpenModalAddEmplopyee}
+                      >
+                        Cadastrar Colaborador
+                      </button>
+                    )}
+                    {cookieProfile === 'Gerente Loja' && (
+                      <button
+                        type="button"
+                        onClick={handleOpenModalSettingShifts}
+                      >
+                        Configurar Turnos
+                      </button>
+                    )}
+                  </div>
                 </header>
 
                 <table>
@@ -212,8 +235,7 @@ export function Employees() {
                           <td></td>
                         )}
 
-                        {cookieProfile === 'Gerente Loja' &&
-                        employee.newUser === true ? (
+                        {cookieProfile === 'Gerente Loja' ? (
                           <td>
                             <div
                               className="circle"
@@ -321,6 +343,10 @@ export function Employees() {
                 open={openModalDeleteEmpoyee}
                 onHandleClose={handleCloseModalDeleteEmployee}
                 employeeId={idEmployee}
+              />
+              <ModalSettingShifts
+                open={openModalSettingShifts}
+                onHandleClose={handleCloseModalSettingShifts}
               />
             </>
           )}
