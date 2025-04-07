@@ -63,6 +63,16 @@ export type DataType = {
   [key: string]: number | null
 }
 
+export interface IParamGenerateScaleNextMonth {
+  day: string
+  status: number
+}
+
+export interface IParamToAlterDayScale {
+  day: string
+  status: number
+}
+
 export interface ScalesContextType {
   fetchScaleByDate: (date: string) => void
   updateSetScalesByDate: (scale: IScale[]) => void
@@ -85,4 +95,6 @@ export interface ScalesContextType {
   dataFinishScale: IDataFinishScale[]
   dataScaleApprovalRequest: IScaleApprovalRequest[]
   isLoadingScale: boolean
+  paramGenerateScaleNextMonth: IParamGenerateScaleNextMonth
+  paramToAlterDayScale: IParamToAlterDayScale
 }

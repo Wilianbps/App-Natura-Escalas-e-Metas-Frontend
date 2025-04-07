@@ -16,6 +16,7 @@ import { useSettings } from '@/contexts/setting/SettingContext'
 
 import { Approvals } from './components/Approvals'
 import { InfoTextScaleDeadline } from './components/InfoTextScaleDeadline'
+import { ModalConfirmLoadScale } from './components/ModalConfirmLoadScale.tsx/index.tsx'
 import { Scale } from './components/ScalePage'
 import { Summary } from './components/Summary'
 import { Container, ContainerLoadScale } from './styles'
@@ -23,43 +24,58 @@ import { Container, ContainerLoadScale } from './styles'
 export function ScalePage() {
   const {
     scaleSummary,
-    fetchLoadMonthScale,
     dataFinishScale,
     dataScaleApprovalRequest,
     isLoadingScale,
   } = useScales()
   const [value, setValue] = useState('setting')
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const { cookieProfile } = useProfiles()
   const { monthValue } = useSettings()
-  const currentDate = new Date()
+  const { paramGenerateScaleNextMonth, paramToAlterDayScale } = useScales()
+
+  const [isModalOpenConfirmLoadScale, setIsModalOpenConfirmLoadScale] =
+    useState<boolean>(false)
+
+  // Memoizar currentDate para evitar recriação a cada render
+  const currentDate = useMemo(() => new Date(), [])
   const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0')
   const currentYear = currentDate.getFullYear().toString()
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
 
-  async function loadMonthScale() {
-    setIsSubmitting(true)
-    const dateFormatted = `${year}${month}01`
+  // Verifica se a data atual permite carregar a escala do próximo mês
+  const canGenerateNextMonthScale = useMemo(() => {
+    const generateDay = Number(paramGenerateScaleNextMonth?.day)
+    const generateDate = setDate(startOfMonth(currentDate), generateDay)
+    return (
+      isAfter(currentDate, generateDate) ||
+      currentDate.getDate() === generateDay
+    )
+  }, [paramGenerateScaleNextMonth, currentDate])
 
-    setTimeout(async () => {
-      fetchLoadMonthScale(dateFormatted)
-      setIsSubmitting(false)
-    }, 3000)
-  }
+  // Verifica se o mês selecionado é anterior ao atual
+  const isMonthBeforeCurrent = useMemo(() => {
+    const selectedYearMonth = Number(`${year}${month}`)
+    const currentYearMonth = Number(`${currentYear}${currentMonth}`)
+    return selectedYearMonth < currentYearMonth
+  }, [year, month, currentYear, currentMonth])
 
   const infoScalePeriod = useMemo(() => {
     return scaleSummary.some((item) => item.length > 0)
   }, [scaleSummary])
 
   const isCurrentDateAfterFifth = useMemo(() => {
-    const currentDate = new Date() // Obtém a data atual
-    const fifthDayOfMonth = setDate(startOfMonth(currentDate), 6) // Define o quinto dia do mês
-
-    // Verifica se a data atual é depois do quinto dia do mês
+    const fifthDayOfMonth = setDate(
+      startOfMonth(currentDate),
+      Number(paramToAlterDayScale?.day),
+    )
     return isAfter(currentDate, fifthDayOfMonth)
-  }, [])
+  }, [paramToAlterDayScale, currentDate])
+
+  async function handleOpenModalToLoadScale() {
+    setIsModalOpenConfirmLoadScale(true)
+  }
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue)
@@ -149,15 +165,15 @@ export function ScalePage() {
                 {!infoScalePeriod &&
                   dataFinishScale.length === 0 &&
                   cookieProfile === 'Gerente Loja' &&
-                  month === currentMonth &&
+                  !isMonthBeforeCurrent &&
+                  (month === currentMonth || canGenerateNextMonthScale) &&
                   year === currentYear && (
                     <Button
                       text="Carregar Escala do Mês"
                       color="#000"
                       bgColor="#7EC864"
                       width="250px"
-                      onClick={loadMonthScale}
-                      isSubmitting={isSubmitting}
+                      onClick={handleOpenModalToLoadScale}
                     />
                   )}
               </ContainerLoadScale>
@@ -173,6 +189,11 @@ export function ScalePage() {
           </TabContext>
         </Box>
       )}
+
+      <ModalConfirmLoadScale
+        open={isModalOpenConfirmLoadScale}
+        onHandleClose={() => setIsModalOpenConfirmLoadScale(false)}
+      />
     </Container>
   )
 }

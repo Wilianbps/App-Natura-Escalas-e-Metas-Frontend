@@ -11,6 +11,8 @@ import { useSettings } from '../setting/SettingContext'
 import {
   DataType,
   IDataFinishScale,
+  type IParamGenerateScaleNextMonth,
+  type IParamToAlterDayScale,
   IScale,
   IScaleApprovalRequest,
   IScaleProps,
@@ -25,6 +27,11 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   const { fetchEmployes, monthValue } = useSettings()
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
   const [dataFinishScale, setDataFinishScale] = useState<IDataFinishScale[]>([])
+  const [paramGenerateScaleNextMonth, setParamGenerateScaleNextMonth] =
+    useState({} as IParamGenerateScaleNextMonth)
+  const [paramToAlterDayScale, setParamToAlterDayScale] = useState(
+    {} as IParamToAlterDayScale,
+  )
   const [scaleSummary, setScaleSummary] = useState<Array<IScaleSummary[]>>([])
   const [scaleSummaryByFortnight, setScaleSummaryByFortnight] = useState<
     Array<IScaleSummary[]>
@@ -256,8 +263,22 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
       })
   }
 
+  async function fetchParamGenerateScaleNextMonth() {
+    await api
+      .get('scales/get-param-generate-scale-next-month')
+      .then((response) => setParamGenerateScaleNextMonth(response.data[0]))
+  }
+
+  async function fetchParamToAlterDayScale() {
+    await api
+      .get('scales/get-param-to-alter-day-scale')
+      .then((response) => setParamToAlterDayScale(response.data[0]))
+  }
+
   useEffect(() => {
     if (store) {
+      fetchParamGenerateScaleNextMonth()
+      fetchParamToAlterDayScale()
       fetchGetScaleApprovalByDate()
       fetchScaleSummary()
       fetchScaleSummaryByFortnight()
@@ -286,6 +307,8 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         updateScaleApprovalRequest,
         dataScaleApprovalRequest,
         isLoadingScale,
+        paramGenerateScaleNextMonth,
+        paramToAlterDayScale,
       }}
     >
       {children}
@@ -365,6 +388,16 @@ function useScales() {
     (context) => context.isLoadingScale,
   )
 
+  const paramGenerateScaleNextMonth = useContextSelector(
+    ScalesContext,
+    (context) => context.paramGenerateScaleNextMonth,
+  )
+
+  const paramToAlterDayScale = useContextSelector(
+    ScalesContext,
+    (context) => context.paramToAlterDayScale,
+  )
+
   return {
     scalesByDate,
     updateSetScalesByDate,
@@ -383,6 +416,8 @@ function useScales() {
     updateScaleApprovalRequest,
     dataScaleApprovalRequest,
     isLoadingScale,
+    paramGenerateScaleNextMonth,
+    paramToAlterDayScale,
   }
 }
 

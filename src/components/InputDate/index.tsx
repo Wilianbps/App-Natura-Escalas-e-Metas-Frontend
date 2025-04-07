@@ -10,22 +10,22 @@ interface InputDateProps {
 export function InputDate(props: InputDateProps) {
   const { selectMonth, onSelectMonth } = props
 
-  // Obter a data atual
   const currentDate = new Date()
-
-  // Obter o mês e ano atuais
   const year = currentDate.getFullYear()
-  const month = currentDate.getMonth() + 1 // getMonth() retorna 0 para janeiro, 1 para fevereiro, etc.
+  const month = currentDate.getMonth() + 1
 
-  // Formatar mês para estar no formato MM (com zero à esquerda, se necessário)
-  const formattedMonth = month < 10 ? `0${month}` : month
-
-  // Definir a string de data no formato YYYY-MM
-  const currentMonth = `${year}-${formattedMonth}`
+  // Calcular o próximo mês e ajustar o ano
+  let nextMonth = month + 1
+  let nextYear = year
+  if (nextMonth > 12) {
+    nextMonth = 1
+    nextYear += 1
+  }
+  const formattedMonth = nextMonth < 10 ? `0${nextMonth}` : nextMonth
+  const maxMonth = `${nextYear}-${formattedMonth}`
 
   function handleSelectDate(e: ChangeEvent<HTMLInputElement>) {
     const month = e.target.value
-
     if (month === '') {
       const now = new Date()
       const year = now.getFullYear()
@@ -40,7 +40,7 @@ export function InputDate(props: InputDateProps) {
     <StyledInputDate
       type="month"
       min="2024-01"
-      max={currentMonth}
+      max={maxMonth}
       value={selectMonth}
       onChange={handleSelectDate}
     />
