@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Box,
+  Checkbox,
   FormControl,
   FormControlLabel,
   IconButton,
@@ -65,6 +66,7 @@ export function ModalAddEmployee(props: ModalAddEmployeeProps) {
   const { addEmployee, shifts } = useSettings()
   const { open, onHandleClose } = props
 
+  const [extraEmployee, setExtraEmployee] = useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const {
@@ -100,6 +102,7 @@ export function ModalAddEmployee(props: ModalAddEmployeeProps) {
       position: infoEmployee.position,
       cpf: infoEmployee.cpf,
       startDate: infoEmployee.date,
+      extraEmployee: extraEmployee === true ? 1 : 0,
       selectedShift:
         infoEmployee.selectedShift === 'Matutino'
           ? 1
@@ -207,18 +210,28 @@ export function ModalAddEmployee(props: ModalAddEmployeeProps) {
                 </section>
               </section>
 
-              <section className="date-content">
-                <DatePickerRegisterEmployee
-                  control={control}
-                  label="Data de Início"
-                  defaultValue={null}
-                />
+              <section className="date-employee-container">
+                <section className="date-content">
+                  <DatePickerRegisterEmployee
+                    control={control}
+                    label="Data de Início"
+                    defaultValue={null}
+                  />
 
-                {errors.date?.message && (
-                  <Typography sx={{ color: 'red' }}>
-                    {errors.date?.message}
-                  </Typography>
-                )}
+                  {errors.date?.message && (
+                    <Typography sx={{ color: 'red' }}>
+                      {errors.date?.message}
+                    </Typography>
+                  )}
+                </section>
+
+                <section>
+                  <Checkbox
+                    onChange={() => setExtraEmployee(!extraEmployee)}
+                    inputProps={{ 'aria-label': 'controlled' }}
+                  />
+                  <span className="extra_employee">Vendedor extra</span>
+                </section>
               </section>
 
               <Box sx={{ mb: 2 }}>

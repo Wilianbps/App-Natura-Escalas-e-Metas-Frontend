@@ -60,6 +60,18 @@ export const InputContainer = styled.section<InputContainerProps>`
     gap: ${(props) => props.error && '1rem'};
   }
 
+  .date-employee-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3.3rem;
+  }
+
+  .extra_employee {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
   .error-message {
     height: ${(props) => props.error && '20px'};
   }

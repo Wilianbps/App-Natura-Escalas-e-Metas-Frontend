@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Box,
+  Checkbox,
   FormControl,
   FormControlLabel,
   IconButton,
@@ -75,6 +76,7 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
   const { open, onHandleClose, employee } = props
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [extraEmployee, setExtraEmployee] = useState<boolean>(false)
 
   const {
     control,
@@ -118,6 +120,7 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
                 ? 'Noturno'
                 : '',
       })
+      setExtraEmployee(employee?.extraEmployee)
     }
   }, [open, employee, reset])
 
@@ -136,6 +139,7 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
       position: infoEmployee.position,
       cpf: infoEmployee.cpf,
       startDate: infoEmployee.date,
+      extraEmployee: extraEmployee === true ? 1 : 0,
       selectedShift:
         infoEmployee.selectedShift === 'Matutino'
           ? 1
@@ -255,18 +259,29 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
                 </section>
               </section>
 
-              <section className="date-content">
-                <DatePickerRegisterEmployee
-                  control={control}
-                  label="Data de Início"
-                  defaultValue={null}
-                />
+              <section className="date-employee-container">
+                <section className="date-content">
+                  <DatePickerRegisterEmployee
+                    control={control}
+                    label="Data de Início"
+                    defaultValue={null}
+                  />
 
-                {errors.date?.message && (
-                  <Typography sx={{ color: 'red' }}>
-                    {errors.date?.message}
-                  </Typography>
-                )}
+                  {errors.date?.message && (
+                    <Typography sx={{ color: 'red' }}>
+                      {errors.date?.message}
+                    </Typography>
+                  )}
+                </section>
+
+                <section>
+                  <Checkbox
+                    checked={extraEmployee}
+                    onChange={() => setExtraEmployee(!extraEmployee)}
+                    inputProps={{ 'aria-label': 'controlled' }}
+                  />
+                  <span className="extra_employee">Vendedor extra</span>
+                </section>
               </section>
 
               <Box sx={{ mb: 2 }}>
