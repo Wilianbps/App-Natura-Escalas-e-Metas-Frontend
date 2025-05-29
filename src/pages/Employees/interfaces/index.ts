@@ -24,4 +24,5 @@ export interface IEmployee {
     type?: string
   }[]
   flowScale?: string
+  extraEmployee?: boolean
 }

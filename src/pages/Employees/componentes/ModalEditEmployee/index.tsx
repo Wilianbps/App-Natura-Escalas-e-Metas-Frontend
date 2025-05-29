@@ -120,7 +120,7 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
                 ? 'Noturno'
                 : '',
       })
-      setExtraEmployee(employee?.extraEmployee)
+      setExtraEmployee(!!employee?.extraEmployee)
     }
   }, [open, employee, reset])
 

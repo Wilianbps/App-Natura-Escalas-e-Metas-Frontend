@@ -27,7 +27,7 @@ export interface IEmployee {
     type?: string
   }[]
   flowScale?: string
-  extraEmployee: boolean
+  extraEmployee?: boolean
 }
 
 export interface ModalEditEmployeeProps {
