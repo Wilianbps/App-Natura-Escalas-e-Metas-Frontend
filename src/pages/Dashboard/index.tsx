@@ -9,15 +9,18 @@ import { formatNumber } from '@/libs/formatNumber'
 import { AverageSalesMonthChart } from './components/AverageSalesMonthChart'
 import { GoalEmployeesChart } from './components/GoalEmployeesChart'
 import SliderSizes from './components/Slider'
+import { StoreCards } from './components/Store-Cards'
 import {
   Container,
   ContainerChartAverageSalesMonth,
   ContainerChartGoalEmployees,
+  ContainerChartScaleStatus,
   ContainerGoals,
   ContentInfoTextAndMonthlyGoal,
   InfoText,
   MonthlyGoalChart,
 } from './styles'
+import { ScaleStatusStoresChart } from './components/ScaleStatusStores'
 
 export function Dashboard() {
   const { cookieUserLogin } = useProfiles()
@@ -30,7 +33,7 @@ export function Dashboard() {
 
   return (
     <Container>
-      <ContainerGoals>
+      {/* <ContainerGoals>
         <ContentInfoTextAndMonthlyGoal>
           <InfoText>
             <h1>Oi, {formatName(cookieUserLogin)}!</h1>
@@ -60,9 +63,31 @@ export function Dashboard() {
             )}
           </MonthlyGoalChart>
         </ContentInfoTextAndMonthlyGoal>
-      </ContainerGoals>
+      </ContainerGoals> */}
 
-      <ContainerChartGoalEmployees>
+      <StoreCards />
+
+      <ContainerChartScaleStatus>
+        {isLoadingGoalEmployeeByMonth && (
+          <>
+            <TextInfo text="Carregando gráfico status escalas das lojas..." />
+            <Box sx={{ width: '100%', marginTop: '10px' }}>
+              <LinearProgress />
+            </Box>
+          </>
+        )}
+
+        {!isLoadingGoalEmployeeByMonth && (
+          <>
+            <header>Gráfico Status de Escalas das Lojas</header>
+            <section>
+              <ScaleStatusStoresChart />
+            </section>
+          </>
+        )}
+      </ContainerChartScaleStatus>
+
+      {/*     <ContainerChartGoalEmployees>
         {isLoadingGoalEmployeeByMonth && (
           <>
             <TextInfo text="Carregando gráfico Meta de Colaboladores por Mês..." />
@@ -80,8 +105,8 @@ export function Dashboard() {
             </section>
           </>
         )}
-      </ContainerChartGoalEmployees>
-      <ContainerChartAverageSalesMonth>
+      </ContainerChartGoalEmployees> */}
+      {/*  <ContainerChartAverageSalesMonth>
         {isLoadingGoalsLastTwelveMonths && (
           <>
             <TextInfo text="Carregando gráfico Ranking Metas..." />
@@ -100,7 +125,7 @@ export function Dashboard() {
             </section>
           </>
         )}
-      </ContainerChartAverageSalesMonth>
+      </ContainerChartAverageSalesMonth> */}
       {/*  <ContainerChartAverageSalesDay>
         <header>Média de Vendas por Dia</header>
         <section>

@@ -64,6 +64,16 @@ export const ContainerChartGoalEmployees = styled(Card)`
   }
 `
 
+export const ContainerChartScaleStatus = styled(Card)`
+  margin: 0 auto;
+  height: 342px;
+  width: 70%;
+  margin-top: 2rem;
+  section {
+    margin-top: 2rem;
+  }
+`
+
 export const ContainerChartsAverageSales = styled.section`
   margin-top: 1rem;
   display: flex;
