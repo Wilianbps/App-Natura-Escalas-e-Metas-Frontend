@@ -10,7 +10,7 @@ import { GoalByDay } from './components/GoalByDay'
 import { GoalByWeek } from './components/GoalByWeek'
 import { Container } from './styles'
 
-export function Goals() {
+export default function Goals() {
   const { isLoadingGoalsByFortnight } = useGoals()
   const [value, setValue] = useState('1')
 

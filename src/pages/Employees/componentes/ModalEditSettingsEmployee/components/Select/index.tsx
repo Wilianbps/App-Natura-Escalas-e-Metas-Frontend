@@ -30,8 +30,8 @@ export function SelectOptions(props: SelectOptionsProps) {
           <MenuItem disabled value="" sx={{ fontSize: '13px' }}>
             <span>Selecione uma ação</span>
           </MenuItem>
-          <MenuItem sx={{ fontSize: '13px' }} value="ferias">
-            Férias
+          <MenuItem sx={{ fontSize: '13px' }} value="ausencia">
+            Ausência
           </MenuItem>
           <MenuItem sx={{ fontSize: '13px' }} value="folga">
             Folgas

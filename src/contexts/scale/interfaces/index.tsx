@@ -73,6 +73,14 @@ export interface IParamToAlterDayScale {
   status: number
 }
 
+export interface IStoresScaleStatus {
+  scaleCode: string
+  branch: string
+  userLogin: string
+  date: string
+  status: string
+}
+
 export interface ScalesContextType {
   fetchScaleByDate: (date: string) => void
   updateSetScalesByDate: (scale: IScale[]) => void
@@ -97,4 +105,5 @@ export interface ScalesContextType {
   isLoadingScale: boolean
   paramGenerateScaleNextMonth: IParamGenerateScaleNextMonth
   paramToAlterDayScale: IParamToAlterDayScale
+  storesScaleStatus: IStoresScaleStatus[]
 }

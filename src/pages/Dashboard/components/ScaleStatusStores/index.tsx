@@ -9,38 +9,40 @@ import {
   YAxis,
 } from 'recharts'
 
-import { useGoals } from '@/contexts/goals/GoalsContext'
-
-const data = [
-  {
-    name: 'Lojas finalizadas',
-    Quantidade: 50,
-  },
-  {
-    name: 'Lojas Não Finalizadas',
-    Quantidade: 50,
-  },
-  {
-    name: 'Lojas Não Geradas',
-    Quantidade: 50,
-  },
-]
+import { useScales } from '@/contexts/scale/ScalesContext'
 
 export function ScaleStatusStoresChart() {
-  const { goalEmployeeByMonth } = useGoals()
+  const { storesScaleStatus } = useScales()
+
+  const statusCounts = storesScaleStatus.reduce(
+    (acc, store) => {
+      switch (store.status) {
+        case 'ESCALA FINALIZADA':
+          acc.finalized += 1
+          break
+        case 'ESCALA NÃO FINALIZADA':
+          acc.notFinalized += 1
+          break
+        case 'ESCALA NÃO GERADA':
+          acc.notGenerated += 1
+          break
+      }
+      return acc
+    },
+    { finalized: 0, notFinalized: 0, notGenerated: 0 },
+  )
+
+  const data = [
+    { name: 'Lojas Finalizadas', Quantidade: statusCounts.finalized },
+    { name: 'Lojas Não Finalizadas', Quantidade: statusCounts.notFinalized },
+    { name: 'Lojas Não Geradas', Quantidade: statusCounts.notGenerated },
+  ]
 
   return (
     <ResponsiveContainer width="100%" height={250}>
       <BarChart
-        width={500}
-        height={300}
         data={data}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
+        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         barSize={50}
         style={{ fontSize: 12, fontWeight: 500 }}
       >

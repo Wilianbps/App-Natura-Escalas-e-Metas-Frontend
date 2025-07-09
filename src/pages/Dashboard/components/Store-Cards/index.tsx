@@ -1,20 +1,23 @@
 import { useEffect, useState } from 'react'
 
-import { useGoals } from '@/contexts/goals/GoalsContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
-import { formatNumber } from '@/libs/formatNumber'
 
 import { Card, Container } from './styles'
 
-export function StoreCards() {
+interface StoreCardsProps {
+  onSetStatusScale: (cardType: string) => void
+}
+
+export function StoreCards(props: StoreCardsProps) {
+  const { onSetStatusScale } = props
+
   const { monthValue } = useSettings()
-  const { fetchGoalsByFortnight, fetchGoalsByWeek } = useGoals()
+
   const [activeCard, setActiveCard] = useState('finished-stores')
 
   const handleCardClick = (cardType: string) => {
+    onSetStatusScale(cardType)
     setActiveCard(cardType)
-    fetchGoalsByFortnight(cardType)
-    fetchGoalsByWeek(cardType)
   }
 
   useEffect(() => {

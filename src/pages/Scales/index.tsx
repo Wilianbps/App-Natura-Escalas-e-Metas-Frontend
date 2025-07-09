@@ -21,7 +21,7 @@ import { Scale } from './components/ScalePage'
 import { Summary } from './components/Summary'
 import { Container, ContainerLoadScale } from './styles'
 
-export function ScalePage() {
+export default function ScalePage() {
   const {
     scaleSummary,
     dataFinishScale,
