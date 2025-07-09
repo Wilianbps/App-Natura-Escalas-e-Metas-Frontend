@@ -24,7 +24,7 @@ interface IEmployeStatus {
   status: boolean
 }
 
-export function Employees() {
+export default function Employees() {
   const { cookieProfile } = useProfiles()
   const { employees, updateSettings, isLoadingEmployees } = useSettings()
   const [openModalEditSettingsEmpoyee, setOpenModalEditSettingsEmpoyee] =

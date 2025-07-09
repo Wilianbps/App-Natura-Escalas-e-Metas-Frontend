@@ -17,13 +17,13 @@ export function validateVacations(
   }
 
   if (selectedStartVacation && !selectedFinishVacation) {
-    return toast.error('Favor informar o fim das férias.', {
+    return toast.error('Favor informar o fim da ausência.', {
       style: { width: '370px', height: '50px', padding: '15px' },
     })
   }
 
   if (!selectedStartVacation && selectedFinishVacation) {
-    return toast.error('Favor informar o início das férias.', {
+    return toast.error('Favor informar o início da ausência.', {
       style: { width: '370px', height: '50px', padding: '15px' },
     })
   }

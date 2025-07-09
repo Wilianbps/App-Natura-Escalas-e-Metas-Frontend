@@ -455,7 +455,7 @@ export default function ModalEditSettingsEmployee(
               <span>cargo:</span> {formatName(employee?.office)}
             </p>
             <p>
-              <span>Próximas férias:</span> {dateNextVacation}
+              <span>Próxima ausência:</span> {dateNextVacation}
             </p>
           </div>
         </header>
@@ -466,18 +466,18 @@ export default function ModalEditSettingsEmployee(
             onHandleSelectTypeRest={handleSelectTypeRest}
           />
           <InfoEmployeeContainer>
-            {selectTypeRest === 'ferias' && (
+            {selectTypeRest === 'ausencia' && (
               <SelectVacationContainer>
                 <section className="container-vacation-button">
                   <DatePickerEmployeeModal
                     selectDate={selectedStartVacation}
                     onSelectDate={handleSelectStartVacation}
-                    label="Início Férias"
+                    label="Início"
                   />
                   <DatePickerEmployeeModal
                     selectDate={selectedFinishVacation}
                     onSelectDate={handleSelectFinishVacation}
-                    label="Fim Férias"
+                    label="Fim"
                   />
                   <button type="button" onClick={handleAddVacationOffInArray}>
                     <IoIosAddCircle size={30} color="#fff" />
@@ -489,8 +489,8 @@ export default function ModalEditSettingsEmployee(
                     {arrayVacations?.length ? (
                       <thead>
                         <tr>
-                          <th>Início férias</th>
-                          <th>Fim férias</th>
+                          <th>Início</th>
+                          <th>Fim</th>
                           <th>Deletar</th>
                         </tr>
                       </thead>

@@ -17,6 +17,7 @@ import {
   IScaleApprovalRequest,
   IScaleProps,
   IScaleSummary,
+  type IStoresScaleStatus,
   ScalesContextType,
 } from './interfaces'
 
@@ -39,6 +40,10 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   const [inputFlow, setInputFlow] = useState<DataType[]>([])
   const [dataScaleApprovalRequest, setDataScaleApprovalRequest] = useState<
     IScaleApprovalRequest[]
+  >([])
+
+  const [storesScaleStatus, setStoresScaleStatus] = useState<
+    IStoresScaleStatus[]
   >([])
   const [isLoadingScale, setIsLoadingScale] = useState(false)
 
@@ -275,6 +280,16 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
       .then((response) => setParamToAlterDayScale(response.data[0]))
   }
 
+  async function fetchStoresScaleStatus() {
+    const day = '01'
+    const date = `${year}${month}${day}`
+    await api
+      .get(`scales/get-stores-scale-status?currentDate=${date}`)
+      .then((response) => {
+        setStoresScaleStatus(response.data)
+      })
+  }
+
   useEffect(() => {
     if (store) {
       fetchParamGenerateScaleNextMonth()
@@ -284,6 +299,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
       fetchScaleSummaryByFortnight()
       fetchFinishedScaleByMonth()
       fetchScaleByDate(getCurrentDate)
+      fetchStoresScaleStatus()
     }
   }, [monthValue, store])
 
@@ -309,6 +325,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         isLoadingScale,
         paramGenerateScaleNextMonth,
         paramToAlterDayScale,
+        storesScaleStatus,
       }}
     >
       {children}
@@ -398,6 +415,11 @@ function useScales() {
     (context) => context.paramToAlterDayScale,
   )
 
+  const storesScaleStatus = useContextSelector(
+    ScalesContext,
+    (context) => context.storesScaleStatus,
+  )
+
   return {
     scalesByDate,
     updateSetScalesByDate,
@@ -418,6 +440,7 @@ function useScales() {
     isLoadingScale,
     paramGenerateScaleNextMonth,
     paramToAlterDayScale,
+    storesScaleStatus,
   }
 }
 
