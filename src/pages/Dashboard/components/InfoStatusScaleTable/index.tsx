@@ -1,4 +1,5 @@
 import { Pagination, PaginationItem } from '@mui/material'
+import { formatInTimeZone } from 'date-fns-tz'
 import { ChangeEvent } from 'react'
 
 import { ContainerTable } from './styles'
@@ -60,11 +61,7 @@ export function InfoStatusScaleTable(props: InfoStatusScaleTableProps) {
               <td>{store.userLogin}</td>
               <td>
                 {store.date &&
-                  new Intl.DateTimeFormat('pt-BR', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                  }).format(new Date(store.date))}
+                  formatInTimeZone(store.date, 'UTC', 'dd/MM/yyyy')}
               </td>
             </tr>
           ))}
