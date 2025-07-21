@@ -466,7 +466,7 @@ export default function ModalEditSettingsEmployee(
             onHandleSelectTypeRest={handleSelectTypeRest}
           />
           <InfoEmployeeContainer>
-            {selectTypeRest === 'ausencia' && (
+            {['ausencia', 'ferias'].includes(selectTypeRest) && (
               <SelectVacationContainer>
                 <section className="container-vacation-button">
                   <DatePickerEmployeeModal
