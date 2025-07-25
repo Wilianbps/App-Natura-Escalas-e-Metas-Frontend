@@ -1,10 +1,13 @@
 import { Document, Image, Page, Text, View } from '@react-pdf/renderer'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 import { formatName } from '@/libs/formatName'
 import { formatNumber } from '@/libs/formatNumber'
 
 import logoDG from '../../../../../../../public/assets/consultdg_logo.png'
 import logoNatura from '../../../../../../../public/assets/natura_logo.png'
+import backgroundImage from '../../../../../../../public/assets/watermark_background.png'
 import { splitDaysOfMonthIntoTwoParts } from '../../utils/splitDaysOfMonthIntoTwoParts'
 import { styles } from './styles'
 
@@ -23,13 +26,18 @@ export interface IGoals {
 interface GoalsSummaryProps {
   goals: Array<IGoals[]>
   monthValue: string
+  finishScale: boolean
 }
 
 export function GoalsSummaryPDF(props: GoalsSummaryProps) {
-  const { goals, monthValue } = props
+  const { goals, monthValue, finishScale } = props
 
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
+  const now = new Date()
+  const formattedDateTime = format(now, "dd/MM/yyyy 'às' HH:mm", {
+    locale: ptBR,
+  })
 
   const fortnights = splitDaysOfMonthIntoTwoParts(Number(month), Number(year))
 
@@ -93,7 +101,8 @@ export function GoalsSummaryPDF(props: GoalsSummaryProps) {
               </View>
               <View style={styles.header}>
                 <Text style={styles.textHeader}>
-                  Resumo Meta {month}/{year} - Quinzena {pageIndex + 1}
+                  Resumo Meta {month}/{year} - Quinzena {pageIndex + 1} - (Data
+                  / Hora Impressão - {formattedDateTime})
                 </Text>
               </View>
 
@@ -222,6 +231,16 @@ export function GoalsSummaryPDF(props: GoalsSummaryProps) {
                     </View>
                   ))}
                 </>
+              )}
+              {(finishScale === false ||
+                finishScale === undefined ||
+                finishScale === null) && (
+                <View style={styles.viewBackgroundImage}>
+                  <Image
+                    source={backgroundImage}
+                    style={styles.backgroundImage}
+                  />
+                </View>
               )}
             </Page>
           ))}

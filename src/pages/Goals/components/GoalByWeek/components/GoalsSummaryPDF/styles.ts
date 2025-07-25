@@ -12,10 +12,25 @@ export const styles = StyleSheet.create({
   },
 
   header: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     fontSize: '16px',
     fontWeight: 'bold',
     marginBottom: '10px',
     width: '100%',
+  },
+
+  viewBackgroundImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
+    opacity: 0.2,
   },
 
   logoHeader: {

@@ -5,6 +5,7 @@ import { CgPrinter } from 'react-icons/cg'
 
 import { TextInfo } from '@/components/TextInfo'
 import { useGoals } from '@/contexts/goals/GoalsContext'
+import { useScales } from '@/contexts/scale/ScalesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 import { formatNumber } from '@/libs/formatNumber'
@@ -19,6 +20,7 @@ import {
 
 export function GoalByWeek() {
   const { goalsByWeek } = useGoals()
+  const { dataFinishScale } = useScales()
   const [isLoadingPDF, setIsLoadingPDF] = useState(false)
   const { monthValue } = useSettings()
 
@@ -27,7 +29,11 @@ export function GoalByWeek() {
 
     setTimeout(async () => {
       const doc = (
-        <GoalsByWeekPDF goalsByWeek={goalsByWeek} monthValue={monthValue} />
+        <GoalsByWeekPDF
+          goalsByWeek={goalsByWeek}
+          monthValue={monthValue}
+          finishScale={dataFinishScale[0]?.finished}
+        />
       )
       const asPdf = pdf()
 

@@ -5,6 +5,7 @@ import { CgPrinter } from 'react-icons/cg'
 
 import { TextInfo } from '@/components/TextInfo'
 import { useGoals } from '@/contexts/goals/GoalsContext'
+import { useScales } from '@/contexts/scale/ScalesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 import { formatNumber } from '@/libs/formatNumber'
@@ -21,6 +22,7 @@ import { splitDaysOfMonthIntoTwoParts } from './utils/splitDaysOfMonthIntoTwoPar
 
 export function GoalByDay() {
   const { monthValue } = useSettings()
+  const { dataFinishScale } = useScales()
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
   const { goals } = useGoals()
@@ -85,7 +87,13 @@ export function GoalByDay() {
     setIsLoadingPDF(true)
 
     setTimeout(async () => {
-      const doc = <GoalsSummaryPDF goals={goals} monthValue={monthValue} />
+      const doc = (
+        <GoalsSummaryPDF
+          goals={goals}
+          monthValue={monthValue}
+          finishScale={dataFinishScale[0]?.finished}
+        />
+      )
       const asPdf = pdf()
 
       asPdf.updateContainer(doc)

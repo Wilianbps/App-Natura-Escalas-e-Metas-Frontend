@@ -1,10 +1,13 @@
 import { Document, Image, Page, Text, View } from '@react-pdf/renderer' // Componente do documento PDF
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 import { formatName } from '@/libs/formatName'
 import { formatNumber } from '@/libs/formatNumber'
 
 import logoDG from '../../../../../../../public/assets/consultdg_logo.png'
 import logoNatura from '../../../../../../../public/assets/natura_logo.png'
+import backgroundImage from '../../../../../../../public/assets/watermark_background.png'
 import { styles } from './styles'
 
 interface IGoalsByWeek {
@@ -31,13 +34,18 @@ interface IGoalsByWeek {
 interface GoalsSummaryProps {
   goalsByWeek: IGoalsByWeek
   monthValue: string
+  finishScale: boolean
 }
 
 export function GoalsByWeekPDF(props: GoalsSummaryProps) {
-  const { goalsByWeek, monthValue } = props
+  const { goalsByWeek, monthValue, finishScale } = props
 
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
+  const now = new Date()
+  const formattedDateTime = format(now, "dd/MM/yyyy 'às' HH:mm", {
+    locale: ptBR,
+  })
 
   return (
     <Document>
@@ -61,7 +69,8 @@ export function GoalsByWeekPDF(props: GoalsSummaryProps) {
           </View>
           <View style={styles.header}>
             <Text style={styles.textHeader}>
-              Resumo Meta Por Semana {month}/{year}
+              Resumo Meta Por Semana {month}/{year} - (Data / Hora Impressão -{' '}
+              {formattedDateTime})
             </Text>
           </View>
 
@@ -140,6 +149,13 @@ export function GoalsByWeekPDF(props: GoalsSummaryProps) {
               </View>
             ))}
           </View>
+          {(finishScale === false ||
+            finishScale === undefined ||
+            finishScale === null) && (
+            <View style={styles.viewBackgroundImage}>
+              <Image source={backgroundImage} style={styles.backgroundImage} />
+            </View>
+          )}
         </Page>
       )}
     </Document>

@@ -149,7 +149,9 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
 
   async function fetchFinishedScaleByMonth() {
     await api
-      .get(`scales/get-finished-scale-by-month?month=${month}&year=${year}`)
+      .get(
+        `scales/get-finished-scale-by-month?month=${month}&year=${year}&storeCode=${store}`,
+      )
       .then((response) => {
         setDataFinishScale(response.data)
       })
