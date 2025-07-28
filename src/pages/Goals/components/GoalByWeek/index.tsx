@@ -16,6 +16,7 @@ import {
   ContainerGoalsByWeekPdf,
   ContainerTable,
   Footer,
+  MessageText,
 } from './styles'
 
 export function GoalByWeek() {
@@ -23,6 +24,8 @@ export function GoalByWeek() {
   const { dataFinishScale } = useScales()
   const [isLoadingPDF, setIsLoadingPDF] = useState(false)
   const { monthValue } = useSettings()
+
+  const finishScale = dataFinishScale[0]?.finished
 
   function handleGenerateGoalByWeekPDF() {
     setIsLoadingPDF(true)
@@ -50,6 +53,14 @@ export function GoalByWeek() {
   return (
     <Container>
       <ContainerTable>
+        {(finishScale === false ||
+          finishScale === undefined ||
+          finishScale === null) &&
+        goalsByWeek.employeesByWeeks?.length ? (
+          <MessageText>Escala Não Finalizada</MessageText>
+        ) : (
+          ''
+        )}
         <ContainerGoalsByWeekPdf onClick={handleGenerateGoalByWeekPDF}>
           {!isLoadingPDF ? (
             <CgPrinter size={24} />

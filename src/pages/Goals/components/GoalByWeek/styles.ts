@@ -4,6 +4,12 @@ export const Container = styled.section`
   margin-top: 1.875rem;
 `
 
+export const MessageText = styled.p`
+  color: ${(props) => props.theme.red};
+  font-weight: bold;
+  padding-top: 30px;
+`
+
 export const ContainerTable = styled.main`
   > table {
     width: 100%;

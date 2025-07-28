@@ -1,15 +1,28 @@
 import styled from '@emotion/styled'
 
 export const Container = styled.section`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+
+  > span {
+    color: ${(props) => props.theme.red};
+    font-weight: bold;
+  }
+`
+
+export const Buttons = styled.section`
+  width: 12rem;
   display: flex;
   align-items: center;
   font-size: 18px;
-  gap: 8px;
   margin: 30px 0;
   text-transform: capitalize;
   font-weight: 500;
 
-  span {
+  > span {
     width: 100%;
     max-width: 175px;
     display: flex;
