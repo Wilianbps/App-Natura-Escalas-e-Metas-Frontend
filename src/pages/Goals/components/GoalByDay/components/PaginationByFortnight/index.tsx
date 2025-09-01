@@ -31,7 +31,7 @@ export function PaginationByFortnight(props: PaginationPerWeekProps) {
       </Buttons>
       {(finishScale === false ||
         finishScale === undefined ||
-        finishScale === null) && <span>Escala Não Finalizda</span>}
+        finishScale === null) && <span>Escala Não Finalizada</span>}
     </Container>
   )
 }
