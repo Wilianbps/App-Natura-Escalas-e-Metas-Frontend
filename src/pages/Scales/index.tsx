@@ -7,6 +7,7 @@ import Tab from '@mui/material/Tab'
 import { isAfter, setDate, startOfMonth } from 'date-fns'
 import { useMemo, useState } from 'react'
 import { CgCheck, CgEye, CgPen } from 'react-icons/cg'
+import { IoHomeOutline } from 'react-icons/io5'
 
 import { Button } from '@/components/Button'
 import { TextInfo } from '@/components/TextInfo'
@@ -149,7 +150,7 @@ export default function ScalePage() {
                 />
                 <Tab
                   label="Folgas"
-                  icon={<CgEye />}
+                  icon={<IoHomeOutline />}
                   iconPosition="end"
                   value="dayOff"
                   sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
