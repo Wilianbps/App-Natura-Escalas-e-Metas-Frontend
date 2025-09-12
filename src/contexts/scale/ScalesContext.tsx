@@ -15,6 +15,8 @@ import {
   type IParamToAlterDayScale,
   IScale,
   IScaleApprovalRequest,
+  IScaleByMonthDate,
+  IScaleMonthDate,
   IScaleProps,
   IScaleSummary,
   type IStoresScaleStatus,
@@ -27,6 +29,9 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
   const { store, cookieUserLogin, cookieProfile } = useProfiles()
   const { fetchEmployes, monthValue } = useSettings()
   const [scalesByDate, setScalesByDate] = useState<IScale[]>([])
+  const [scalesByMonthDate, setScalesByMonthDate] = useState<
+    Array<IScaleByMonthDate[]>
+  >([])
   const [dataFinishScale, setDataFinishScale] = useState<IDataFinishScale[]>([])
   const [paramGenerateScaleNextMonth, setParamGenerateScaleNextMonth] =
     useState({} as IParamGenerateScaleNextMonth)
@@ -46,6 +51,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
     IStoresScaleStatus[]
   >([])
   const [isLoadingScale, setIsLoadingScale] = useState(false)
+  const [isLoadingMonthScale, setIsLoadingMonthScale] = useState(false)
 
   const [getCurrentDate, setGetCurrentDate] = useState('')
 
@@ -65,15 +71,33 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         .get(
           `scales/get-scale-by-date?date=${dateFormatted}&storeCode=${store}`,
         )
-        .then((response) => {
+        .then(async (response) => {
           setScalesByDate(response.data.result)
           setIsLoadingScale(false)
         })
     }
   }
 
+  async function fetchScaleByMonthDate() {
+    if (month && year && store) {
+      setIsLoadingMonthScale(true)
+      await api
+        .get(
+          `scales/get-scale-by-month-date?month=${month}&year=${year}&storeCode=${store}`,
+        )
+        .then((response) => {
+          setScalesByMonthDate(response.data)
+          setIsLoadingMonthScale(false)
+        })
+    }
+  }
+
   function updateSetScalesByDate(scale: IScale[]) {
     setScalesByDate(scale)
+  }
+
+  function updateSetScalesByMonthDate(scale: Array<IScaleByMonthDate[]>) {
+    setScalesByMonthDate(scale)
   }
 
   async function fetchScaleSummary() {
@@ -133,6 +157,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
           await fetchScaleSummary()
           await fetchScaleSummaryByFortnight()
           await fetchEmployes()
+          await fetchScaleByMonthDate()
           return false
         }
       })
@@ -145,6 +170,21 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         }
         return false
       })
+  }
+
+  async function updateScalesByMonthDate(scales: IScaleMonthDate) {
+    try {
+      await api.put(
+        `scales/update-scale-by-month-date?storeCode=${store}&loginUser=${cookieUserLogin}`,
+        { scales },
+      )
+      toast.success('Escala atualizada com sucesso!', {
+        style: { height: '50px', padding: '15px' },
+      })
+      await fetchScaleByMonthDate()
+    } catch (error) {
+      toast.error('Erro ao atualizar a escala. Tente novamente.')
+    }
   }
 
   async function fetchFinishedScaleByMonth() {
@@ -301,6 +341,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
       fetchScaleSummaryByFortnight()
       fetchFinishedScaleByMonth()
       fetchScaleByDate(getCurrentDate)
+      fetchScaleByMonthDate()
       fetchStoresScaleStatus()
     }
   }, [monthValue, store])
@@ -309,9 +350,13 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
     <ScalesContext.Provider
       value={{
         fetchScaleByDate,
+        fetchScaleByMonthDate,
         updateSetScalesByDate,
+        updateScalesByMonthDate,
+        updateSetScalesByMonthDate,
         updateScalesByDate,
         scalesByDate,
+        scalesByMonthDate,
         updateGetCurrenDate,
         scaleSummary,
         scaleSummaryByFortnight,
@@ -325,6 +370,7 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
         updateScaleApprovalRequest,
         dataScaleApprovalRequest,
         isLoadingScale,
+        isLoadingMonthScale,
         paramGenerateScaleNextMonth,
         paramToAlterDayScale,
         storesScaleStatus,
@@ -340,18 +386,40 @@ function useScales() {
     ScalesContext,
     (context) => context.scalesByDate,
   )
+
+  const scalesByMonthDate = useContextSelector(
+    ScalesContext,
+    (context) => context.scalesByMonthDate,
+  )
   const updateSetScalesByDate = useContextSelector(
     ScalesContext,
     (context) => context.updateSetScalesByDate,
   )
+  const updateSetScalesByMonthDate = useContextSelector(
+    ScalesContext,
+    (context) => context.updateSetScalesByMonthDate,
+  )
+
   const fetchScaleByDate = useContextSelector(
     ScalesContext,
     (context) => context.fetchScaleByDate,
   )
+
+  const fetchScaleByMonthDate = useContextSelector(
+    ScalesContext,
+    (context) => context.fetchScaleByMonthDate,
+  )
+
   const updateScalesByDate = useContextSelector(
     ScalesContext,
     (context) => context.updateScalesByDate,
   )
+
+  const updateScalesByMonthDate = useContextSelector(
+    ScalesContext,
+    (context) => context.updateScalesByMonthDate,
+  )
+
   const updateGetCurrenDate = useContextSelector(
     ScalesContext,
     (context) => context.updateGetCurrenDate,
@@ -406,6 +474,10 @@ function useScales() {
     ScalesContext,
     (context) => context.isLoadingScale,
   )
+  const isLoadingMonthScale = useContextSelector(
+    ScalesContext,
+    (context) => context.isLoadingMonthScale,
+  )
 
   const paramGenerateScaleNextMonth = useContextSelector(
     ScalesContext,
@@ -424,8 +496,12 @@ function useScales() {
 
   return {
     scalesByDate,
+    scalesByMonthDate,
     updateSetScalesByDate,
+    updateScalesByMonthDate,
+    updateSetScalesByMonthDate,
     fetchScaleByDate,
+    fetchScaleByMonthDate,
     updateScalesByDate,
     updateGetCurrenDate,
     scaleSummary,
@@ -440,6 +516,7 @@ function useScales() {
     updateScaleApprovalRequest,
     dataScaleApprovalRequest,
     isLoadingScale,
+    isLoadingMonthScale,
     paramGenerateScaleNextMonth,
     paramToAlterDayScale,
     storesScaleStatus,

@@ -40,35 +40,33 @@ export function InfoStatusScaleTable(props: InfoStatusScaleTableProps) {
 
   const startIndex = (page - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
-  //const pagedStores = storesFiltered.slice(startIndex, endIndex)
+  // const pagedStores = storesFiltered.slice(startIndex, endIndex)
   const orderedStores = [...storesFiltered].sort((a, b) => {
-  // Ordenar por status
-  if (a.status < b.status) return -1
-  if (a.status > b.status) return 1
+    // Ordenar por status
+    if (a.status < b.status) return -1
+    if (a.status > b.status) return 1
 
-  const hasDateA = a.date != null && a.date !== ''
-  const hasDateB = b.date != null && b.date !== ''
+    const hasDateA = a.date != null && a.date !== ''
+    const hasDateB = b.date != null && b.date !== ''
 
-  if (hasDateA && hasDateB) {
-    // Ambos têm data: ordenar por data DESC
-    return new Date(b.date).getTime() - new Date(a.date).getTime()
-  } else if (hasDateA) {
-    // Só A tem data → A vem antes
-    return -1
-  } else if (hasDateB) {
-    // Só B tem data → B vem antes
-    return 1
-  } else {
-    // Nenhum tem data → ordenar por scaleCode (string ou número)
-    if (a.scaleCode < b.scaleCode) return -1
-    if (a.scaleCode > b.scaleCode) return 1
-    return 0
-  }
-})
+    if (hasDateA && hasDateB) {
+      // Ambos têm data: ordenar por data DESC
+      return new Date(b.date).getTime() - new Date(a.date).getTime()
+    } else if (hasDateA) {
+      // Só A tem data → A vem antes
+      return -1
+    } else if (hasDateB) {
+      // Só B tem data → B vem antes
+      return 1
+    } else {
+      // Nenhum tem data → ordenar por scaleCode (string ou número)
+      if (a.scaleCode < b.scaleCode) return -1
+      if (a.scaleCode > b.scaleCode) return 1
+      return 0
+    }
+  })
 
-const pagedStores = orderedStores.slice(startIndex, endIndex)
-
-
+  const pagedStores = orderedStores.slice(startIndex, endIndex)
 
   return (
     <ContainerTable>

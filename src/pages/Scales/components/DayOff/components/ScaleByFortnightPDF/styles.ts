@@ -1,0 +1,240 @@
+import { StyleSheet } from '@react-pdf/renderer'
+
+export const styles = StyleSheet.create({
+  page: {
+    position: 'relative',
+    margin: '0 auto',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
+    padding: 10,
+  },
+
+  header: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    marginBottom: '10px',
+    width: '100%',
+  },
+
+  viewBackgroundImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
+    opacity: 0.2,
+  },
+
+  logoHeader: {
+    position: 'absolute',
+    top: 10,
+    paddingRight: 20,
+    width: '100%',
+    marginBottom: '10px',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: '20px',
+  },
+
+  logoDG: { width: '70px' },
+
+  logoNatura: { width: '40px' },
+
+  textHeader: { textAlign: 'center', fontSize: '14px' },
+
+  tableRow: {
+    flexDirection: 'row',
+  },
+
+  tableCol: {
+    flexDirection: 'column',
+  },
+
+  tableColLeftHeaderDayMonth: {
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    fontSize: 8.5,
+    fontWeight: 'bold',
+    width: 68,
+  },
+
+  tableColHeaderDayMonth: {
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '5px',
+    color: '#FF9E00',
+    fontSize: 8.5,
+    fontWeight: 'bold',
+    width: 43,
+  },
+
+  tableColLeftHeader: {
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    color: '#0f0f0f',
+    fontSize: 8.5,
+    fontWeight: 'bold',
+    backgroundColor: '#FFE9C4',
+    width: 68,
+    border: '1px solid #e0e0e0',
+  },
+
+  tableColHeaderContainer: {
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 38,
+    width: 43,
+    fontSize: 8.5,
+    fontWeight: 'bold',
+    color: '#0f0f0f',
+    backgroundColor: '#fff3e0',
+    padding: 3,
+    border: '1px solid #e0e0e0',
+  },
+
+  tableColBodyContainer: {
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 43,
+    height: 38,
+    fontSize: 6.5,
+    color: '#0f0f0f',
+    backgroundColor: '#fff',
+    padding: 1,
+    border: '1px solid #e0e0e0',
+  },
+
+  tableColBodyContainerOdd: {
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 43,
+    height: 38,
+    fontSize: 6.5,
+    color: '#0f0f0f',
+    backgroundColor: '#fff',
+    padding: 1,
+    border: '1px solid #e0e0e0',
+  },
+
+  tableColLeftBody: {
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    color: '#0f0f0f',
+    fontSize: 6.5,
+    fontWeight: 'bold',
+    backgroundColor: '#fff',
+    width: 68,
+    border: '1px solid #e0e0e0',
+  },
+
+  tableColBodyBlue: {
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    color: '#0f0f0f',
+    fontSize: 6.5,
+    fontWeight: 'bold',
+    backgroundColor: '#fff',
+    width: 68,
+    border: '1px solid #e0e0e0',
+  },
+
+  tableColBodyContainerBlue: {
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 43,
+    height: 38,
+    fontSize: 6.5,
+    color: '#0f0f0f',
+    backgroundColor: '#daedff',
+    padding: 1,
+    border: '1px solid #e0e0e0',
+  },
+
+  tableColLeftBodyOdd: {
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    color: '#0f0f0f',
+    fontSize: 6.5,
+    fontWeight: 'bold',
+    backgroundColor: '#fff',
+    width: 68,
+    border: '1px solid #e0e0e0',
+  },
+
+  tableColLeftFooter: {
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    color: '#0f0f0f',
+    fontSize: 6.5,
+    fontWeight: 'bold',
+    backgroundColor: '#fff',
+    width: 68,
+    border: '1px solid #e0e0e0',
+  },
+
+  tableColFooterContainer: {
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    height: 38,
+    width: 43,
+    fontSize: 6.5,
+    fontWeight: 'bold',
+    color: '#0f0f0f',
+    backgroundColor: '#fff3e0',
+    padding: 3,
+  },
+
+  greenLight: { backgroundColor: '#e2d34c' },
+  orangeDark: { backgroundColor: '#FF9E00' },
+  brown: { backgroundColor: '#B77100' },
+  gray: { backgroundColor: '#C8C8C8' },
+
+  headerFootter: {
+    fontSize: '13px',
+    fontWeight: 'bold',
+    marginTop: '10px',
+    marginBottom: '10px',
+  },
+})

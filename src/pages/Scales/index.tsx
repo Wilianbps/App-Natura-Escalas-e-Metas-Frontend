@@ -15,6 +15,7 @@ import { useScales } from '@/contexts/scale/ScalesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 
 import { Approvals } from './components/Approvals'
+import { DayOff } from './components/DayOff/index.tsx'
 import { InfoTextScaleDeadline } from './components/InfoTextScaleDeadline'
 import { ModalConfirmLoadScale } from './components/ModalConfirmLoadScale.tsx/index.tsx'
 import { Scale } from './components/ScalePage'
@@ -27,6 +28,8 @@ export default function ScalePage() {
     dataFinishScale,
     dataScaleApprovalRequest,
     isLoadingScale,
+    isLoadingMonthScale,
+    fetchScaleByMonthDate,
   } = useScales()
   const [value, setValue] = useState('setting')
 
@@ -79,12 +82,15 @@ export default function ScalePage() {
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue)
+    if (newValue === 'dayOff') {
+      fetchScaleByMonthDate()
+    }
   }
 
   return (
     <Container>
       <header>
-        {isLoadingScale ? (
+        {isLoadingScale || isLoadingMonthScale ? (
           <>
             <TextInfo text="Carregando escala..." />
             <Box sx={{ width: '100%', marginTop: '10px' }}>
@@ -141,6 +147,13 @@ export default function ScalePage() {
                   value="summary"
                   sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
                 />
+                <Tab
+                  label="Folgas"
+                  icon={<CgEye />}
+                  iconPosition="end"
+                  value="dayOff"
+                  sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
+                />
                 {(cookieProfile === 'Supervisão Loja' ||
                   cookieProfile === 'Master') && (
                   <Tab
@@ -185,6 +198,9 @@ export default function ScalePage() {
             </TabPanel>
             <TabPanel value="approvals" sx={{ padding: 0 }}>
               <Approvals />
+            </TabPanel>
+            <TabPanel value="dayOff" sx={{ padding: 0 }}>
+              <DayOff />
             </TabPanel>
           </TabContext>
         </Box>

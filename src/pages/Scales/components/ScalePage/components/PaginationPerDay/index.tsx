@@ -215,7 +215,9 @@ export function PaginationPerDay() {
         )}
 
       {dataFinishScale[0]?.finished === true &&
-        ['Gerente Loja', 'Supervisão Loja', 'Master'].includes(cookieProfile) && (
+        ['Gerente Loja', 'Supervisão Loja', 'Master'].includes(
+          cookieProfile,
+        ) && (
           <Typography style={{ color: '#449428', fontWeight: 'bold' }}>
             Escala finalizada dia {scaleEndDate} por {nameFormatted}
           </Typography>

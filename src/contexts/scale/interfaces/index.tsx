@@ -13,6 +13,18 @@ export interface IScale {
   }
 }
 
+export interface IScaleByMonthDate {
+  id: string
+  name: string
+
+  days: {
+    date: string
+    status: number | null
+    activeDays?: number
+    absenceId: null | number
+  }[]
+}
+
 export interface IScaleProps {
   id: number
   date: string
@@ -81,10 +93,25 @@ export interface IStoresScaleStatus {
   status: string
 }
 
+type ScaleType = {
+  type: 'I' | 'D'
+  newStatus: number
+  absenceId: number | null
+  date: string
+}
+
+export type IScaleMonthDate = Record<
+  string,
+  { name: string; days: Record<number, ScaleType> }
+>
+
 export interface ScalesContextType {
   fetchScaleByDate: (date: string) => void
+  fetchScaleByMonthDate: () => void
   updateSetScalesByDate: (scale: IScale[]) => void
   updateScalesByDate: (scale: IScale[]) => void
+  updateScalesByMonthDate: (scale: IScaleMonthDate) => void
+  updateSetScalesByMonthDate: (scale: Array<IScaleByMonthDate[]>) => void
   fetchLoadMonthScale: (date: string) => void
   fetchInputFlow: (date: string) => void
   updateGetCurrenDate: (date: string) => void
@@ -97,12 +124,14 @@ export interface ScalesContextType {
     storeCode: string,
   ) => void
   scalesByDate: IScale[]
+  scalesByMonthDate: Array<IScaleByMonthDate[]>
   scaleSummary: Array<IScaleSummary[]>
   scaleSummaryByFortnight: Array<IScaleSummary[]>
   inputFlow: DataType[]
   dataFinishScale: IDataFinishScale[]
   dataScaleApprovalRequest: IScaleApprovalRequest[]
   isLoadingScale: boolean
+  isLoadingMonthScale: boolean
   paramGenerateScaleNextMonth: IParamGenerateScaleNextMonth
   paramToAlterDayScale: IParamToAlterDayScale
   storesScaleStatus: IStoresScaleStatus[]
