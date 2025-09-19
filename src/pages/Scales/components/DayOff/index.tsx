@@ -209,8 +209,6 @@ export function DayOff() {
     return false
   }
 
-  console.log('changes', changes)
-
   const handleSave = () => {
     setIsSubmitting(true)
 
