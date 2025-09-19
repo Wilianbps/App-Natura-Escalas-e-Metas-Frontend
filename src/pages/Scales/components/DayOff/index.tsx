@@ -148,6 +148,10 @@ export function DayOff() {
 
     const employeeId = String(employeeToUpdate.id)
 
+    // índice global: evita sobrescrever quando muda de página
+    const globalDayIndex =
+      page === 0 ? dayIndex : dayIndex + daysOfMonth[0].length
+
     setChanges((prev) => {
       const newChanges: ChangesState = { ...prev }
 
@@ -160,12 +164,12 @@ export function DayOff() {
 
       if (newStatus === originalStatus) {
         // voltou pro estado original → remove do changes
-        delete newChanges[employeeId].days[dayIndex]
+        delete newChanges[employeeId].days[globalDayIndex]
         if (Object.keys(newChanges[employeeId].days).length === 0) {
           delete newChanges[employeeId]
         }
       } else if (actionType) {
-        newChanges[employeeId].days[dayIndex] = {
+        newChanges[employeeId].days[globalDayIndex] = {
           type: actionType,
           newStatus,
           absenceId: originalAbsenceId,
@@ -204,6 +208,8 @@ export function DayOff() {
 
     return false
   }
+
+  console.log('changes', changes)
 
   const handleSave = () => {
     setIsSubmitting(true)
