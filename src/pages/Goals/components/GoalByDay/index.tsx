@@ -112,7 +112,7 @@ export function GoalByDay() {
 
   return (
     <Container>
-      {goals[0]?.length > 0 && (
+      {(goals[0]?.length || goals[1]?.length > 0) && (
         <PaginationByFortnight
           currentPage={page}
           totalPages={totalPages}
@@ -129,10 +129,11 @@ export function GoalByDay() {
         )}
       </ContainerGoalsSummaryPdf>
 
-      {goals[0]?.length === 0 && (
+      {goals[page]?.length === 0 && (
         <TextInfo text="Não há informações no período" marginTop="2rem" />
       )}
-      {goals[0]?.length > 0 && (
+
+      {goals[page]?.length > 0 && (
         <>
           <ContainerTable>
             <table>
