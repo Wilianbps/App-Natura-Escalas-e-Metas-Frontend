@@ -183,7 +183,9 @@ function ScalesProvider({ children }: { children: React.ReactNode }) {
       })
       await fetchScaleByMonthDate()
     } catch (error) {
-      toast.error('Erro ao atualizar a escala. Tente novamente.')
+      toast.error('Erro ao atualizar a escala. Tente novamente.', {
+        style: { height: '50px', padding: '15px' },
+      })
     }
   }
 
