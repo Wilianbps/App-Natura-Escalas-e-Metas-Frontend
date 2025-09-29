@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material'
 import { pdf } from '@react-pdf/renderer'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CgPrinter } from 'react-icons/cg'
 import { IoPersonCircleOutline } from 'react-icons/io5'
 import { toast } from 'sonner'
@@ -52,7 +52,6 @@ export function DayOff() {
   const {
     scalesByMonthDate,
     isLoadingMonthScale,
-    updateSetScalesByMonthDate,
     updateScalesByMonthDate,
     dataFinishScale,
   } = useScales()
@@ -64,6 +63,17 @@ export function DayOff() {
   const currentYear = currentDate.getFullYear().toString()
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
+
+  const [editedScales, setEditedScales] = useState(scalesByMonthDate)
+  useEffect(() => {
+    // Sempre que o contexto for atualizado (ex: após salvar),
+    // sincroniza a cópia local usada para edição
+    setEditedScales(
+      structuredClone
+        ? structuredClone(scalesByMonthDate)
+        : JSON.parse(JSON.stringify(scalesByMonthDate)),
+    )
+  }, [scalesByMonthDate])
 
   const [modalMessage, setModalMessage] = useState<Array<string>>([])
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -100,29 +110,26 @@ export function DayOff() {
     const originalAbsenceId = originalDay.absenceId ?? null
     const originalStatus = originalAbsenceId ? 0 : 1
 
-    // --- deep clone do scalesByMonthDate ---
+    // deep clone da cópia local
     const updatedScales = structuredClone
-      ? structuredClone(scalesByMonthDate)
-      : JSON.parse(JSON.stringify(scalesByMonthDate))
+      ? structuredClone(editedScales)
+      : JSON.parse(JSON.stringify(editedScales))
 
     const employeeToUpdate = updatedScales[page]?.[employeeIndex]
     const dayToUpdate = employeeToUpdate?.days?.[dayIndex]
     if (!dayToUpdate) return
 
-    // --- atualiza status do dia alterado ---
+    // atualiza status do dia alterado
     dayToUpdate.status = newStatus
 
-    // --- recalcula activeDays de forma contínua para todo o mês ---
-    // 1) pega todos os dias do funcionário em todas as páginas
+    // recalcula activeDays em todas as páginas para este funcionário
     const allDays: EmployeeDay[] = updatedScales.flatMap(
       (pageArr: Employee[]) => pageArr[employeeIndex]?.days ?? [],
     )
 
-    // 2) percorre todos os dias para recalcular activeDays
     let counter = 0
     allDays.forEach((day) => {
       if (!day) return
-
       if (Number(day.status) === 1) {
         counter++
         day.activeDays = counter
@@ -132,23 +139,22 @@ export function DayOff() {
       }
     })
 
-    // 3) remapeia os dias de volta para cada página
     updatedScales.forEach((pageArr: Employee[]) => {
       if (!pageArr[employeeIndex]) return
       const len = pageArr[employeeIndex].days.length
       pageArr[employeeIndex].days = allDays.splice(0, len)
     })
 
-    updateSetScalesByMonthDate(updatedScales)
+    // só atualiza a cópia local
+    setEditedScales(updatedScales)
 
-    // --- decide ação (I = inserir folga, D = deletar folga) ---
+    // decide ação (I = inserir folga, D = deletar folga)
     let actionType: 'I' | 'D' | null = null
     if (originalStatus === 1 && newStatus === 0) actionType = 'I'
     else if (originalStatus === 0 && newStatus === 1) actionType = 'D'
 
     const employeeId = String(employeeToUpdate.id)
 
-    // índice global: evita sobrescrever quando muda de página
     const globalDayIndex =
       page === 0 ? dayIndex : dayIndex + daysOfMonth[0].length
 
@@ -163,7 +169,6 @@ export function DayOff() {
       }
 
       if (newStatus === originalStatus) {
-        // voltou pro estado original → remove do changes
         delete newChanges[employeeId].days[globalDayIndex]
         if (Object.keys(newChanges[employeeId].days).length === 0) {
           delete newChanges[employeeId]
@@ -184,7 +189,7 @@ export function DayOff() {
   function dayOffValidator(): boolean {
     const nameEmployeesSet = new Set<string>()
 
-    scalesByMonthDate.forEach((page) => {
+    editedScales.forEach((page) => {
       page.forEach((employee) => {
         employee.days.forEach((day) => {
           if (day?.activeDays !== undefined && day.activeDays > 6) {
@@ -195,7 +200,6 @@ export function DayOff() {
       })
     })
 
-    // transforma em array e ordena pelo nome
     const nameEmployees = Array.from(nameEmployeesSet).sort((a, b) =>
       a.localeCompare(b),
     )
@@ -235,12 +239,7 @@ export function DayOff() {
   }
 
   function handleGenerateScalePDF() {
-    scalesByMonthDate.forEach((item) => {
-      item.forEach((teste) => {
-        formatName(teste.name)
-      })
-    })
-
+    // continua usando os dados originais do banco
     setIsLoadingPDF(true)
 
     setTimeout(async () => {
@@ -264,8 +263,8 @@ export function DayOff() {
   }
 
   const infoScaleMonthPeriod = useMemo(
-    () => scalesByMonthDate.some((item) => item.length > 0),
-    [scalesByMonthDate],
+    () => editedScales.some((item) => item.length > 0),
+    [editedScales],
   )
 
   return (
@@ -319,7 +318,7 @@ export function DayOff() {
                     </tr>
                   </thead>
                   <tbody>
-                    {scalesByMonthDate[page]?.map((employee, employeeIndex) => (
+                    {editedScales[page]?.map((employee, employeeIndex) => (
                       <tr key={employee.id}>
                         <td>{formatName(employee.name)}</td>
                         {daysOfMonth[page]?.map((_, dayIndex) => {
