@@ -21,7 +21,7 @@ import { z } from 'zod'
 
 import { Button } from '@/components/Button'
 import { useSettings } from '@/contexts/setting/SettingContext'
-import { insertMaskInCpf } from '@/libs/cpf'
+import { insertMaskInCpf, isValidCpf } from '@/libs/cpf'
 import { formatName } from '@/libs/formatName'
 
 import { DatePickerRegisterEmployee } from '../DatePickerRegisterEmployee'
@@ -51,8 +51,8 @@ const schemaForm = z.object({
     .min(14, 'Por favor, informe um CPF válido')
     .refine(
       (value) => {
-        const unmaskedCpf = value.replace(/\D/g, '') // Remove pontos e hífen para validação
-        return unmaskedCpf.length === 11
+        const unmaskedCpf = value.replace(/\D/g, '')
+        return unmaskedCpf.length === 11 && isValidCpf(value)
       },
       { message: 'CPF inválido' },
     ),
@@ -280,9 +280,16 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
                     onChange={() => setExtraEmployee(!extraEmployee)}
                     inputProps={{ 'aria-label': 'controlled' }}
                   />
-                  <span className="extra_employee">Vendedor extra</span>
+                  <span className="extra_employee">Vendedor extra *</span>
                 </section>
               </section>
+
+              <span>
+                <b>* Obs:</b> Use a flag <b>Vendedor extra</b> somente para
+                adicionar a meta de um novo vendedor que entrou após finalizar a
+                escala. Essa meta é exclusiva dele e não será dividida com os
+                outros vendedores.
+              </span>
 
               <Box sx={{ mb: 2 }}>
                 <h4>Turnos</h4>
