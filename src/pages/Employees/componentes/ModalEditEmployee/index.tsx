@@ -280,15 +280,15 @@ export function ModalEditEmployee(props: ModalEditEmployeeProps) {
                     onChange={() => setExtraEmployee(!extraEmployee)}
                     inputProps={{ 'aria-label': 'controlled' }}
                   />
-                  <span className="extra_employee">Vendedor extra *</span>
+                  <span className="extra_employee">Incremento de Consultor *</span>
                 </section>
               </section>
 
               <span>
-                <b>* Obs:</b> Use a flag <b>Vendedor extra</b> somente para
-                adicionar a meta de um novo vendedor que entrou após finalizar a
-                escala. Essa meta é exclusiva dele e não será dividida com os
-                outros vendedores.
+                 <b>* Obs: </b>Marcar este campo apenas em caso de inicio de novo vendedor em loja, que não 
+                havia sido contemplado na escala no inicio do mês. Com essa opção marcada, será
+                incluída a meta do vendedor sem que haja qualquer alteração ou distribuição entre as metas dos
+                demais consultores.
               </span>
 
               <Box sx={{ mb: 2 }}>
