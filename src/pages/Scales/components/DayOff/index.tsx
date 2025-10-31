@@ -353,9 +353,9 @@ export function DayOff() {
                                 )}
                                 <div className="styled-select">
                                   {isVacationDay ? (
-                                    <span>Férias</span>
+                                    <span>❌</span>
                                   ) : currentStatus === 0 ? (
-                                    <span>Folga</span>
+                                    <span>❌</span>
                                   ) : (
                                     <IoPersonCircleOutline size={20} />
                                   )}

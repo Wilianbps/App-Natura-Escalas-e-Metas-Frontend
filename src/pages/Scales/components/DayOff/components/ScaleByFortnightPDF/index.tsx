@@ -43,10 +43,10 @@ export function ScaleByFortnightPDF({
   // Função para renderizar cada célula conforme status
   function renderDayCell(status: number | null) {
     if (status === null) {
-      return <Text style={{ color: '#449428', fontSize: 8 }}>Férias</Text>
+      return <Text style={{ color: '#ff0000ff', fontSize: 12 }}> X </Text>
     }
     if (status === 0) {
-      return <Text style={{ color: '#FF9E00', fontSize: 8 }}>Folga</Text>
+      return <Text style={{ color: '#ff0000ff', fontSize: 12 }}> X </Text>
     }
     return <Image src={personIcon} style={{ width: 12, height: 12 }} />
   }
