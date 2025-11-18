@@ -69,7 +69,6 @@ export const ContainerTable = styled.main`
 `
 
 export const ContainerDayOffPdf = styled.section`
-  margin: 1.063rem auto;
   display: flex;
   justify-content: flex-end;
   cursor: pointer;
@@ -123,4 +122,10 @@ export const SelectStyled = styled.div<SelectStyledProps>`
 export const Footer = styled.footer`
   margin-top: 2rem;
   text-align: end;
+`
+export const ContainerIcons = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 `
