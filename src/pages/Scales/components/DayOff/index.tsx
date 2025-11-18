@@ -2,6 +2,7 @@ import { CircularProgress } from '@mui/material'
 import { pdf } from '@react-pdf/renderer'
 import React, { useEffect, useMemo, useState } from 'react'
 import { CgPrinter } from 'react-icons/cg'
+import { FaFileExcel } from 'react-icons/fa6'
 import { IoPersonCircleOutline } from 'react-icons/io5'
 import { toast } from 'sonner'
 
@@ -12,11 +13,13 @@ import { useScales } from '@/contexts/scale/ScalesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 
+import { generateScaleByFortnigthExcel } from './components/GenerateScaleByFortnigthExcel'
 import { PaginationByFortnight } from './components/PaginationByFortnight'
 import { ScaleByFortnightPDF } from './components/ScaleByFortnightPDF'
 import {
   Container,
   ContainerDayOffPdf,
+  ContainerIcons,
   ContainerTable,
   Footer,
   SelectStyled,
@@ -79,6 +82,7 @@ export function DayOff() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isLoadingPDF, setIsLoadingPDF] = useState(false)
+  const [isLoadingExcel, setIsLoadingExcel] = useState(false)
   const [page, setPage] = useState(0)
   const totalPages = 2
 
@@ -262,6 +266,22 @@ export function DayOff() {
     }, 2000)
   }
 
+  function handleExportExcel() {
+    setIsLoadingExcel(true)
+
+    setTimeout(() => {
+      const excelProps = {
+        scales: scalesByMonthDate,
+        monthValue,
+        finishScale: dataFinishScale[0]?.finished,
+      }
+
+      generateScaleByFortnigthExcel(excelProps, daysOfMonth)
+
+      setIsLoadingExcel(false)
+    }, 800)
+  }
+
   const infoScaleMonthPeriod = useMemo(
     () => editedScales.some((item) => item.length > 0),
     [editedScales],
@@ -293,13 +313,23 @@ export function DayOff() {
                 onPreviousPage={handlePreviousPage}
               />
 
-              <ContainerDayOffPdf onClick={handleGenerateScalePDF}>
-                {!isLoadingPDF ? (
-                  <CgPrinter size={24} />
-                ) : (
-                  <CircularProgress size={24} style={{ color: '#ffffff' }} />
-                )}
-              </ContainerDayOffPdf>
+              <ContainerIcons>
+                <ContainerDayOffPdf onClick={handleGenerateScalePDF}>
+                  {!isLoadingPDF ? (
+                    <CgPrinter size={24} />
+                  ) : (
+                    <CircularProgress size={24} style={{ color: '#ffffff' }} />
+                  )}
+                </ContainerDayOffPdf>
+
+                <ContainerDayOffPdf onClick={handleExportExcel}>
+                  {!isLoadingExcel ? (
+                    <FaFileExcel size={24} />
+                  ) : (
+                    <CircularProgress size={24} style={{ color: '#ffffff' }} />
+                  )}
+                </ContainerDayOffPdf>
+              </ContainerIcons>
 
               <ContainerTable>
                 <table>

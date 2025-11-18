@@ -1,7 +1,9 @@
+// GoalByWeek.tsx (Versão modificada e completa)
 import { CircularProgress } from '@mui/material'
 import { pdf } from '@react-pdf/renderer'
 import { useState } from 'react'
 import { CgPrinter } from 'react-icons/cg'
+import { FaFileExcel } from 'react-icons/fa' // 💡 Importar ícone do Excel
 
 import { TextInfo } from '@/components/TextInfo'
 import { useGoals } from '@/contexts/goals/GoalsContext'
@@ -10,12 +12,13 @@ import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
 import { formatNumber } from '@/libs/formatNumber'
 
+import { generateGoalsByWeekExcel } from './components/generateGoalsByWeekExcel'
 import { GoalsByWeekPDF } from './components/GoalsSummaryPDF'
 import {
   Container,
   ContainerGoalsByWeekPdf,
+  ContainerIcons,
   ContainerTable,
-  Footer,
   MessageText,
 } from './styles'
 
@@ -23,6 +26,7 @@ export function GoalByWeek() {
   const { goalsByWeek } = useGoals()
   const { dataFinishScale } = useScales()
   const [isLoadingPDF, setIsLoadingPDF] = useState(false)
+  const [isLoadingExcel, setIsLoadingExcel] = useState(false) // 💡 Estado para o Excel
   const { monthValue } = useSettings()
 
   const finishScale = dataFinishScale[0]?.finished
@@ -50,6 +54,18 @@ export function GoalByWeek() {
     }, 2000)
   }
 
+  // 💡 NOVA FUNÇÃO: EXPORTAR EXCEL
+  function handleExportExcel() {
+    setIsLoadingExcel(true)
+
+    setTimeout(() => {
+      generateGoalsByWeekExcel(goalsByWeek, monthValue)
+
+      setIsLoadingExcel(false)
+    }, 800)
+  }
+  // ------------------------------------
+
   return (
     <Container>
       <ContainerTable>
@@ -61,17 +77,29 @@ export function GoalByWeek() {
         ) : (
           ''
         )}
-        <ContainerGoalsByWeekPdf onClick={handleGenerateGoalByWeekPDF}>
-          {!isLoadingPDF ? (
-            <CgPrinter size={24} />
-          ) : (
-            <CircularProgress size={24} style={{ color: '#ffffff' }} />
-          )}
-        </ContainerGoalsByWeekPdf>
+        <ContainerIcons>
+          {/* BOTÃO PDF */}
+          <ContainerGoalsByWeekPdf onClick={handleGenerateGoalByWeekPDF}>
+            {!isLoadingPDF ? (
+              <CgPrinter size={24} />
+            ) : (
+              <CircularProgress size={24} style={{ color: '#ffffff' }} />
+            )}
+          </ContainerGoalsByWeekPdf>
 
-        {goalsByWeek.employeesByWeeks?.length === 0 && (
-          <TextInfo text="Não há informações no período" marginTop="2rem" />
-        )}
+          {/* 💡 NOVO BOTÃO EXCEL */}
+          <ContainerGoalsByWeekPdf onClick={handleExportExcel}>
+            {!isLoadingExcel ? (
+              <FaFileExcel size={24} />
+            ) : (
+              <CircularProgress size={24} style={{ color: '#ffffff' }} />
+            )}
+          </ContainerGoalsByWeekPdf>
+
+          {goalsByWeek.employeesByWeeks?.length === 0 && (
+            <TextInfo text="Não há informações no período" marginTop="2rem" />
+          )}
+        </ContainerIcons>
 
         {goalsByWeek.employeesByWeeks?.length > 0 && (
           <table>
@@ -122,24 +150,6 @@ export function GoalByWeek() {
           </table>
         )}
       </ContainerTable>
-
-      <Footer>
-        {/*      <p>Colaborador Extra</p>
-
-        <table>
-          <tbody>
-            <tr>
-              <td>Márcia Santos</td>
-              <td>R$36.000,00</td>
-              <td>R$1.500,00</td>
-              <td>R$1.500,00</td>
-              <td>R$1.500,00</td>
-              <td>R$1.500,00</td>
-              <td>R$1.500,00</td>
-            </tr>
-          </tbody>
-        </table> */}
-      </Footer>
     </Container>
   )
 }

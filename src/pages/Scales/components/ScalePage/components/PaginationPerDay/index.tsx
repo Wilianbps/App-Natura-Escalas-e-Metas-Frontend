@@ -131,6 +131,10 @@ export function PaginationPerDay() {
   }
 
   function handleOpenModalFinishedScale() {
+    const validator = dayOffValidator()
+
+    if (validator) return
+
     setIsModalOpenFinishScale(true)
   }
 

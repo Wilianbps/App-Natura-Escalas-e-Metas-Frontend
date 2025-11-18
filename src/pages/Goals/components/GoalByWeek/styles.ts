@@ -153,7 +153,6 @@ export const Footer = styled.footer`
 `
 
 export const ContainerGoalsByWeekPdf = styled.section`
-  margin: 1.063rem auto;
   display: flex;
   justify-content: flex-end;
   cursor: pointer;
@@ -162,4 +161,10 @@ export const ContainerGoalsByWeekPdf = styled.section`
   margin-right: 2rem;
   background-color: #fdbd54;
   border-radius: 50%;
+`
+export const ContainerIcons = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 `
