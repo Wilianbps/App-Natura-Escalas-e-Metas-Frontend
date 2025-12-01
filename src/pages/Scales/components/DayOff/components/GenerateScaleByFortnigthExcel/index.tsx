@@ -24,6 +24,14 @@ interface ExcelProps {
   scales: Employee[][] // Array de Quinzenas (Páginas), onde cada quinzena é um array de Employee
   monthValue: string
   finishScale: boolean | undefined
+  storesByUser?: {
+    branch: string
+    profile: string
+    status: boolean
+    storeBranch: string
+    storeCode: string
+    user: string
+  }[]
 }
 
 /**
@@ -52,7 +60,52 @@ export async function generateScaleByFortnigthExcel(
 
     if (collaborators.length === 0) continue
 
+    // -------------------------------------------------
+    // 🔵 LINHA EXTRA: LOJA + DATA/HORA + STATUS
+    // -------------------------------------------------
+    const storeName =
+      props.storesByUser && props.storesByUser.length > 0
+        ? props.storesByUser[0].branch.trim()
+        : ''
+    const now = new Date()
+
+    const formattedDate =
+      now.toLocaleDateString('pt-BR') +
+      ' ' +
+      now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+
+    const statusText = props.finishScale
+      ? 'Escala Finalizada'
+      : 'Escala Não Finalizada'
+
+    const statusColor = props.finishScale ? 'FF3CB043' : 'FFFF0000' // verde/vermelho
+
+    const extraRow = sheet.addRow([''])
+
+    extraRow.height = 25
+    extraRow.getCell(1).alignment = { vertical: 'middle', horizontal: 'center' }
+    extraRow.getCell(1).font = { bold: true, size: 14 }
+
+    extraRow.getCell(1).value = {
+      richText: [
+        {
+          text: `${storeName} - ${formattedDate} - `,
+          font: { size: 14, bold: true },
+        },
+        {
+          text: statusText,
+          font: { color: { argb: statusColor }, bold: true, size: 14 },
+        },
+      ],
+    }
+
+    sheet.mergeCells(
+      `A${extraRow.number}:${sheet.getColumn(fortnightDays.length + 1).letter}${extraRow.number}`,
+    )
+
+    // -------------------------------------------------
     // ---------- HEADER 1: Datas (Dia/Mês) ----------
+    // -------------------------------------------------
     const dateHeaderRow = ['Colaboradores']
     fortnightDays.forEach((dayInfo) => {
       dateHeaderRow.push(dayInfo.dayAndmonth)
@@ -69,7 +122,7 @@ export async function generateScaleByFortnigthExcel(
     sheet.addRow(weekDayHeaderRow)
 
     // Estiliza o cabeçalho (Linhas 1 e 2)
-    ;[1, 2].forEach((rowNum) => {
+    ;[extraRow.number + 1, extraRow.number + 2].forEach((rowNum) => {
       const headerRowInstance = sheet.getRow(rowNum)
       headerRowInstance.height = 25
       headerRowInstance.eachCell((cell) => {
@@ -88,28 +141,23 @@ export async function generateScaleByFortnigthExcel(
     })
 
     // Garante que a primeira célula da Linha 1 tenha o título e a Linha 2 fique vazia
-    sheet.getRow(1).getCell(1).value = 'Colaboradores'
-    sheet.getRow(2).getCell(1).value = ''
+    sheet.getRow(extraRow.number + 1).getCell(1).value = 'Colaboradores'
+    sheet.getRow(extraRow.number + 2).getCell(1).value = ''
 
     // ---------- DADOS DO CORPO (Uma linha por Colaborador) ----------
     collaborators.forEach((employee) => {
       const dataRow: (string | null)[] = [employee.name]
 
-      // Itera pelos dias da quinzena atual
       employee.days.forEach((dayData) => {
         let cellValue: string
-
-        // 💡 Lógica atualizada: Se for status "null" ou 0, é 'F' (Folga). Se for 1, é 'T' (Trabalha).
         if (dayData && dayData.status === 1) {
           cellValue = 'T'
         } else {
           cellValue = 'F'
         }
-
         dataRow.push(cellValue)
       })
 
-      // Adiciona a linha de dados
       const newRow = sheet.addRow(dataRow)
 
       newRow.getCell(1).font = { bold: true }
@@ -145,10 +193,8 @@ export async function generateScaleByFortnigthExcel(
       const column = col as ExcelJS.Column
 
       if (index === 0) {
-        // Coluna de nomes
         column.width = 30
       } else {
-        // Colunas de dias/status
         column.width = 10
       }
     })

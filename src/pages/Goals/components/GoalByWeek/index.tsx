@@ -7,6 +7,7 @@ import { FaFileExcel } from 'react-icons/fa' // 💡 Importar ícone do Excel
 
 import { TextInfo } from '@/components/TextInfo'
 import { useGoals } from '@/contexts/goals/GoalsContext'
+import { useProfiles } from '@/contexts/profiles/ProfilesContext'
 import { useScales } from '@/contexts/scale/ScalesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
@@ -25,6 +26,7 @@ import {
 export function GoalByWeek() {
   const { goalsByWeek } = useGoals()
   const { dataFinishScale } = useScales()
+  const { storesByUser } = useProfiles()
   const [isLoadingPDF, setIsLoadingPDF] = useState(false)
   const [isLoadingExcel, setIsLoadingExcel] = useState(false) // 💡 Estado para o Excel
   const { monthValue } = useSettings()
@@ -59,7 +61,12 @@ export function GoalByWeek() {
     setIsLoadingExcel(true)
 
     setTimeout(() => {
-      generateGoalsByWeekExcel(goalsByWeek, monthValue)
+      generateGoalsByWeekExcel(
+        goalsByWeek,
+        monthValue,
+        finishScale,
+        storesByUser,
+      )
 
       setIsLoadingExcel(false)
     }, 800)

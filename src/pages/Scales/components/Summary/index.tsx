@@ -5,6 +5,7 @@ import { CgPrinter } from 'react-icons/cg'
 import { FaFileExcel } from 'react-icons/fa'
 
 import { TextInfo } from '@/components/TextInfo'
+import { useProfiles } from '@/contexts/profiles/ProfilesContext'
 import { useScales } from '@/contexts/scale/ScalesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
@@ -24,7 +25,8 @@ import { daysOfWeek } from './utils/daysOfWeek'
 
 export function Summary() {
   const { monthValue } = useSettings()
-  const { scaleSummary, scaleSummaryByFortnight } = useScales()
+  const { scaleSummary, scaleSummaryByFortnight, dataFinishScale } = useScales()
+  const { storesByUser } = useProfiles()
 
   const infoScalePeriod = useMemo(() => {
     return scaleSummary.some((item) => item.length > 0)
@@ -80,6 +82,8 @@ export function Summary() {
     const excelProps = {
       scaleSummary,
       monthValue,
+      finishScale: dataFinishScale[0]?.finished,
+      storesByUser,
     }
 
     setTimeout(() => {

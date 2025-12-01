@@ -27,6 +27,15 @@ interface IScaleSummary {
 interface ScaleSummaryProps {
   scaleSummary: IScaleSummary[][]
   monthValue: string
+  finishScale?: boolean | undefined
+  storesByUser?: {
+    branch: string
+    profile: string
+    status: boolean
+    storeBranch: string
+    storeCode: string
+    user: string
+  }[]
 }
 
 // Interface para a informação de dia da semana (retorno de daysOfWeek)
@@ -63,18 +72,59 @@ export async function generateScaleSummaryExcel(
 
     if (collaborators.length === 0) continue
 
-    // ---------- HEADER: Dias da Semana e Datas ----------
+    // -------------------------------------------------
+    // 🔵 LINHA EXTRA: LOJA + DATA/HORA + STATUS
+    // -------------------------------------------------
+    const storeName =
+      props.storesByUser && props.storesByUser.length > 0
+        ? props.storesByUser[0].branch.trim()
+        : ''
+
+    const now = new Date()
+    const formattedDate =
+      now.toLocaleDateString('pt-BR') +
+      ' ' +
+      now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+
+    const statusText = props.finishScale
+      ? 'Escala Finalizada'
+      : 'Escala Não Finalizada'
+
+    const statusColor = props.finishScale ? 'FF3CB043' : 'FFFF0000' // verde/vermelho
+
+    const extraRow = sheet.addRow([''])
+    extraRow.height = 25
+    extraRow.getCell(1).alignment = { vertical: 'middle', horizontal: 'center' }
+
+    extraRow.getCell(1).value = {
+      richText: [
+        {
+          text: `${storeName} - ${formattedDate} - `,
+          font: { bold: true, size: 14 },
+        },
+        {
+          text: statusText,
+          font: { bold: true, size: 14, color: { argb: statusColor } },
+        },
+      ],
+    }
+
+    sheet.mergeCells(
+      `A${extraRow.number}:${sheet.getColumn(weekDays.length + 1).letter}${extraRow.number}`,
+    )
+
+    // -------------------------------------------------
+    // HEADER ORIGINAL — NÃO ALTERADO
+    // -------------------------------------------------
     const headerRow = ['Nome Colab.']
 
-    // Adiciona o dia da semana e a data
     weekDays.forEach((dayInfo, index) => {
       headerRow.push(`${DAYS_NAMES[index]} ${dayInfo.day}`)
     })
 
     sheet.addRow(headerRow)
 
-    // Estiliza o cabeçalho
-    const headerRowInstance = sheet.getRow(1)
+    const headerRowInstance = sheet.getRow(extraRow.number + 1)
     headerRowInstance.height = 25
     headerRowInstance.eachCell((cell) => {
       cell.fill = {
@@ -94,11 +144,9 @@ export async function generateScaleSummaryExcel(
     collaborators.forEach((collaborator) => {
       const dataRow: (string | null)[] = [collaborator.name]
 
-      // Itera pelos 7 dias da semana
       Array.from({ length: 7 }).forEach((_, index) => {
         const day = collaborator.days.find((d) => d.dayOfWeek === index + 1)
 
-        // Verifica se o dia pertence ao mês/semana e tem status
         if (!day || day.status === undefined || !day.month) {
           dataRow.push('')
           return
@@ -107,26 +155,18 @@ export async function generateScaleSummaryExcel(
         const statusChar = day.status === 1 ? 'T' : day.status === 0 ? 'F' : ''
 
         if (day.status === 1) {
-          // Trabalha (T)
-          // Formato: T (07:00 - 16:30)
-          const timeAndStatus = `${statusChar} (${day.startTime} - ${day.endTime})`
-          dataRow.push(timeAndStatus)
+          dataRow.push(`${statusChar} (${day.startTime} - ${day.endTime})`)
         } else if (day.status === 0) {
-          // Folga (F)
-          // Formato: F (FOLGA)
           dataRow.push(`${statusChar} (FOLGA)`)
         } else {
           dataRow.push('')
         }
       })
 
-      // Adiciona a linha de dados
       const newRow = sheet.addRow(dataRow)
 
-      // Estilização: Nome em negrito
       newRow.getCell(1).font = { bold: true }
 
-      // Estilização: Centralizar Status/Horário
       for (let i = 2; i <= 8; i++) {
         newRow.getCell(i).alignment = {
           vertical: 'middle',
@@ -148,7 +188,6 @@ export async function generateScaleSummaryExcel(
         if (len > maxLength) maxLength = len
       })
 
-      // Coluna de nome (1) e colunas de dados (2+) fixas para Horário (15)
       column.width = Math.min(
         Math.max(maxLength + 2, column.number === 1 ? 25 : 15),
         50,

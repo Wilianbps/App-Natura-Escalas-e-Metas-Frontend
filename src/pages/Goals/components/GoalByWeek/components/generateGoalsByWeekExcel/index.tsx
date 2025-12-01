@@ -1,8 +1,6 @@
-// ./components/GenerateGoalsByWeekExcel.ts (Corrigido para Metas Semanais)
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 
-// 💡 Interfaces baseadas no contexto do goalsByWeek
 interface WeekData {
   amountWeek: number
 }
@@ -10,7 +8,7 @@ interface WeekData {
 interface EmployeeByWeek {
   id: string
   name: string
-  totalAmountMonth: number // Total de todas as semanas
+  totalAmountMonth: number
   weeks: WeekData[]
 }
 
@@ -24,6 +22,15 @@ const CURRENCY_FORMAT = 'R$ #,##0.00'
 export async function generateGoalsByWeekExcel(
   goalsByWeek: GoalsByWeekData,
   monthValue: string,
+  finishScale?: boolean | undefined,
+  storesByUser?: {
+    branch: string
+    profile: string
+    status: boolean
+    storeBranch: string
+    storeCode: string
+    user: string
+  }[],
 ) {
   const workbook = new ExcelJS.Workbook()
   const sheet = workbook.addWorksheet('Metas Semanais')
@@ -36,8 +43,42 @@ export async function generateGoalsByWeekExcel(
     return
   }
 
-  // ---------- HEADER ----------
-  // Criando os títulos das semanas (Semana 1, Semana 2, ...)
+  const storeName =
+    storesByUser && storesByUser.length > 0 ? storesByUser[0].branch.trim() : ''
+
+  const now = new Date()
+  const formattedDate =
+    now.toLocaleDateString('pt-BR') +
+    ' ' +
+    now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+
+  const statusText = finishScale ? 'Escala Finalizada' : 'Escala Não Finalizada'
+
+  const statusColor = finishScale ? 'FF3CB043' : 'FFFF0000'
+
+  const extraRow = sheet.addRow([''])
+  extraRow.height = 25
+  extraRow.getCell(1).alignment = { vertical: 'middle', horizontal: 'center' }
+
+  extraRow.getCell(1).value = {
+    richText: [
+      {
+        text: `${storeName} - ${formattedDate} - `,
+        font: { bold: true, size: 14 },
+      },
+      {
+        text: statusText,
+        font: { bold: true, size: 14, color: { argb: statusColor } },
+      },
+    ],
+  }
+
+  // Merge baseado no total de colunas existentes (Colab + Total Mês + semanas)
+  const totalColumns = 2 + weeksCount
+  sheet.mergeCells(
+    `A${extraRow.number}:${sheet.getColumn(totalColumns).letter}${extraRow.number}`,
+  )
+
   const weekHeaders = Array.from({ length: weeksCount }).map(
     (_, index) => `Semana ${index + 1}`,
   )
@@ -45,8 +86,7 @@ export async function generateGoalsByWeekExcel(
   const header = ['Colaboradores', 'Total Mês', ...weekHeaders]
   sheet.addRow(header)
 
-  // estiliza o cabeçalho (linha 1)
-  const headerRow = sheet.getRow(1)
+  const headerRow = sheet.getRow(extraRow.number + 1)
   headerRow.height = 20
   headerRow.eachCell((cell) => {
     cell.fill = {
@@ -69,26 +109,17 @@ export async function generateGoalsByWeekExcel(
   })
 
   // ---------- TOTAL SEMANAL LOJA ----------
-  const totalRow = [
-    'Total semanal loja',
-    '', // Célula vazia na coluna Total Mês
-    ...(goalsByWeek.weeksSums || []), // Totais semanais
-  ]
+  const totalRow = ['Total semanal loja', '', ...(goalsByWeek.weeksSums || [])]
   const totalRowInstance = sheet.addRow(totalRow)
   totalRowInstance.font = { bold: true }
 
   // ---------- FORMATAÇÃO R$ E LARGURA ----------
-
-  // 1. Coluna B (Total Mês)
   sheet.getColumn(2).numFmt = CURRENCY_FORMAT
 
-  // 2. Colunas C em diante (Metas Semanais)
-  // Começa na coluna 3 e vai até a última coluna (Colaborador + Total Mês + semanas)
   for (let i = 3; i <= header.length; i++) {
     sheet.getColumn(i).numFmt = CURRENCY_FORMAT
   }
 
-  // AJUSTE DE LARGURA (auto width)
   sheet.columns.forEach((col) => {
     if (!col) return
     const column = col as ExcelJS.Column

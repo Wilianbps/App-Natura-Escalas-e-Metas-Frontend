@@ -6,6 +6,7 @@ import { FaFileExcel } from 'react-icons/fa'
 
 import { TextInfo } from '@/components/TextInfo'
 import { useGoals } from '@/contexts/goals/GoalsContext'
+import { useProfiles } from '@/contexts/profiles/ProfilesContext'
 import { useScales } from '@/contexts/scale/ScalesContext'
 import { useSettings } from '@/contexts/setting/SettingContext'
 import { formatName } from '@/libs/formatName'
@@ -29,6 +30,7 @@ export function GoalByDay() {
   const month = monthValue.split('-')[1]
   const year = monthValue.split('-')[0]
   const { goals } = useGoals()
+  const { storesByUser } = useProfiles()
 
   const [isLoadingPDF, setIsLoadingPDF] = useState(false)
   const [isLoadingExcel, setIsLoadingExcel] = useState(false)
@@ -162,6 +164,8 @@ export function GoalByDay() {
         calculateMonthTotalExcel,
         // calculateDailyTotalExcel será chamada pela função Excel com o page correto
         calculateDailyTotalExcel,
+        dataFinishScale[0]?.finished,
+        storesByUser,
       )
 
       setIsLoadingExcel(false)

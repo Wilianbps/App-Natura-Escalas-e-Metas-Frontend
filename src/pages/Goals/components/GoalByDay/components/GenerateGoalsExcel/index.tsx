@@ -1,4 +1,3 @@
-// utils/generateGoalsExcel.ts
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 
@@ -10,7 +9,7 @@ interface Employee {
   id: string
   name: string
   days: GoalDay[]
-  activeSeller: boolean // Adicionado para garantir o contexto
+  activeSeller: boolean
 }
 
 /**
@@ -20,23 +19,68 @@ export async function generateGoalsExcel(
   goals: Employee[][],
   monthValue: string,
   daysOfMonth: { dayAndmonth: string }[][],
-  // page REMOVIDO daqui
   calculateMonthTotal: (id: string) => number | string,
-  // page ADICIONADO como parâmetro da função de cálculo diário
   calculateDailyTotal: (index: number, page: number) => number | string,
+  finishScale?: boolean | undefined,
+  storesByUser?: {
+    branch: string
+    profile: string
+    status: boolean
+    storeBranch: string
+    storeCode: string
+    user: string
+  }[],
 ) {
   const workbook = new ExcelJS.Workbook()
 
-  // 💡 Loop para criar DUAS ABAS (1ª Quinzena e 2ª Quinzena)
+  // Loop para criar 1ª e 2ª quinzena
   for (let page = 0; page < goals.length; page++) {
     const sheetTitle = page === 0 ? '1ª Quinzena' : '2ª Quinzena'
     const sheet = workbook.addWorksheet(sheetTitle)
 
-    // Função auxiliar para calcular o total diário específico desta página/aba
     const calculateDailyTotalForPage = (index: number) =>
       calculateDailyTotal(index, page)
 
-    // ---------- HEADER ----------
+    const storeName =
+      storesByUser && storesByUser.length > 0
+        ? storesByUser[0].branch.trim()
+        : ''
+
+    const now = new Date()
+    const formattedDate =
+      now.toLocaleDateString('pt-BR') +
+      ' ' +
+      now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+
+    const statusText = finishScale
+      ? 'Escala Finalizada'
+      : 'Escala Não Finalizada'
+
+    const statusColor = finishScale ? 'FF3CB043' : 'FFFF0000'
+
+    const extraRow = sheet.addRow([''])
+    extraRow.height = 25
+    extraRow.getCell(1).alignment = { vertical: 'middle', horizontal: 'center' }
+
+    extraRow.getCell(1).value = {
+      richText: [
+        {
+          text: `${storeName} - ${formattedDate} - `,
+          font: { bold: true, size: 14 },
+        },
+        {
+          text: statusText,
+          font: { bold: true, size: 14, color: { argb: statusColor } },
+        },
+      ],
+    }
+
+    // Merge baseado no total de colunas do header
+    const totalColumns = 2 + daysOfMonth[page].length
+    sheet.mergeCells(
+      `A${extraRow.number}:${sheet.getColumn(totalColumns).letter}${extraRow.number}`,
+    )
+
     const header = [
       'Colaboradores',
       'Total Mês',
@@ -44,8 +88,7 @@ export async function generateGoalsExcel(
     ]
     sheet.addRow(header)
 
-    // estiliza o cabeçalho (linha 1)
-    const headerRow = sheet.getRow(1)
+    const headerRow = sheet.getRow(extraRow.number + 1)
     headerRow.height = 20
     headerRow.eachCell((cell) => {
       cell.fill = {
@@ -57,16 +100,14 @@ export async function generateGoalsExcel(
       cell.alignment = { vertical: 'middle', horizontal: 'center' }
     })
 
-    // ---------- DADOS DOS COLABORADORES (Vendedores Ativos e Extras) ----------
+    // ---------- DADOS DOS COLABORADORES ----------
     const employeesOnPage = goals[page] || []
 
-    // Filtra e Adiciona Vendedores Normais
     employeesOnPage
       .filter((e) => !e.activeSeller)
       .forEach((employee) => {
         const row = [
           employee.name,
-          // Garante que o valor passado é numérico
           Number(calculateMonthTotal(employee.id)),
           ...employee.days.map((d) =>
             !isNaN(Number(d.goalDayByEmployee))
@@ -81,27 +122,26 @@ export async function generateGoalsExcel(
     const dailyRow = [
       'Total diário loja',
       '',
-      // Garante que o valor passado é numérico
       ...daysOfMonth[page].map((_, i) => Number(calculateDailyTotalForPage(i))),
     ]
     const dailyTotalRow = sheet.addRow(dailyRow)
     dailyTotalRow.font = { bold: true }
 
-    // Adiciona uma linha em branco para separar
     sheet.addRow([])
 
-    // ---------- VENDEDORES EXTRAS (Opcional, se o formato for usado) ----------
+    // ---------- VENDEDORES EXTRAS ----------
     const extraSellers = employeesOnPage.filter((e) => e.activeSeller)
     if (extraSellers.length > 0) {
       sheet.addRow(['Colaborador Extra']).font = { bold: true }
 
-      // Adiciona um cabeçalho auxiliar
-      sheet.addRow(header).font = { bold: true, color: { argb: '000000' } }
+      sheet.addRow(header).font = {
+        bold: true,
+        color: { argb: '000000' },
+      }
 
       extraSellers.forEach((employee) => {
         const row = [
           employee.name,
-          // Garante que o valor passado é numérico
           Number(calculateMonthTotal(employee.id)),
           ...employee.days.map((d) =>
             !isNaN(Number(d.goalDayByEmployee))
@@ -113,19 +153,13 @@ export async function generateGoalsExcel(
       })
     }
 
-    // ⭐️ INÍCIO: APLICAÇÃO DA FORMATAÇÃO R$
+    // ---------- FORMATO R$ ----------
     const CURRENCY_FORMAT = 'R$ #,##0.00'
-
-    // Coluna 2 (Total Mês)
     sheet.getColumn(2).numFmt = CURRENCY_FORMAT
-
-    // Colunas 3 em diante (Metas Diárias)
     for (let i = 3; i <= header.length; i++) {
       sheet.getColumn(i).numFmt = CURRENCY_FORMAT
     }
-    // ⭐️ FIM: APLICAÇÃO DA FORMATAÇÃO R$
 
-    // ---------- AJUSTE DE LARGURA (auto width) ----------
     sheet.columns.forEach((col) => {
       if (!col) return
       const column = col as ExcelJS.Column
@@ -136,10 +170,9 @@ export async function generateGoalsExcel(
         const len = text.length
         if (len > maxLength) maxLength = len
       })
-      // Ajustado o valor mínimo para 12 para acomodar o formato R$ #,##0.00
       column.width = Math.min(Math.max(maxLength + 2, 12), 50)
     })
-  } // FIM DO LOOP das quinzenas
+  }
 
   // ---------- EXPORTAR ----------
   const buffer = await workbook.xlsx.writeBuffer()

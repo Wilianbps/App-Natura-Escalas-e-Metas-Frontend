@@ -59,7 +59,7 @@ export function DayOff() {
     dataFinishScale,
   } = useScales()
 
-  const { cookieProfile } = useProfiles()
+  const { cookieProfile, storesByUser } = useProfiles()
   const { monthValue } = useSettings()
   const currentDate = new Date()
   const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0')
@@ -274,6 +274,7 @@ export function DayOff() {
         scales: scalesByMonthDate,
         monthValue,
         finishScale: dataFinishScale[0]?.finished,
+        storesByUser,
       }
 
       generateScaleByFortnigthExcel(excelProps, daysOfMonth)
